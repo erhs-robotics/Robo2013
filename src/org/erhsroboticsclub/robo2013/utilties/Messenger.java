@@ -39,10 +39,7 @@ public class Messenger {
 
             this.printLn(_msg);
         } else {
-            for (int i = 0; i < _msg.length(); i++) {
-                String s = "" + _msg.toCharArray()[i];
-                driverLCD.println(line, i + 1, s);
-            }
+            driverLCD.println(line, 1, _msg);            
         }
     }   
 
@@ -65,7 +62,7 @@ public class Messenger {
      * @param line The line to print the message to
      */
     public void printOnLn(String s, DriverStationLCD.Line line) {
-        driverLCD.println(line, 1, "                             ");
+        driverLCD.println(line, 1, emptySpace);
         driverLCD.println(line, 1, s);
         driverLCD.updateLCD();        
     }
