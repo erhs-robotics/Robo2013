@@ -25,12 +25,21 @@ public class Messenger {
         }
     }
 
+    /**
+     * Moves up all lines like a scrolling console
+     */
     private void moveUp() {
-        for(int i=msg.length-1;i>0;i--) {
-            msg[i] = msg[i - 1];    
-        }        
+        for (int i = msg.length - 1; i > 0; i--) {
+            msg[i] = msg[i - 1];
+        }
     }
 
+    /**
+     * Writes _msg to the driver station and wraps around long strings
+     *
+     * @param line The line to write to
+     * @param _msg The message to write
+     */
     private void write(DriverStationLCD.Line line, String _msg) {
         if (_msg.length() > 20) {
             msg[0] = _msg.substring(0, 20);
@@ -39,9 +48,9 @@ public class Messenger {
 
             this.printLn(_msg);
         } else {
-            driverLCD.println(line, 1, _msg);            
+            driverLCD.println(line, 1, _msg);
         }
-    }   
+    }
 
     /**
      * Clears the DriverStation LCD
@@ -64,7 +73,7 @@ public class Messenger {
     public void printOnLn(String s, DriverStationLCD.Line line) {
         driverLCD.println(line, 1, emptySpace);
         driverLCD.println(line, 1, s);
-        driverLCD.updateLCD();        
+        driverLCD.updateLCD();
     }
 
     /**
@@ -75,9 +84,9 @@ public class Messenger {
     public void printLn(String s) {
         clearConsole();
         moveUp();
-        
+
         String time = String.valueOf(Timer.getFPGATimestamp());
-        msg[0] = "[" + time + "]: " + s;       
+        msg[0] = "[" + time + "]: " + s;
 
         write(DriverStationLCD.Line.kMain6, msg[5]);
         write(DriverStationLCD.Line.kUser2, msg[4]);
