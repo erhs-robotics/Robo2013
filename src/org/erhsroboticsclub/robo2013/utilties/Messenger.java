@@ -11,12 +11,12 @@ import edu.wpi.first.wpilibj.Timer;
  *
  * @author Michael
  */
-public class Messager {
+public class Messenger {
 
     private DriverStationLCD driverLCD;
     private String msg[];
 
-    public Messager() {
+    public Messenger() {
         driverLCD = DriverStationLCD.getInstance();
         msg = new String[7];
         for (int i = 0; i < 7; i++) {

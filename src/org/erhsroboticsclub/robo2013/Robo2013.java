@@ -1,20 +1,20 @@
 package org.erhsroboticsclub.robo2013;
 
-import org.erhsroboticsclub.robo2013.utilties.Messager;
+import org.erhsroboticsclub.robo2013.utilties.Messenger;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
 
 public class Robo2013 extends IterativeRobot {
     
-    Messager msg;
+    Messenger msg;
     
     RobotDrive drive;
     Joystick leftDriveStick, rightDriveStick, controlStick;
     
 
     public void robotInit() {
-        msg = new Messager();
+        msg = new Messenger();
         msg.printLn("Loading Robot Code - Please Wait...");
         
         drive = new RobotDrive(RoboMap.TOP_LEFT_MOTOR, RoboMap.BOTTOM_LEFT_MOTOR,
