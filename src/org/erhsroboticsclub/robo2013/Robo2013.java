@@ -1,9 +1,9 @@
 package org.erhsroboticsclub.robo2013;
 
-import org.erhsroboticsclub.robo2013.utilties.Messenger;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
+import org.erhsroboticsclub.robo2013.utilties.Messenger;
 
 public class Robo2013 extends IterativeRobot {
     
