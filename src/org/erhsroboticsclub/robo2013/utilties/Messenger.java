@@ -56,7 +56,7 @@ public class Messenger {
      * Clears the DriverStation LCD
      */
     public final void clearConsole() {
-        driverLCD.println(DriverStationLCD.Line.kMain6, 1, emptySpace);
+        driverLCD.println(DriverStationLCD.Line.kUser1, 1, emptySpace);
         driverLCD.println(DriverStationLCD.Line.kUser2, 1, emptySpace);
         driverLCD.println(DriverStationLCD.Line.kUser3, 1, emptySpace);
         driverLCD.println(DriverStationLCD.Line.kUser4, 1, emptySpace);
@@ -88,7 +88,7 @@ public class Messenger {
         String time = String.valueOf(Timer.getFPGATimestamp());
         msg[0] = "[" + time + "]: " + s;
 
-        write(DriverStationLCD.Line.kMain6, msg[5]);
+        write(DriverStationLCD.Line.kUser1, msg[5]);
         write(DriverStationLCD.Line.kUser2, msg[4]);
         write(DriverStationLCD.Line.kUser3, msg[3]);
         write(DriverStationLCD.Line.kUser4, msg[2]);
