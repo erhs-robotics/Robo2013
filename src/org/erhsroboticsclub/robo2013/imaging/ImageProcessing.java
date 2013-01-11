@@ -5,8 +5,8 @@ import edu.wpi.first.wpilibj.image.BinaryImage;
 import edu.wpi.first.wpilibj.image.CriteriaCollection;
 import edu.wpi.first.wpilibj.image.NIVision.MeasurementType;
 import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
-import org.erhsroboticsclub.robo2013.utilties.MathX;
-import org.erhsroboticsclub.robo2013.utilties.Messenger;
+import org.erhsroboticsclub.robo2013.utilities.MathX;
+import org.erhsroboticsclub.robo2013.utilities.Messenger;
 
 public class ImageProcessing {
 

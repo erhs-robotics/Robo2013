@@ -1,7 +1,7 @@
 package org.erhsroboticsclub.robo2013;
 
 import edu.wpi.first.wpilibj.RobotDrive;
-import org.erhsroboticsclub.robo2013.utilties.Messenger;
+import org.erhsroboticsclub.robo2013.utilities.Messenger;
 
 public class LiveReckoning {
     
