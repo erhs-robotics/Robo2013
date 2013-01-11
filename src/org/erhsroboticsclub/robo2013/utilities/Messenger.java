@@ -15,7 +15,8 @@ public class Messenger {
 
     private DriverStationLCD driverLCD;
     private String msg[];
-    private final String emptySpace = "                             ";
+    private final String EMPTY_SPACE = "                             ";
+    private final int MAX_MESSAGE_LENGTH = 20;
 
     public Messenger() {
         driverLCD = DriverStationLCD.getInstance();
@@ -41,10 +42,10 @@ public class Messenger {
      * @param _msg The message to write
      */
     private void write(DriverStationLCD.Line line, String _msg) {
-        if (_msg.length() > 20) {
-            msg[0] = _msg.substring(0, 20);
+        if (_msg.length() > MAX_MESSAGE_LENGTH) {
+            msg[0] = _msg.substring(0, MAX_MESSAGE_LENGTH);
             driverLCD.println(line, 1, msg[0]);
-            _msg = _msg.substring(20);
+            _msg = _msg.substring(MAX_MESSAGE_LENGTH);
 
             this.printLn(_msg);
         } else {
@@ -56,12 +57,12 @@ public class Messenger {
      * Clears the DriverStation LCD
      */
     public final void clearConsole() {
-        driverLCD.println(DriverStationLCD.Line.kUser1, 1, emptySpace);
-        driverLCD.println(DriverStationLCD.Line.kUser2, 1, emptySpace);
-        driverLCD.println(DriverStationLCD.Line.kUser3, 1, emptySpace);
-        driverLCD.println(DriverStationLCD.Line.kUser4, 1, emptySpace);
-        driverLCD.println(DriverStationLCD.Line.kUser5, 1, emptySpace);
-        driverLCD.println(DriverStationLCD.Line.kUser6, 1, emptySpace);
+        driverLCD.println(DriverStationLCD.Line.kUser1, 1, EMPTY_SPACE);
+        driverLCD.println(DriverStationLCD.Line.kUser2, 1, EMPTY_SPACE);
+        driverLCD.println(DriverStationLCD.Line.kUser3, 1, EMPTY_SPACE);
+        driverLCD.println(DriverStationLCD.Line.kUser4, 1, EMPTY_SPACE);
+        driverLCD.println(DriverStationLCD.Line.kUser5, 1, EMPTY_SPACE);
+        driverLCD.println(DriverStationLCD.Line.kUser6, 1, EMPTY_SPACE);
     }
 
     /**
@@ -71,7 +72,7 @@ public class Messenger {
      * @param line The line to print the message to
      */
     public void printOnLn(String s, DriverStationLCD.Line line) {
-        driverLCD.println(line, 1, emptySpace);
+        driverLCD.println(line, 1, EMPTY_SPACE);
         driverLCD.println(line, 1, s);
         driverLCD.updateLCD();
     }
@@ -85,8 +86,8 @@ public class Messenger {
         clearConsole();
         moveUp();
 
-        String time = String.valueOf(Timer.getFPGATimestamp());
-        msg[0] = "[" + time + "]: " + s;
+        String time = String.valueOf((int)Timer.getFPGATimestamp());
+        msg[0] = "[" + time + "] " + s;
 
         write(DriverStationLCD.Line.kUser1, msg[5]);
         write(DriverStationLCD.Line.kUser2, msg[4]);
