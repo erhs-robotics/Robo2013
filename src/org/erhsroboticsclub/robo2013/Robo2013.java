@@ -2,14 +2,16 @@ package org.erhsroboticsclub.robo2013;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
+import org.erhsroboticsclub.robo2013.utilities.Controls;
 import org.erhsroboticsclub.robo2013.utilities.Messenger;
 
 public class Robo2013 extends IterativeRobot {
     
     RobotDrive drive;
     Joystick sticky;
-    Messenger msg;
     CANJaguar TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR;
+    Messenger msg;
+    Controls driveControls;
     
     public void robotInit() {
         msg = new Messenger();
@@ -24,6 +26,7 @@ public class Robo2013 extends IterativeRobot {
         }
         drive = new RobotDrive(TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR);
         sticky = new Joystick(1);
+        driveControls = new Controls(sticky);
         msg.printLn("Done Loading: FRC 2013");
 
     }
@@ -39,7 +42,23 @@ public class Robo2013 extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
-        drive.arcadeDrive(sticky);
+        //drive.arcadeDrive(sticky);
+        if (driveControls.FOV_Top()) {
+            drive.drive(.75, .75);
+        }
+        else if (driveControls.FOV_Bottom()) {
+            drive.drive(-.75, -.75);
+        }
+        else if (driveControls.FOV_Left()) {
+            drive.drive(-.75, .75);
+        }
+        else if (driveControls.FOV_Right()) {
+            drive.drive(.75, -.75);
+        }
+        else {
+            drive.arcadeDrive(sticky);
+        }
+        
     }
     
     /**
