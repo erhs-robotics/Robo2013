@@ -21,6 +21,7 @@ public class ImageProcessing {
 
     public double getDistance(AxisCamera leftCam, AxisCamera rightCam) {
         ParticleAnalysisReport[] leftReport, rightReport;
+        double distance = 0;
 
         try {
             leftReport = getPARs(leftCam);
@@ -32,13 +33,15 @@ public class ImageProcessing {
                 msg.printLn("WARN: " + rightReport.length + "right reports found!");
             }
             double disparity = getDisparity(leftReport[0], rightReport[0]);
+            distance = calcDistance(disparity);
+            
         } catch (Exception e) {
             msg.printLn("Failed to get PAR's!");
         }
 
 
 
-        return 0;
+        return distance;
     }
 
     /**
@@ -87,8 +90,7 @@ public class ImageProcessing {
     }
 
     //Distance based on the pixel distances x and y
-    public static double getDistance(double x, double y) {
-        return FOCAL_LENGTH * (CAMERA_DISPLACEMENT / (x + y) - 1);
-        //return 0;
+    private static double calcDistance(double disparity) {
+        return FOCAL_LENGTH * (CAMERA_DISPLACEMENT / disparity - 1);        
     }
 }
