@@ -11,63 +11,59 @@ import org.erhsroboticsclub.robo2013.utilities.Messenger;
 public class ImageProcessing {
 
     Messenger msg = new Messenger();
-    
     static final double CAMERA_PIXEL_WIDTH = 640;
     static final double CAMERA_PIXEL_HEIGHT = 480;
     static final double CAMERA_DISPLACEMENT = 10;
     static final double FOCAL_LENGTH = 0;
-    
-    
-    
 
     public ImageProcessing() {
-        
     }
-    
+
     public double getDistance(AxisCamera leftCam, AxisCamera rightCam) {
         ParticleAnalysisReport[] leftReport, rightReport;
-        
+
         try {
             leftReport = getPARs(leftCam);
             rightReport = getPARs(rightCam);
-            if(leftReport.length > 1) {
+            if (leftReport.length > 1) {
                 msg.printLn("WARN: " + leftReport.length + "left reports found!");
             }
-            if(rightReport.length > 1) {
+            if (rightReport.length > 1) {
                 msg.printLn("WARN: " + rightReport.length + "right reports found!");
             }
             double disparity = getDisparity(leftReport[0], rightReport[0]);
-        } catch(Exception e) {
+        } catch (Exception e) {
             msg.printLn("Failed to get PAR's!");
         }
-        
-        
-        
+
+
+
         return 0;
     }
 
     /**
-     * fills the targetParticles[] array with all found particle analysis reports
+     * fills the targetParticles[] array with all found particle analysis
+     * reports
      *
      * @param camera the camera to get the particle analysis report from
      * @throws Exception
      */
     public ParticleAnalysisReport[] getPARs(AxisCamera camera) throws Exception {
         CriteriaCollection criteriaCollection = new CriteriaCollection();
-        
+
         criteriaCollection.addCriteria(
                 MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 30, 400, false);
         criteriaCollection.addCriteria(
                 MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 40, 400, false);
-        
+
         ParticleAnalysisReport targetParticles[];
         int erosionCount = 2;
         boolean useConnectivity8 = false;  // use connectivity4 instead
         // get color image
         // seperate the light and dark image creating a binary image,
-        // fill rectanges created from colorImage rgb threshold, 
+        // fill rectanges created from colorImage rgb threshold,
         // clean out residual small objects,
-        // convexHull, 
+        // convexHull,
         // apply a particle filter based on Criteria Collection constraints
         BinaryImage filteredImage = camera.getImage()
                 .thresholdRGB(0, 42, 71, 255, 0, 255)
@@ -78,24 +74,21 @@ public class ImageProcessing {
         filteredImage.free();
         return targetParticles;
     }
-    
-     
+
     private double getDisparity(ParticleAnalysisReport left, ParticleAnalysisReport right) {
         double center_x, left_x, right_x, disparity;
         center_x = CAMERA_PIXEL_WIDTH / 2;
         left_x = left.center_mass_x;
         right_x = right.center_mass_x;
-        
-        disparity = (left_x - center_x) + (center_x - right_x);        
-        
+
+        disparity = (left_x - center_x) + (center_x - right_x);
+
         return disparity;
     }
-    
 
-        //Distance based on the pixel distances x and y
-        public static double getDistance(double x, double y) {
-            return FOCAL_LENGTH * (CAMERA_DISPLACEMENT/(x+y)-1);
-       //return 0;
-    }   
-    
+    //Distance based on the pixel distances x and y
+    public static double getDistance(double x, double y) {
+        return FOCAL_LENGTH * (CAMERA_DISPLACEMENT / (x + y) - 1);
+        //return 0;
+    }
 }
