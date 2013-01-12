@@ -1,0 +1,16 @@
+<xml version="1.0">
+<dashboard>
+	<static-widget class="edu.wpi.first.smartdashboard.camera.WPICameraExtension">
+		<location x="506" y="1"/>
+		<width>501</width>
+		<height>482</height>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.camera.WPICameraExtension">
+		<location x="0" y="0"/>
+		<width>503</width>
+		<height>482</height>
+	</static-widget>
+</dashboard>
+<live-window>
+</live-window>
+</xml>
