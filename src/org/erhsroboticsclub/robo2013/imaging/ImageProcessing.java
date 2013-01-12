@@ -22,6 +22,28 @@ public class ImageProcessing {
     public ImageProcessing() {
         
     }
+    
+    public double getDistance(AxisCamera leftCam, AxisCamera rightCam) {
+        ParticleAnalysisReport[] leftReport, rightReport;
+        
+        try {
+            leftReport = getPARs(leftCam);
+            rightReport = getPARs(rightCam);
+            if(leftReport.length > 1) {
+                msg.printLn("WARN: " + leftReport.length + "left reports found!");
+            }
+            if(rightReport.length > 1) {
+                msg.printLn("WARN: " + leftReport.length + "right reports found!");
+            }
+            double disparity = getDisparity(leftReport[0], rightReport[0]);
+        } catch(Exception e) {
+            msg.printLn("Failed to get PAR's!");
+        }
+        
+        
+        
+        return 0;
+    }
 
     /**
      * fills the targetParticles[] array with all found particle analysis reports
@@ -29,7 +51,7 @@ public class ImageProcessing {
      * @param camera the camera to get the particle analysis report from
      * @throws Exception
      */
-    public ParticleAnalysisReport[] getParticleAnalysisReports(AxisCamera camera) throws Exception {
+    public ParticleAnalysisReport[] getPARs(AxisCamera camera) throws Exception {
         CriteriaCollection criteriaCollection = new CriteriaCollection();
         
         criteriaCollection.addCriteria(
@@ -56,6 +78,7 @@ public class ImageProcessing {
         return targetParticles;
     }
     
+     
     private double getDisparity(ParticleAnalysisReport left, ParticleAnalysisReport right) {
         double center_x, left_x, right_x, disparity;
         center_x = CAMERA_PIXEL_WIDTH / 2;
