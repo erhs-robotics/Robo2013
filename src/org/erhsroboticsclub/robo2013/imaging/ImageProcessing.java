@@ -33,7 +33,7 @@ public class ImageProcessing {
                 msg.printLn("WARN: " + leftReport.length + "left reports found!");
             }
             if(rightReport.length > 1) {
-                msg.printLn("WARN: " + leftReport.length + "right reports found!");
+                msg.printLn("WARN: " + rightReport.length + "right reports found!");
             }
             double disparity = getDisparity(leftReport[0], rightReport[0]);
         } catch(Exception e) {
