@@ -10,8 +10,6 @@ import org.erhsroboticsclub.robo2013.utilities.Messenger;
 
 public class ImageProcessing {
 
-    ParticleAnalysisReport targetParticles[] = null;
-    CriteriaCollection criteriaCollection = new CriteriaCollection();
     Messenger msg = new Messenger();
     
     static final double CAMERA_PIXEL_WIDTH = 640;
@@ -22,10 +20,7 @@ public class ImageProcessing {
     
 
     public ImageProcessing() {
-        criteriaCollection.addCriteria(
-                MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 30, 400, false);
-        criteriaCollection.addCriteria(
-                MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 40, 400, false);
+        
     }
 
     /**
@@ -34,7 +29,15 @@ public class ImageProcessing {
      * @param camera the camera to get the particle analysis report from
      * @throws Exception
      */
-    public void getParticleAnalysisReports(AxisCamera camera) throws Exception {
+    public ParticleAnalysisReport[] getParticleAnalysisReports(AxisCamera camera) throws Exception {
+        CriteriaCollection criteriaCollection = new CriteriaCollection();
+        
+        criteriaCollection.addCriteria(
+                MeasurementType.IMAQ_MT_BOUNDING_RECT_WIDTH, 30, 400, false);
+        criteriaCollection.addCriteria(
+                MeasurementType.IMAQ_MT_BOUNDING_RECT_HEIGHT, 40, 400, false);
+        
+        ParticleAnalysisReport targetParticles[];
         int erosionCount = 2;
         boolean useConnectivity8 = false;  // use connectivity4 instead
         // get color image
@@ -50,7 +53,9 @@ public class ImageProcessing {
                 .particleFilter(criteriaCollection);
         targetParticles = filteredImage.getOrderedParticleAnalysisReports();
         filteredImage.free();
+        return targetParticles;
     }
+    
 
         public double getDistance(ParticleAnalysisReport targetReport, double targetHeight) {
        return 0;
