@@ -56,6 +56,17 @@ public class ImageProcessing {
         return targetParticles;
     }
     
+    private double getDisparity(ParticleAnalysisReport left, ParticleAnalysisReport right) {
+        double center_x, left_x, right_x, disparity;
+        center_x = CAMERA_PIXEL_WIDTH / 2;
+        left_x = left.center_mass_x;
+        right_x = right.center_mass_x;
+        
+        disparity = (left_x - center_x) + (center_x - right_x);        
+        
+        return disparity;
+    }
+    
 
         public double getDistance(ParticleAnalysisReport targetReport, double targetHeight) {
        return 0;
