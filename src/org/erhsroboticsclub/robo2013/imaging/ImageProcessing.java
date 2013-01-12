@@ -17,6 +17,7 @@ public class ImageProcessing {
     static final double CAMERA_PIXEL_WIDTH = 640;
     static final double CAMERA_PIXEL_HEIGHT = 480;
     static final double CAMERA_DISPLACEMENT = 10;
+    static final double FOCAL_LENGTH = 0;
     
     
     
@@ -52,8 +53,10 @@ public class ImageProcessing {
         filteredImage.free();
     }
 
-        public double getDistance(ParticleAnalysisReport targetReport, double targetHeight) {
-       return 0;
+        //Distance based on the pixel distances x and y
+        public static double getDistance(double x, double y) {
+            return FOCAL_LENGTH * (CAMERA_DISPLACEMENT/(x+y)-1);
+       //return 0;
     }   
     
 }
