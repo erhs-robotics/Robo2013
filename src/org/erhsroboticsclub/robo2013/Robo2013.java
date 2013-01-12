@@ -1,7 +1,11 @@
 package org.erhsroboticsclub.robo2013;
 
+import com.sun.squawk.imp.ImpGlobal;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.camera.AxisCamera;
+import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
+import org.erhsroboticsclub.robo2013.imaging.ImageProcessing;
 import org.erhsroboticsclub.robo2013.utilities.Controls;
 import org.erhsroboticsclub.robo2013.utilities.Messenger;
 
@@ -12,6 +16,7 @@ public class Robo2013 extends IterativeRobot {
     CANJaguar TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR;
     Messenger msg;
     Controls driveControls;
+    AxisCamera leftCam, rightCam;
     
     public void robotInit() {
         msg = new Messenger();
@@ -21,6 +26,8 @@ public class Robo2013 extends IterativeRobot {
             BOTTOM_LEFT_JAGUAR = new CANJaguar(RoboMap.BOTTOM_LEFT_MOTOR);
             TOP_RIGHT_JAGUAR = new CANJaguar(RoboMap.TOP_RIGHT_MOTOR);
             BOTTOM_RIGHT_JAGUAR = new CANJaguar(RoboMap.BOTTOM_RIGHT_MOTOR);
+            leftCam = AxisCamera.getInstance("10.0.53.11");
+            rightCam = AxisCamera.getInstance("10.0.53.12");
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }
@@ -30,6 +37,19 @@ public class Robo2013 extends IterativeRobot {
         msg.printLn("Done Loading: FRC 2013");
 
     }
+
+    public void autonomousInit() {
+        msg.clearConsole();
+        msg.printLn("Starting Autonomous");
+        ImageProcessing imgProc = new ImageProcessing();
+        msg.printLn("Calculating distance");
+        double distance = imgProc.getDistance(leftCam, rightCam);
+        msg.printLn("Distance = " + distance);
+        
+        
+    }
+    
+    
 
     /**
      * This function is called periodically during autonomous
