@@ -13,8 +13,8 @@ public class ImageProcessing {
     Messenger msg = new Messenger();
     static final double CAMERA_PIXEL_WIDTH = 640;
     static final double CAMERA_PIXEL_HEIGHT = 480;
-    static final double CAMERA_DISPLACEMENT = 10;
-    static final double FOCAL_LENGTH = 0;
+    static final double CAMERA_DISPLACEMENT = .17;//meters
+    static final double FOCAL_LENGTH = .0042;//meters
 
     public ImageProcessing() {
     }
@@ -25,7 +25,10 @@ public class ImageProcessing {
 
         try {
             leftReport = getPARs(leftCam);
+            msg.printLn("Left report done");
+            //Thread.sleep(10000);
             rightReport = getPARs(rightCam);
+            msg.printLn("right report done");
             if (leftReport.length > 1) {
                 msg.printLn("WARN: " + leftReport.length + "left reports found!");
             }
