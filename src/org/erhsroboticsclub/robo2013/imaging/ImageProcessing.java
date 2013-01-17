@@ -26,9 +26,10 @@ public class ImageProcessing {
         try {
             leftReport = getPARs(leftCam);
             msg.printLn("Left report done");
-            //Thread.sleep(10000);
+            
             rightReport = getPARs(rightCam);
             msg.printLn("right report done");
+            
             if (leftReport.length > 1) {
                 System.out.println("WARN: " + leftReport.length + "left reports found!");
             }

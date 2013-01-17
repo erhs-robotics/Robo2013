@@ -40,11 +40,11 @@ public class Robo2013 extends IterativeRobot {
 
     public void autonomousInit() {
         msg.clearConsole();
-        msg.printLn("Starting Autonomous");
+        
         ImageProcessing imgProc = new ImageProcessing();
-        msg.printLn("Calculating distance");
+        
         double distance = imgProc.getDistance(leftCam, rightCam);
-        msg.printLn("Distance = " + distance);
+        
         
         
     }
