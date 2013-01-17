@@ -25,10 +25,10 @@ public class ImageProcessing {
 
         try {
             leftReport = getPARs(leftCam);
-            msg.printLn("Left report done");
+            msg.printLn("LR done");
             //Thread.sleep(10000);
             rightReport = getPARs(rightCam);
-            msg.printLn("right report done");
+            msg.printLn("RR done");
             if (leftReport.length > 1) {
                 System.out.println("WARN: " + leftReport.length + "left reports found!");
             }
@@ -86,12 +86,12 @@ public class ImageProcessing {
         center_x = CAMERA_PIXEL_WIDTH / 2;
         left_x = left.center_mass_x;
         right_x = right.center_mass_x;
-        System.out.println("Center of image: " + center_x);
-        System.out.println("Target left: " + left_x);
-        System.out.println("Target right: " + right_x);
+        msg.printLn("CI: " + center_x);  // center image
+        msg.printLn("TL: " + left_x);    // target left
+        msg.printLn("TR: " + right_x);  // target right
 
         disparity = (left_x - center_x) + (center_x - right_x);
-        System.out.println("Disparity " + right_x);
+        msg.printLn("D " + right_x);  // disparity
 
         return disparity;
     }
