@@ -40,22 +40,24 @@ public class Robo2013 extends IterativeRobot {
 
     public void autonomousInit() {
         msg.clearConsole();
+
         
         ImageProcessing imgProc = new ImageProcessing();
         
+
         double distance = imgProc.getDistance(leftCam, rightCam);
         
         
         
     }
     
-    
+   
 
     /**
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-
+       drive.drive(0, 0);
     }
 
     /**
