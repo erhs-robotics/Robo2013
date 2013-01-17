@@ -30,10 +30,10 @@ public class ImageProcessing {
             rightReport = getPARs(rightCam);
             msg.printLn("right report done");
             if (leftReport.length > 1) {
-                msg.printLn("WARN: " + leftReport.length + "left reports found!");
+                System.out.println("WARN: " + leftReport.length + "left reports found!");
             }
             if (rightReport.length > 1) {
-                msg.printLn("WARN: " + rightReport.length + "right reports found!");
+                System.out.println("WARN: " + rightReport.length + "right reports found!");
             }
             double disparity = getDisparity(leftReport[0], rightReport[0]);
             distance = calcDistance(disparity);
@@ -86,14 +86,19 @@ public class ImageProcessing {
         center_x = CAMERA_PIXEL_WIDTH / 2;
         left_x = left.center_mass_x;
         right_x = right.center_mass_x;
+        System.out.println("Center of image: " + center_x);
+        System.out.println("Target left: " + left_x);
+        System.out.println("Target right: " + right_x);
 
         disparity = (left_x - center_x) + (center_x - right_x);
+        System.out.println("Disparity " + right_x);
 
         return disparity;
     }
 
     //Distance based on the pixel distances x and y
     private static double calcDistance(double disparity) {
+        
         return FOCAL_LENGTH * (CAMERA_DISPLACEMENT / disparity - 1);        
     }
 }
