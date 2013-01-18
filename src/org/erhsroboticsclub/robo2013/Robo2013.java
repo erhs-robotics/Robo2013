@@ -15,8 +15,8 @@ public class Robo2013 extends IterativeRobot {
     Joystick sticky;
     CANJaguar TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR;
     Messenger msg;
-    Controls driveControls;
-    AxisCamera leftCam, rightCam;
+    Controls driveControls;    
+    
     
     public void robotInit() {
         msg = new Messenger();
@@ -25,9 +25,8 @@ public class Robo2013 extends IterativeRobot {
             TOP_LEFT_JAGUAR = new CANJaguar(RoboMap.TOP_LEFT_MOTOR);
             BOTTOM_LEFT_JAGUAR = new CANJaguar(RoboMap.BOTTOM_LEFT_MOTOR);
             TOP_RIGHT_JAGUAR = new CANJaguar(RoboMap.TOP_RIGHT_MOTOR);
-            BOTTOM_RIGHT_JAGUAR = new CANJaguar(RoboMap.BOTTOM_RIGHT_MOTOR);
-            leftCam = AxisCamera.getInstance("10.0.53.11");
-            rightCam = AxisCamera.getInstance("192.168.0.90");
+            BOTTOM_RIGHT_JAGUAR = new CANJaguar(RoboMap.BOTTOM_RIGHT_MOTOR); 
+            
             
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
@@ -40,13 +39,15 @@ public class Robo2013 extends IterativeRobot {
     }
 
     public void autonomousInit() {
+        drive.setSafetyEnabled(false);
+        
         msg.clearConsole();
 
         
-        ImageProcessing imgProc = new ImageProcessing();
+        //ImageProcessing imgProc = new ImageProcessing();
         
 
-        double distance = imgProc.getDistance(leftCam, rightCam);
+        //double distance = imgProc.getDistance(leftCam, rightCam);
         
         
         

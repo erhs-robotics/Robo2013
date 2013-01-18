@@ -25,11 +25,13 @@ public class ImageProcessing {
         double distance = 0;
 
         try {
-            leftReport = getPARs(leftCam);
-            msg.printLn("LR done");
-            //Thread.sleep(10000);
             rightReport = getPARs(rightCam);
             msg.printLn("RR done");
+            
+            leftReport = getPARs(leftCam);            
+            msg.printLn("LR done");
+            //Thread.sleep(10000);
+            
 
             if (leftReport.length > 1) {
                 System.out.println("WARN: " + leftReport.length + "left reports found!");
@@ -56,6 +58,8 @@ public class ImageProcessing {
      * @param camera the camera to get the particle analysis report from
      * @throws Exception
      */
+    
+    
     public ParticleAnalysisReport[] getPARs(AxisCamera camera) throws Exception {
         CriteriaCollection criteriaCollection = new CriteriaCollection();
 
