@@ -27,7 +27,8 @@ public class Robo2013 extends IterativeRobot {
             TOP_RIGHT_JAGUAR = new CANJaguar(RoboMap.TOP_RIGHT_MOTOR);
             BOTTOM_RIGHT_JAGUAR = new CANJaguar(RoboMap.BOTTOM_RIGHT_MOTOR);
             leftCam = AxisCamera.getInstance("10.0.53.11");
-            rightCam = AxisCamera.getInstance("10.0.53.12");
+            rightCam = AxisCamera.getInstance("192.168.0.90");
+            
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }
@@ -40,11 +41,13 @@ public class Robo2013 extends IterativeRobot {
 
     public void autonomousInit() {
         msg.clearConsole();
-        msg.printLn("Starting Auto");
+
+        
         ImageProcessing imgProc = new ImageProcessing();
-        msg.printLn("Calcing dist");
+        
+
         double distance = imgProc.getDistance(leftCam, rightCam);
-        msg.printLn("Distance = " + distance);
+        
         
         
     }

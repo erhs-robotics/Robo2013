@@ -2,6 +2,7 @@ package org.erhsroboticsclub.robo2013.imaging;
 
 import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.image.BinaryImage;
+import edu.wpi.first.wpilibj.image.ColorImage;
 import edu.wpi.first.wpilibj.image.CriteriaCollection;
 import edu.wpi.first.wpilibj.image.NIVision.MeasurementType;
 import edu.wpi.first.wpilibj.image.ParticleAnalysisReport;
@@ -29,6 +30,7 @@ public class ImageProcessing {
             //Thread.sleep(10000);
             rightReport = getPARs(rightCam);
             msg.printLn("RR done");
+
             if (leftReport.length > 1) {
                 System.out.println("WARN: " + leftReport.length + "left reports found!");
             }
@@ -71,11 +73,16 @@ public class ImageProcessing {
         // clean out residual small objects,
         // convexHull,
         // apply a particle filter based on Criteria Collection constraints
-        BinaryImage filteredImage = camera.getImage()
-                .thresholdRGB(0, 42, 71, 255, 0, 255)
-                .removeSmallObjects(useConnectivity8, erosionCount)
-                .convexHull(useConnectivity8)
-                .particleFilter(criteriaCollection);
+        ColorImage colorImage = camera.getImage();
+        BinaryImage threshold = colorImage.thresholdRGB(0, 42, 71, 255, 0, 255);
+        colorImage.free();
+        BinaryImage eroded = threshold.removeSmallObjects(useConnectivity8, erosionCount);
+        threshold.free();
+        BinaryImage convexHull = eroded.convexHull(useConnectivity8);
+        eroded.free();
+        BinaryImage filteredImage = convexHull.particleFilter(criteriaCollection);
+        convexHull.free();
+                
         targetParticles = filteredImage.getOrderedParticleAnalysisReports();
         filteredImage.free();
         return targetParticles;
@@ -90,7 +97,7 @@ public class ImageProcessing {
         msg.printLn("TL: " + left_x);    // target left
         msg.printLn("TR: " + right_x);  // target right
 
-        disparity = (left_x - center_x) + (center_x - right_x);
+        disparity = MathX.abs(left_x - center_x) + MathX.abs(right_x - center_x);
         msg.printLn("D " + right_x);  // disparity
 
         return disparity;
