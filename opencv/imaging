@@ -1,0 +1,54 @@
+import cv2
+from cv2 import cv
+import numpy as np
+import sys
+import cPickle
+
+camera = cv2.VideoCapture(0)
+
+while 1:
+    img = cv2.imread(sys.argv[1], cv2.CV_LOAD_IMAGE_COLOR)
+    # _,img = camera.read()
+
+    img = cv2.blur(img,(3,3))
+
+    hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+
+    GREEN_MIN = np.array([50, 100, 100], np.uint8)
+    GREEN_MAX = np.array([100, 255, 255], np.uint8)
+
+    frame_threshed = cv2.inRange(hsv_img, GREEN_MIN, GREEN_MAX)
+    frame_threshed2 = frame_threshed.copy()
+
+    print cv2.countNonZero(frame_threshed)
+    blur = cv2.medianBlur(frame_threshed, 5)
+    print cv2.countNonZero(blur)
+
+    blur2 = blur.copy()
+
+    contours, hierarchy = cv2.findContours(blur2,
+                                          cv2.RETR_LIST,
+                                          cv2.CHAIN_APPROX_SIMPLE)
+    
+    tmp = cPickle.dumps(contours)    
+    contours = cPickle.loads(tmp)
+
+    cv2.drawContours(img, contours, -1, (0,0,255), 3)
+    
+    #max_area = 0
+    #for cnt in contours:
+    #    area = cv2.contourArea(cnt)
+    #    if area > max_area:
+    #        max_area = area
+    #        best_cnt = cnt
+
+    #M = cv2.moments(best_cnt)
+    #cx, cy = int(M['m10']/M['m00']), int(M['m01']/M['m00'])
+    #cv2.circle(frame_threshed,(cx,cy),5,255,-1)
+    
+    cv2.namedWindow('Display Window')
+    cv2.imshow('Display Window', img)
+    if cv2.waitKey(5) == 27:
+        break
+            
+cv2.destroyAllWindows()
