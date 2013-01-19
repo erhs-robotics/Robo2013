@@ -7,3 +7,8 @@
 /Physics/dist/
 /build/
 /suite/
+bin/
+*.cmake
+CMakeFiles/
+CMakeCache.txt
+*.so
