@@ -5,12 +5,12 @@ import cPickle
 import sys
 from Rectangle import Rectangle
 
-camera = cv2.VideoCapture(0)
 
 class imgproc:
 
 	def __init__(self, cam):
-		self.camera = cv2.VideoCapture(0)
+		if cam > 0:
+			self.camera = cv2.VideoCapture(cam)
 		self.GREEN_MIN = np.array([50, 100, 100], np.uint8)
 		self.GREEN_MAX = np.array([100, 255, 255], np.uint8)
 		self.YELLOW_MIN = np.array([0, 100, 100], np.uint8)
@@ -36,6 +36,7 @@ class imgproc:
 											cv2.CHAIN_APPROX_SIMPLE)
 		tmp = cPickle.dumps(self.contours)
 		self.contours = cPickle.loads(tmp)
+		
 		return self.contours
 		
 	def fillContours(self, image, contours):
@@ -56,10 +57,20 @@ class imgproc:
 		
 		hsv_img = self.getHSVImage(cam_img)
 		thresh_img = self.getThreshImage(hsv_img, self.GREEN_MIN, self.GREEN_MAX) #cv2.inRange(hsv_img, GREEN_MIN, GREEN_MAX)
-		thresh_contours = self.getContours(thresh_img.copy())
-		#cv2.drawContours(cam_img, thresh_contours, -1, (0,0,255), 3)
-		self.fillContours(cam_img, thresh_contours)
-		rects_img = cv2.inRange(cam_img, self.YELLOW_MIN, self.YELLOW_MAX)
-		rects_contours = self.getContours(rects_img.copy())
-		rects = self.getBoundingRectangles(rects_contours)
-		return (rects, rects_img)
+		thresh_contours = self.getContours(thresh_img)
+		cv2.drawContours(cam_img, thresh_contours, -1, (0,0,255), 3)
+		#self.fillContours(cam_img, thresh_contours)
+		rects = self.getBoundingRectangles(thresh_contours)
+		
+		return (rects, cam_img)
+		#return ([], cam_img)
+		
+	def getRect(self, img):
+		img = cv2.blur(img,(3,3))
+		
+		hsv_img = self.getHSVImage(img)
+		thresh_img = self.getThreshImage(hsv_img, self.GREEN_MIN, self.GREEN_MAX)
+		thresh_contours = self.getContours(thresh_img)
+		rects = self.getBoundingRectangles(thresh_contours)
+		return rects
+		

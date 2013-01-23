@@ -16,9 +16,13 @@ int main() {
     while (true) {
         
         IplImage* frame = cvQueryFrame ( capture );
+        blur(frame, frame)
         IplImage* imgHSV = cvCreateImage(cvGetSize(frame), 8, 3);
         IplImage* imgThreshed = cvCreateImage(cvGetSize(frame), 8, 1);
         cvCvtColor(frame, imgHSV, CV_BGR2HSV);
+        
+        
+		
         cvInRangeS(imgHSV, cvScalar(60, 100, 100), cvScalar(100, 255, 255), imgThreshed);
         if ( !frame ) {
             fprintf ( stderr, "ERROR: frame is null...\n" );
