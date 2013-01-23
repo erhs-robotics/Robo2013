@@ -26,6 +26,7 @@ def update_upperV(value):
     
 
 imgproc = imgproc(0)
+
 cv2.namedWindow('Display Window')
 cv2.namedWindow('Thresh View')
 cv2.namedWindow('Tuning Window')
@@ -39,8 +40,8 @@ cv.CreateTrackbar("Upper V", 'Tuning Window', imgproc.GREEN_MAX[2], 255, update_
 while 1:
     
     # Load the image from the camera (or a static file for testing)
-    cam_img = cv2.imread(sys.argv[1], cv2.CV_LOAD_IMAGE_COLOR)
-    #cam_img = imgproc.getCameraImage()
+    #cam_img = cv2.imread(sys.argv[1], cv2.CV_LOAD_IMAGE_COLOR)
+    cam_img = imgproc.getCameraImage()
 
     #cam_img = cv2.blur(cam_img,(3,3))
     	
