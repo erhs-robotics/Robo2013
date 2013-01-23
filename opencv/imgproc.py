@@ -57,7 +57,8 @@ class imgproc:
 		
 		hsv_img = self.getHSVImage(cam_img)
 		thresh_img = self.getThreshImage(hsv_img, self.GREEN_MIN, self.GREEN_MAX) #cv2.inRange(hsv_img, GREEN_MIN, GREEN_MAX)
-		thresh_contours = self.getContours(thresh_img)
+		
+		thresh_contours = self.getContours(thresh_img.copy())
 		cv2.drawContours(cam_img, thresh_contours, -1, (0,0,255), 3)
 		#self.fillContours(cam_img, thresh_contours)
 		rects = self.getBoundingRectangles(thresh_contours)
