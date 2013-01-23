@@ -12,3 +12,4 @@ bin/
 CMakeFiles/
 CMakeCache.txt
 *.so
+*.pyc
