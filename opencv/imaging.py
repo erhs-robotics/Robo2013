@@ -7,7 +7,6 @@ from imgproc import *
 from Rectangle import *
 
 
-
 imgproc = imgproc(0)
 cv2.namedWindow('Display Window')
 while 1:
