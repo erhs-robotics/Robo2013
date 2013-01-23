@@ -6,13 +6,10 @@ import cPickle
 from imgproc import *
 from Rectangle import *
 
-GREEN_MIN = np.array([50, 100, 100], np.uint8)
-GREEN_MAX = np.array([100, 255, 255], np.uint8)
-YELLOW_MIN = np.array([0, 100, 100], np.uint8)
-YELLOW_MAX = np.array([30, 255, 255], np.uint8)
+
 
 imgproc = imgproc(0)
-
+cv2.namedWindow('Display Window')
 while 1:
     
     # Load the image from the camera (or a static file for testing)
@@ -25,7 +22,7 @@ while 1:
     for i in range(len(rects)):
         print rects[i].x + rects[i].width/2, rects[i].y + rects[i].height/2
     
-    cv2.namedWindow('Display Window')
+    
     cv2.imshow('Display Window', rects_img)
     if cv2.waitKey(5) == 27:
         break
