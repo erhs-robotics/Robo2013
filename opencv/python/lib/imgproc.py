@@ -11,8 +11,11 @@ class imgproc:
 	def __init__(self, cam):
 		if cam >= 0:
 			self.camera = cv2.VideoCapture(cam)
-		self.GREEN_MIN = np.array([50, 100, 100], np.uint8)
+		#self.GREEN_MIN = np.array([50, 100, 100], np.uint8)
+		#self.GREEN_MAX = np.array([100, 255, 255], np.uint8)
+		self.GREEN_MIN = np.array([70, 138, 156], np.uint8)
 		self.GREEN_MAX = np.array([100, 255, 255], np.uint8)
+        
 		self.YELLOW_MIN = np.array([0, 100, 100], np.uint8)
 		self.YELLOW_MAX = np.array([30, 255, 255], np.uint8)
 		
