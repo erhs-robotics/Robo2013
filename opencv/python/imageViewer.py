@@ -1,3 +1,6 @@
+#!/usr/bin/python2
+import sys
+sys.path.append('lib')
 import cv2
 from cv2 import cv
 import numpy as np

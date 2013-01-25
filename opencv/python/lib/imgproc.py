@@ -34,7 +34,9 @@ class imgproc:
 		self.contours, _ = cv2.findContours(image,
 											cv2.RETR_LIST,
 											cv2.CHAIN_APPROX_SIMPLE)
-		tmp = cPickle.dumps(self.contours)
+		#this is for a bug in opencv, it should be fixed in the newest
+        #version or a later version
+        tmp = cPickle.dumps(self.contours)
 		self.contours = cPickle.loads(tmp)
 		
 		return self.contours
@@ -60,11 +62,10 @@ class imgproc:
 		
 		thresh_contours = self.getContours(thresh_img.copy())
 		cv2.drawContours(cam_img, thresh_contours, -1, (0,0,255), 3)
-		#self.fillContours(cam_img, thresh_contours)
+		
 		rects = self.getBoundingRectangles(thresh_contours)
 		
-		return (rects, cam_img)
-		#return ([], cam_img)
+		return (rects, cam_img)		
 		
 	def getRect(self, img):
 		img = cv2.blur(img,(3,3))
