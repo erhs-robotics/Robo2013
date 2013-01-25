@@ -34,9 +34,9 @@ class imgproc:
 		self.contours, _ = cv2.findContours(image,
 											cv2.RETR_LIST,
 											cv2.CHAIN_APPROX_SIMPLE)
-		#this is for a bug in opencv, it should be fixed in the newest
+        #this is for a bug in opencv, it should be fixed in the newest
         #version or a later version
-        tmp = cPickle.dumps(self.contours)
+		tmp = cPickle.dumps(self.contours)
 		self.contours = cPickle.loads(tmp)
 		
 		return self.contours
