@@ -6,15 +6,6 @@ Vision::Vision ( bool webcam ) {
 
 }
 
-Mat Vision::getHSVimage (Mat image) {
-  //IplImage* hsv_image = cvCreateImage(cvGetSize(image), 8, 3);
-  Mat hsv_image;
-  cvtColor(image, hsv_image, CV_BGR2HSV);
-  //cvCvtColor(image, hsv_image, CV_BGR2HSV);
-  return hsv_image;
-
-}
-
 Mat Vision::doImgProc (Mat image) {
   Mat binimg;
   vector<vector<Point> > contours;
