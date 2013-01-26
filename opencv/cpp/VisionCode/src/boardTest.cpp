@@ -1,6 +1,8 @@
 #include <opencv2/opencv.hpp>
+#include <iostream>
 #include "Vision.h"
 using namespace cv;
+using namespace std;
 
 int main(int, char** argv)
 {
@@ -12,8 +14,7 @@ int main(int, char** argv)
     
     
 
-    Mat edges;
-    namedWindow("edges",1);
+    
     
     for(;;)
     {
@@ -21,9 +22,15 @@ int main(int, char** argv)
 	Mat frame;
 	cap >> frame;
         
-        Mat target = vision.doImgProc(frame);
+        Vector<Rect> rects = vision.getRects(frame);
+	
+	for(int i=0;i<rects.size();i++) {
+	  cout << "["  << rects[i].x     << ", " << rects[i].y
+	       << ", " << rects[i].width << ", " << rects[i].height
+	       << "]"  << endl;
+	}
        
-        imshow("edges", target);
+        
         if(waitKey(30) >= 0) break;
     }
     

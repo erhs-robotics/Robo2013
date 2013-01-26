@@ -1,48 +1,54 @@
 #include "Vision.h"
 
 Vision::Vision ( bool webcam ) {
-  HSV_lower = cvScalar(10, 100, 100);
-  HSV_upper = cvScalar(255, 255, 255);
+  HSV_lower = Scalar(70, 138, 156);
+  HSV_upper = Scalar(100, 255, 255);
 
 }
 
-IplImage* Vision::getHSVimage (IplImage* image) {
-  IplImage* hsv_image = cvCreateImage(cvGetSize(image), 8, 3);
-  cvCvtColor(image, hsv_image, CV_BGR2HSV);
+Mat Vision::getHSVimage (Mat image) {
+  //IplImage* hsv_image = cvCreateImage(cvGetSize(image), 8, 3);
+  Mat hsv_image;
+  cvtColor(image, hsv_image, CV_BGR2HSV);
+  //cvCvtColor(image, hsv_image, CV_BGR2HSV);
   return hsv_image;
 
 }
 
-IplImage* Vision::getThreshImage (IplImage* image) {
-  IplImage* threshed_image = cvCreateImage(cvGetSize(image), 8, 1);
-  cvInRangeS(image, HSV_lower, HSV_upper, threshed_image);
-  return threshed_image;
-
-}
-
-CvSeq* Vision::getContours(IplImage* image) {
-  CvSeq* contours;
-  CvMemStorage *storage=cvCreateMemStorage(0);        
-  cvFindContours(image, storage, &contours, sizeof(CvContour), CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
-  return contours;
-}
-
-void Vision::getBoundingRectangles() {
-
-}
-
-
-
-IplImage* Vision::doImgProc (IplImage* image) {
-  //Mat imgMat(image);
-  //blur(imgMat, imgMat, Size(3,3));
-  cvSmooth( image, image, CV_GAUSSIAN, 11, 11 );
-  IplImage* hsv_image = getHSVimage(image);
-  IplImage* threshed_image = getThreshImage(hsv_image);
-  CvSeq* contours = getContours(threshed_image);
+Mat Vision::doImgProc (Mat image) {
+  Mat binimg;
+  vector<vector<Point> > contours;
+  blur(image, image, Size(3,3));
+  
+  cvtColor(image, binimg, CV_BGR2HSV);
+  inRange(binimg, HSV_lower, HSV_upper, binimg);
+  findContours(binimg, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
+  for( int i = 0; i< contours.size(); i++ ) {    
+    drawContours( image, contours, i, Scalar( 0, 0, 255 ), 3);
+  }
+ 
   
  
-  return threshed_image;//new IplImage(imgMat);
+  return image;
 
 }
+
+Vector<Rect> Vision::getRects(Mat image) {
+  Mat binimg;
+  vector<vector<Point> > contours;
+  blur(image, image, Size(3,3));
+  
+  cvtColor(image, binimg, CV_BGR2HSV);
+  inRange(binimg, HSV_lower, HSV_upper, binimg);
+  findContours(binimg, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
+  Vector<Rect> rects;
+  
+  for( int i = 0; i< contours.size(); i++ ) {    
+    rects.push_back(boundingRect(contours[i]));    
+  }
+  
+  return rects;
+
+}
+
 

@@ -115,6 +115,19 @@ vision/fast:
 .PHONY : vision/fast
 
 #=============================================================================
+# Target rules for targets named boardTest
+
+# Build rule for target.
+boardTest: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 boardTest
+.PHONY : boardTest
+
+# fast build rule for target.
+boardTest/fast:
+	$(MAKE) -f bin/CMakeFiles/boardTest.dir/build.make bin/CMakeFiles/boardTest.dir/build
+.PHONY : boardTest/fast
+
+#=============================================================================
 # Target rules for targets named visionGUI
 
 # Build rule for target.
@@ -136,6 +149,7 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... vision"
+	@echo "... boardTest"
 	@echo "... visionGUI"
 .PHONY : help
 

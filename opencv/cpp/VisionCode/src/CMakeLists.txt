@@ -1,5 +1,7 @@
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
-set(GUI_SRCS gui.cpp)
 
-add_executable(visionGUI ${GUI_SRCS})
+add_executable(visionGUI gui.cpp)
 target_link_libraries(visionGUI ${OpenCV_LIBS} vision)
+
+add_executable(boardTest boardTest.cpp)
+target_link_libraries(boardTest ${OpenCV_LIBS} vision)
