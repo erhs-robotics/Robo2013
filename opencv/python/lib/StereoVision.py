@@ -14,7 +14,7 @@ class StereoVision:
         self.CAM_PIXEL_WIDTH = 640
         self.CAM_PIXEL_HEIGHT = 480
         self.CAM_DISTANCE = .16# meters
-        self.FOCAL_LEN = 4.2# * pixels_per_mm
+        self.FOCAL_LEN = 297.647058824# * pixels_per_mm
         #self.PPMM = # Pixels per millimeter 
     
     def getDistance(self, left_rects, right_rects):
