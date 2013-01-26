@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python2
 import cv2 
 from cv2 import cv
 import numpy as np
