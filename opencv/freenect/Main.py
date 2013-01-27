@@ -26,20 +26,28 @@ while True:
     rgb,_ = get_video()
     
     bgr = cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
-    hsv_img = imgproc.getHSVImage(bgr)
-    thresh_img = imgproc.getThreshImage(hsv_img, imgproc.GREEN_MIN, imgproc.GREEN_MAX)
+    rects, rects_img = imgproc.doImgProc(bgr)
+    if len(rects) > 0:
+        max_rect = rects[0]
+        for i in range(len(rects)):
+            if rects[i].area > max_rect.area:
+                max_rect = rects[i]
+                
+        print max_rect.x, max_rect.y
+        #x_pos = max_rect.x
+        #y_pos = max_rect.y
     
     cv2.circle(rgb, (x_pos, y_pos), 2, (255,255,0), 5)        
     
     raw_depth_val = depth[y_pos][x_pos]
     distance = 0.1236 * tan(raw_depth_val / 2842.5 + 1.1863) #raw->meters
-    print distance# meters->feet->in
+    print distance * 100 / 2.54# meters->feet->in
     
     # Build a two panel color image
     d3 = np.dstack((depth,depth,depth)).astype(np.uint8)
     da = np.hstack((d3,rgb))
     
     cv2.imshow('Depth and RGB',np.array(da[::2,::2,::-1]))
-    cv2.imshow('RGB Mods', hsv_img)
+    cv2.imshow('RGB Mods', rects_img)
     if cv2.waitKey(5) == 27:
         break
