@@ -27,7 +27,7 @@ def update_upperV(value):
     imgproc.GREEN_MAX[2] = value
     
 
-imgproc = imgproc(-1`)
+imgproc = imgproc(-1)
 
 cv2.namedWindow('Display Window')
 cv2.namedWindow('Thresh View')
