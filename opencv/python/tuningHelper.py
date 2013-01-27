@@ -1,13 +1,12 @@
 #!/usr/bin/python2
 import sys
 sys.path.append('lib')
-import cv2
+import cv2 
 from cv2 import cv
 import numpy as np
-import sys
-import cPickle
+from freenect import sync_get_depth as get_depth, sync_get_video as get_video
+from math import tan
 from imgproc import *
-from Rectangle import *
 
 def update_lowerH(value):
     imgproc.GREEN_MIN[0] = value
@@ -28,7 +27,7 @@ def update_upperV(value):
     imgproc.GREEN_MAX[2] = value
     
 
-imgproc = imgproc(0)
+imgproc = imgproc(-1`)
 
 cv2.namedWindow('Display Window')
 cv2.namedWindow('Thresh View')
@@ -46,7 +45,7 @@ while 1:
     if len(sys.argv) > 1:
         cam_img = cv2.imread(sys.argv[1], cv2.CV_LOAD_IMAGE_COLOR)
     else:
-        cam_img = imgproc.getCameraImage()
+        cam_img, _ = get_video()
 
     #cam_img = cv2.blur(cam_img,(3,3))
     	
