@@ -7,6 +7,7 @@ import numpy as np
 from freenect import sync_get_depth as get_depth, sync_get_video as get_video
 from math import tan
 from imgproc import *
+from Kinect import Kinect
 
 def update_lowerH(value):
     imgproc.GREEN_MIN[0] = value
@@ -26,16 +27,18 @@ def update_upperS(value):
 def update_upperV(value):
     imgproc.GREEN_MAX[2] = value
     
-# 0 - Kinect
 # 1 - Webcam
 # 2 - File
-action = 0
+action = 1
 
 
 
 
 
-imgproc = imgproc(-1)
+imgproc = imgproc(0)
+kinect = None
+if len(sys.argv) > 1:
+    kinect = Kinect()
 
 cv2.namedWindow('Display Window')
 cv2.namedWindow('Thresh View')
@@ -51,11 +54,14 @@ while 1:
     
     # Load the image from the camera (or a static file for testing)
     if len(sys.argv) > 1:
-        cam_img = cv2.imread(sys.argv[1], cv2.CV_LOAD_IMAGE_COLOR)
+        if action == 2:
+            cam_img = cv2.imread(sys.argv[1], cv2.CV_LOAD_IMAGE_COLOR)
+        elif action == 1:
+            cam_img = imgproc.getCameraImage()
     else:
-        cam_img, _ = get_video()
+        cam_img = kinect.get_video()
 
-    #cam_img = cv2.blur(cam_img,(3,3))
+    
     	
     rects, rects_img = imgproc.doImgProc(cam_img)
     for i in range(len(rects)):
