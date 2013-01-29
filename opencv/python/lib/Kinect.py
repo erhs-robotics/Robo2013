@@ -1,6 +1,6 @@
-import numpy as np
 import freenect
 from math import tan
+import cv2
 
 class Kinect:
     def __init__(self):
@@ -13,7 +13,8 @@ class Kinect:
         return freenect.sync_get_depth()[0]
         
     def get_video(self):
-        return freenect.sync_get_video()[0]
+        rgb = freenect.sync_get_video()[0]
+        return cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
         
     def get_raw_depth_at(self, x, y):
         return self.get_depth()[y][x]
