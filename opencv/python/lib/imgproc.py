@@ -59,14 +59,14 @@ class imgproc:
 			rect = Rectangle(center_x, center_y, width, height)
 			rects.append(rect)
 		return rects
-        
-    def getMaxRect(self, rects):
-        if len(rects) > 0:
-            big = rects[0]
-            for rect in rects:
-                if rect.area > big.area:
-                    big = rect
-            return big
+
+	def getMaxRect(self, rects):
+		if len(rects) > 0:
+			big = rects[0]
+			for rect in rects:
+				if rect.area > big.area:
+					big = rect
+			return big
 	
 	def doImgProc(self, cam_img):
 		cam_img = cv2.blur(cam_img,(4,4))

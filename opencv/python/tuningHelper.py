@@ -1,5 +1,5 @@
 #!/usr/bin/python2
-import sys
+import sys, getopt
 sys.path.append('lib')
 import cv2 
 from cv2 import cv
@@ -26,6 +26,14 @@ def update_upperS(value):
 def update_upperV(value):
     imgproc.GREEN_MAX[2] = value
     
+# 0 - Kinect
+# 1 - Webcam
+# 2 - File
+action = 0
+
+
+
+
 
 imgproc = imgproc(-1)
 
