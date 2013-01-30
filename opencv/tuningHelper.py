@@ -31,10 +31,6 @@ def update_upperV(value):
 # 2 - File
 action = 2
 
-
-
-
-
 imgproc = None
 if action == 1:
     imgproc = Imgproc(0)
@@ -45,10 +41,7 @@ kinect = None
 if len(sys.argv) < 1:
     kinect = Kinect()
 
-cv2.namedWindow('Original Image')
-cv2.namedWindow('HSV Image')
-cv2.namedWindow('Threshed Image')
-cv2.namedWindow('Rects View')
+cv2.namedWindow('Original, HSV, Thresh, Rects')
 cv2.namedWindow('Tuning Window')
 cv.CreateTrackbar("Lower H", 'Tuning Window', imgproc.GREEN_MIN[0], 255, update_lowerH)
 cv.CreateTrackbar("Lower S", 'Tuning Window', imgproc.GREEN_MIN[1], 255, update_lowerS)
@@ -70,16 +63,15 @@ while 1:
         
     #cam_img = cv2.cvtColor(cam_img, cv2.COLOR_RGB2BGR)
 
-    
-    	
     rects, rects_img = imgproc.doImgProc(cam_img)
     for i in range(len(rects)):
         print rects[i].x + rects[i].width/2, rects[i].y + rects[i].height/2
     
-    cv2.imshow('Original Image', cam_img)
-    cv2.imshow('HSV Image', imgproc.hsv_img)
-    cv2.imshow('Threshed Image', imgproc.thresh_img)
-    cv2.imshow('Rects View', rects_img)
+    color = np.hstack((cam_img, imgproc.hsv_img)) #, imgproc.thresh_img, rects_img))
+    binary = np.hstack((imgproc.thresh_img, rects_img))
+    binary_3d = np.dstack((binary, binary, binary)).astype(np.uint8)
+    all_images = np.hstack((color, binary_3d))
+    cv2.imshow('Original, HSV, Thresh, Rects', np.array(all_images[::2,::2,::-1]))
     
     if cv2.waitKey(5) == 27:
         break
