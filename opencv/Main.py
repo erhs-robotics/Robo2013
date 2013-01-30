@@ -7,7 +7,7 @@ import numpy as np
 from imgproc import *
 from Kinect import Kinect
 
-imgproc = imgproc(-1)
+imgproc = Imgproc(-1)
 
 x_pos = 100
 y_pos = 100

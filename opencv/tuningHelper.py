@@ -29,19 +29,26 @@ def update_upperV(value):
     
 # 1 - Webcam
 # 2 - File
-action = 1
+action = 2
 
 
 
 
 
-imgproc = imgproc(0)
+imgproc = None
+if action == 1:
+    imgproc = Imgproc(0)
+else:
+    imgproc = Imgproc(-1)
+
 kinect = None
 if len(sys.argv) < 1:
     kinect = Kinect()
 
-cv2.namedWindow('Display Window')
-cv2.namedWindow('Thresh View')
+cv2.namedWindow('Original Image')
+cv2.namedWindow('HSV Image')
+cv2.namedWindow('Threshed Image')
+cv2.namedWindow('Rects View')
 cv2.namedWindow('Tuning Window')
 cv.CreateTrackbar("Lower H", 'Tuning Window', imgproc.GREEN_MIN[0], 255, update_lowerH)
 cv.CreateTrackbar("Lower S", 'Tuning Window', imgproc.GREEN_MIN[1], 255, update_lowerS)
@@ -60,6 +67,8 @@ while 1:
             cam_img = imgproc.getCameraImage()
     else:
         cam_img = kinect.get_video()
+        
+    #cam_img = cv2.cvtColor(cam_img, cv2.COLOR_RGB2BGR)
 
     
     	
@@ -67,9 +76,11 @@ while 1:
     for i in range(len(rects)):
         print rects[i].x + rects[i].width/2, rects[i].y + rects[i].height/2
     
+    cv2.imshow('Original Image', cam_img)
+    cv2.imshow('HSV Image', imgproc.hsv_img)
+    cv2.imshow('Threshed Image', imgproc.thresh_img)
+    cv2.imshow('Rects View', rects_img)
     
-    cv2.imshow('Display Window', rects_img)
-    cv2.imshow('Thresh View', imgproc.thresh_img)
     if cv2.waitKey(5) == 27:
         break
             

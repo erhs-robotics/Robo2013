@@ -6,7 +6,7 @@ import sys
 from Rectangle import Rectangle
 
 
-class imgproc:
+class Imgproc:
 
     # MIN 31, 69, 144
     # MAX 92, 198, 255
