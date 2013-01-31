@@ -1,7 +1,7 @@
 import socket 
 
 host = 'localhost' 
-port = 1180 
+port = 80 
 backlog = 5 
 size = 1024 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
