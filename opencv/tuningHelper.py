@@ -56,12 +56,13 @@ while 1:
     if len(sys.argv) > 1:
         if action == 2:
             cam_img = cv2.imread(sys.argv[1], cv2.CV_LOAD_IMAGE_COLOR)
+            cam_img = cv2.cvtColor(cam_img, cv2.COLOR_RGB2BGR)
         elif action == 1:
             cam_img = imgproc.getCameraImage()
     else:
         cam_img = kinect.get_video()
         
-    #cam_img = cv2.cvtColor(cam_img, cv2.COLOR_RGB2BGR)
+    
 
     rects, rects_img = imgproc.doImgProc(cam_img)
     for i in range(len(rects)):
