@@ -6,6 +6,7 @@ from cv2 import cv
 import numpy as np
 from imgproc import *
 from Kinect import Kinect
+import freenect
 
 imgproc = Imgproc(-1)
 
@@ -24,6 +25,9 @@ cv.CreateTrackbar("Y", 'Depth and RGB', y_pos, 479, update_y)
 kinect = Kinect()
 
 while True:
+
+    rgb,_ = freenect.sync_get_video()
+    depth = kinect.get_depth()
     
     bgr = kinect.get_video()
     rects, rects_img = imgproc.doImgProc(bgr)

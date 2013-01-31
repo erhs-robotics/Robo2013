@@ -4,10 +4,11 @@ import cv2
 
 class Kinect:
     def __init__(self):
-        try:
-            _,_ = get_depth()
-        except:
-            raise Exception("Kinect not found!")
+        pass
+        #try:
+        #    _,_ = get_depth()
+        #except:
+        #    raise Exception("Kinect not found!")
     
     def get_depth(self):
         return freenect.sync_get_depth()[0]
