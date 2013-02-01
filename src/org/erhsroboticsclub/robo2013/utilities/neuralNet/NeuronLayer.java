@@ -1,4 +1,4 @@
-package neuralNet;
+package org.erhsroboticsclub.robo2013.utilities.neuralNet;
 
 public class NeuronLayer {
 
