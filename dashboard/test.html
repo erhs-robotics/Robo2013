@@ -15,6 +15,10 @@
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {        
             document.getElementById("serverReply").innerHTML=xmlhttp.responseText;    
 	        var obj = eval ("(" + xmlhttp.responseText + ")");
+	        
+	        var d = new Date();
+            var n = d.getTime();
+            document.getElementById("time").innerHTML = n
 	        document.getElementById("status").innerHTML = obj.status 
 	        document.getElementById("image").src = obj.image
 	        document.getElementById("message").innerHTML = obj.message
@@ -22,13 +26,16 @@
       }
       xmlhttp.open("GET","http://localhost:85/",true);
       xmlhttp.send();
+      window.setTimeout("getMessage();", 100);
     }
+    getMessage();
   </script>
 </head>
 <body>
-    <div id="serverReply"><a onclick="getMessage();">Click For Teh Message!</a></div>
-	    Status:     <span id="status"></span><br /> 
-	    Image:      <img id="image"><br /> 
-	    Message:    <span id="message"></span><br /> 
+    <div id="serverReply"></div>
+    Time:       <span id="time"></span><br>
+    Status:     <span id="status"></span><br> 
+    Image:      <img id="image"><br> 
+    Message:    <span id="message"></span><br> 
 </body>
 </html>
