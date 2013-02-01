@@ -11,41 +11,25 @@
         // code for IE6, IE5
         xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
       }
-			
-
-
       xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {        
-            document.getElementById("serverReply").innerHTML=xmlhttp.responseText;
-	var obj = eval ("(" + xmlhttp.responseText + ")");
-	alert(obj.status);
-
-	document.getElementById("status").innerHTML = obj.Status 
-		document.getElementById("image").innerHTML = obj.Image 
-		document.getElementById("message").innerHTML = obj.Message
-	
+            document.getElementById("serverReply").innerHTML=xmlhttp.responseText;    
+	        var obj = eval ("(" + xmlhttp.responseText + ")");
+        	alert(obj.status);
+	        document.getElementById("status").innerHTML = obj.status 
+	        document.getElementById("image").src = obj.image
+	        document.getElementById("message").innerHTML = obj.message
         }
       }
-        xmlhttp.open("GET","http://localhost:85/",true);
-        xmlhttp.send();
-
-	
-
-
+      xmlhttp.open("GET","http://localhost:85/",true);
+      xmlhttp.send();
     }
   </script>
 </head>
 <body>
-
-
-<div id="serverReply"><a href="  onclick="getMessage();""a/>Click For Teh Message!</div>
-	
-	Status: <span id="status"></span><br /> 
-	Image: <span id="image"></span><br /> 
-	Message: <span id="message"></span><br /> 
-	 
-
-
-
+    <div id="serverReply"><a onclick="getMessage();">Click For Teh Message!</a></div>
+	    Status:     <span id="status"></span><br /> 
+	    Image:      <img id="image"><br /> 
+	    Message:    <span id="message"></span><br /> 
 </body>
 </html>
