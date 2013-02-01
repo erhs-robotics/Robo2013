@@ -15,7 +15,6 @@
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {        
             document.getElementById("serverReply").innerHTML=xmlhttp.responseText;    
 	        var obj = eval ("(" + xmlhttp.responseText + ")");
-        	alert(obj.status);
 	        document.getElementById("status").innerHTML = obj.status 
 	        document.getElementById("image").src = obj.image
 	        document.getElementById("message").innerHTML = obj.message
