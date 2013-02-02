@@ -2,8 +2,10 @@
 import sys
 sys.path.append('../board/lib')
 from Com import Com
-
-com = Com("10.0.53.42", 80)
+if len(sys.argv) < 2:
+        print "Supply the ip adress in the argument!"
+        exit()
+com = Com(sys.argv[1], 80)
 
 while True: 
     try:

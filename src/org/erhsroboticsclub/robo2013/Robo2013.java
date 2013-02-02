@@ -5,7 +5,12 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import javax.microedition.io.Connector;
+import javax.microedition.io.SocketConnection;
 import org.erhsroboticsclub.robo2013.imaging.ImageProcessing;
 import org.erhsroboticsclub.robo2013.utilities.Controls;
 import org.erhsroboticsclub.robo2013.utilities.Messenger;
@@ -21,7 +26,7 @@ public class Robo2013 extends IterativeRobot {
     
     
     public void robotInit() {
-        com = new Com("http://10.0.53.42", "80");
+        //com = new Com("http://10.0.53.23/");
         msg = new Messenger();
         msg.printLn("Loading FRC 2013");
         try {
@@ -41,9 +46,26 @@ public class Robo2013 extends IterativeRobot {
         
         while(true) {
             try {
-                System.out.println(com.getMessage());
+                SocketConnection sc = (SocketConnection)
+                Connector.open("socket://10.0.53.23:80");
+                sc.setSocketOption(SocketConnection.LINGER, 5);
+
+                InputStream is = sc.openInputStream(); 
+                OutputStream os = sc.openOutputStream();
+                
+                
+
+                int ch = 0;
+                String string = "";
+                while(ch != -1) { 
+                    ch = is.read();
+                    string += (char) ch;
+                }
+                System.out.println(string);
+                is.close(); os.close(); sc.close();
+                
             } catch (IOException ex) {
-                ex.printStackTrace();
+                System.out.println("Connection Failed!");
             }
         }
 

@@ -15,10 +15,10 @@ public class Com{
 	Protocol socket;	
         Connection connection; 	
         
-	Com(String host, String port){            
+        Com(String host){            
             socket = new Protocol();
             try {
-                connection =  socket.open("http", host + ":" + port, 0, true);                                
+                connection =  socket.open("http", host, 0, true);                                
             } catch (IOException ex) {
                 ex.printStackTrace();
             }        
