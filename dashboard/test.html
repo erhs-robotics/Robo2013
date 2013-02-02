@@ -12,13 +12,11 @@
         xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
       }
       xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {        
-            document.getElementById("serverReply").innerHTML=xmlhttp.responseText;    
-	        var obj = JSON.parse(xmlhttp.responseText);
-	        
-	        var d = new Date();
-            var n = d.getTime();
-            document.getElementById("time").innerHTML = n
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                     
+	        var obj = JSON.parse(xmlhttp.responseText);	        
+          var n = new Date().getTime();
+          document.getElementById("time").innerHTML = n
 	        document.getElementById("status").innerHTML = obj.status 
 	        document.getElementById("image").src = obj.image
 	        document.getElementById("message").innerHTML = obj.message
@@ -31,8 +29,7 @@
     getMessage();
   </script>
 </head>
-<body>
-    <div id="serverReply"></div>
+<body>    
     Time:       <span id="time"></span><br>
     Status:     <span id="status"></span><br> 
     Image:      <img id="image"><br> 
