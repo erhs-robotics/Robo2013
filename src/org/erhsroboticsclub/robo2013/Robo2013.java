@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.camera.AxisCamera;
 import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
+import java.io.IOException;
 import org.erhsroboticsclub.robo2013.imaging.ImageProcessing;
 import org.erhsroboticsclub.robo2013.utilities.Controls;
 import org.erhsroboticsclub.robo2013.utilities.Messenger;
@@ -15,10 +16,12 @@ public class Robo2013 extends IterativeRobot {
     Joystick sticky;
     CANJaguar TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR;
     Messenger msg;
-    Controls driveControls;    
+    Controls driveControls;
+    Com com;
     
     
     public void robotInit() {
+        com = new Com("http://10.0.53.42", "80");
         msg = new Messenger();
         msg.printLn("Loading FRC 2013");
         try {
@@ -35,21 +38,21 @@ public class Robo2013 extends IterativeRobot {
         sticky = new Joystick(1);
         driveControls = new Controls(sticky);
         msg.printLn("Done Loading: FRC 2013");
+        
+        while(true) {
+            try {
+                System.out.println(com.getMessage());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
 
     }
 
     public void autonomousInit() {
         drive.setSafetyEnabled(false);
         
-        msg.clearConsole();
-
-        
-        //ImageProcessing imgProc = new ImageProcessing();
-        
-
-        //double distance = imgProc.getDistance(leftCam, rightCam);
-        
-        
+        msg.clearConsole();    
         
     }
     
@@ -59,7 +62,7 @@ public class Robo2013 extends IterativeRobot {
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
-       drive.drive(0, 0);
+        
     }
 
     /**
