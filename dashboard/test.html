@@ -14,7 +14,7 @@
       xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {        
             document.getElementById("serverReply").innerHTML=xmlhttp.responseText;    
-	        var obj = eval ("(" + xmlhttp.responseText + ")");
+	        var obj = JSON.parse(xmlhttp.responseText);
 	        
 	        var d = new Date();
             var n = d.getTime();
