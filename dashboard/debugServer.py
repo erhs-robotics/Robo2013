@@ -12,12 +12,13 @@ while 1:
     try:
         client, address = s.accept() 
         data = client.recv(size) 
-        if data:
-            client.send('HTTP/1.0 200 OK\r\n')
-            client.send("Content-Type: application/json\r\n")
-            client.send("Access-Control-Allow-Origin: *\r\n\r\n")
-            client.send('{"status": "Ready", "image" : "http://a57.foxnews.com/global.fncstatic.com/static/managed/img/Scitech/0/371/tardar-sauce-the-cat.jpg", "message" : "yo"}') 
+        
+        client.send('HTTP/1.0 200 OK\r\n')
+        client.send("Content-Type: application/json\r\n")
+        client.send("Access-Control-Allow-Origin: *\r\n\r\n")
+        client.send('{"status": "Ready", "image" : "http://a57.foxnews.com/global.fncstatic.com/static/managed/img/Scitech/0/371/tardar-sauce-the-cat.jpg", "message" : "yo"}') 
         client.close()
-    except:
+    except NameError as e:
+        print e
         s.close()
         exit()
