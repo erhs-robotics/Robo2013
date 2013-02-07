@@ -1,4 +1,5 @@
 #!/usr/bin/python2
+import socket
 
 class Com:
 	def __init__(self, host, port):
@@ -11,8 +12,10 @@ class Com:
 		data = self.client.recv(size)
 		return data
 	
-	def write_steam(self, string):
+	def write_stream(self, string):
 		self.client.send(string)
+		
+	def close_stream(self):
 		self.client.close()
 		
 	

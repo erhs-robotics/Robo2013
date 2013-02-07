@@ -30,7 +30,11 @@
 	        document.getElementById("message").innerHTML = obj.message
         }
       }
+<<<<<<< HEAD
       xmlhttp.open("GET",ip,true);
+=======
+      xmlhttp.open("GET","http://localhost:80/",true);
+>>>>>>> 991bca8230c117d5f48c18f52a09c8e2481d6bb7
       xmlhttp.send();
       window.setTimeout("getMessage();", 100);
     }
