@@ -24,7 +24,8 @@ $(document).ready(function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText);
             console += "<br>" + obj.message;
-            var n = new Date().getTime();
+            var n = (new Date() - start)/1000;
+            n = n.toFixed(1);
             $("#time").text(n);
             $("#status").text(obj.status);
             $("#image").attr("src", obj.image);
@@ -39,7 +40,7 @@ $(document).ready(function() {
 });
 
 function updateIP() { 
-    start = new Date();   
+    start = new Date();  
     ip = $("#txt").val();
 }
 
