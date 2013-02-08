@@ -1,20 +1,15 @@
 package org.erhsroboticsclub.robo2013;
 
-import com.sun.squawk.imp.ImpGlobal;
+
+import com.sun.squawk.platform.posix.linux.natives.SocketImpl;
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.camera.AxisCamera;
-import edu.wpi.first.wpilibj.camera.AxisCameraException;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import javax.microedition.io.Connector;
 import javax.microedition.io.ServerSocketConnection;
 import javax.microedition.io.SocketConnection;
-import org.erhsroboticsclub.robo2013.imaging.ImageProcessing;
 import org.erhsroboticsclub.robo2013.utilities.Controls;
 import org.erhsroboticsclub.robo2013.utilities.Messenger;
 
@@ -25,10 +20,10 @@ public class Robo2013 extends IterativeRobot {
     CANJaguar TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR;
     Messenger msg;
     Controls driveControls;
-    Com com;
+    
 
     public void robotInit() {
-        //com = new Com("http://10.0.53.23/");
+        
         msg = new Messenger();
         msg.printLn("Loading FRC 2013");
         try {
@@ -46,43 +41,7 @@ public class Robo2013 extends IterativeRobot {
         driveControls = new Controls(sticky);
         msg.printLn("Done Loading: FRC 2013");
 
-        while (true) {
-            try {
-                // Create the server listening socket for port 1234
-                ServerSocketConnection scn = (ServerSocketConnection) Connector.open("socket://:1234");
 
-                // Wait for a connection.
-                SocketConnection sc = (SocketConnection) scn.acceptAndOpen();
-
-                // Set application specific hints on the socket.
-                sc.setSocketOption(SocketConnection.DELAY, 0);
-                sc.setSocketOption(SocketConnection.LINGER, 0);
-                sc.setSocketOption(SocketConnection.KEEPALIVE, 0);
-                sc.setSocketOption(SocketConnection.RCVBUF, 128);
-                sc.setSocketOption(SocketConnection.SNDBUF, 128);
-
-                // Get the input stream of the connection.
-                DataInputStream is = sc.openDataInputStream();
-
-                // Get the output stream of the connection.
-                DataOutputStream os = sc.openDataOutputStream();
-
-                // Read the input data.
-                String result = is.readUTF();
-
-                // Echo the data back to the sender.
-                //os.writeUTF(result);
-
-                // Close everything.
-                is.close();
-                os.close();
-                sc.close();
-                scn.close();
-
-            } catch (IOException ex) {
-                System.out.println("Connection Failed!");
-            }
-        }
 
     }
 
@@ -90,6 +49,23 @@ public class Robo2013 extends IterativeRobot {
         drive.setSafetyEnabled(false);
 
         msg.clearConsole();
+        while (true) {
+            try {
+                drive.drive(0, 0);                
+                DataInputStream in = Connector.openDataInputStream("socket://10.0.53.23:80");
+                msg.printLn("Connected");
+                
+                System.out.println("received: " + in.readUTF());
+                
+                in.close();
+                msg.printLn("Success!");
+
+            } catch (Exception ex) {
+                msg.printLn("Connection Failed!");
+                break;
+            }
+        }
+        
 
     }
 
