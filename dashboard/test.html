@@ -1,7 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script type="text/javascript">
+  <script type="text/javascript"> 
+	
+	var ip = "http://localhost:85";
+	function retrieve(id) {
+	alert("retrieve id");
+	ip = document.getElementById(id).value;
+	
+	
+}
     function getMessage() {
       var xmlhttp;
       if(window.XMLHttpRequest) {
@@ -22,7 +30,11 @@
 	        document.getElementById("message").innerHTML = obj.message
         }
       }
+<<<<<<< HEAD
+      xmlhttp.open("GET",ip,true);
+=======
       xmlhttp.open("GET","http://localhost:80/",true);
+>>>>>>> 991bca8230c117d5f48c18f52a09c8e2481d6bb7
       xmlhttp.send();
       window.setTimeout("getMessage();", 100);
     }
@@ -30,9 +42,16 @@
   </script>
 </head>
 <body>    
-    Time:       <span id="time"></span><br>
-    Status:     <span id="status"></span><br> 
-    Image:      <img id="image"><br> 
-    Message:    <span id="message"></span><br> 
+<b> Insert Full HTTP IP for Robot
+  <input type="text" name="txt" id="txt"/>
+<input type="button" onclick="retrieve('txt');"/>
+	<table border="2">
+	<tr><th>Message Type</th><th>Output </th></tr>
+	<tr><td>Status</td><td>  <span id="status"></span> </td></tr>
+	<tr><td>Time</td><td><span id="time"; ></span></td></tr>
+	<tr><td>Robot Camera</td><td><img id="image" style="width:500px" style="length:500px"></td></tr>
+	<tr><td>Message</td><td><span id="message"></span> </td></tr>
+	</table>
+
 </body>
 </html>
