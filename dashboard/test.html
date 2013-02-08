@@ -6,6 +6,8 @@
 var console = "";    
 var ip = "localhost:80";
 var xmlhttp;
+var start;
+var first = true;
 
 $(document).ready(function() {
     $("#txt").val(ip);
@@ -15,10 +17,14 @@ $(document).ready(function() {
         xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
     }
     xmlhttp.onreadystatechange = function() {
+        if(first){
+            start = new Date();
+            first = false;
+        }
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText);
             console += "<br>" + obj.message;
-            var n = new Date().getTime();
+            var n = new Date().getSeconds() - start.getSeconds();
             $("#time").text(n);
             $("#status").text(obj.status);
             $("#image").attr("src", obj.image);
@@ -32,7 +38,8 @@ $(document).ready(function() {
    
 });
 
-function updateIP() {    
+function updateIP() { 
+    start = new Date();   
     ip = $("#txt").val();
 }
 
