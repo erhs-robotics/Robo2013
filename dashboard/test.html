@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-
+<script type="text/javascript" src="jquery-1.9.1.min.js"></script>
 <script type="text/javascript"> 
 var console = "";    
-var ip = "http://localhost:80";
+var ip = "localhost:80";
+var xmlhttp;
 
-function retrieve(id) {    
-    ip = document.getElementById(id).value;
-}
-
-function getMessage() {
-    var xmlhttp;
+$(document).ready(function() {
+    $("#txt").val(ip);
     if(window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
         xmlhttp=new XMLHttpRequest();
     } else { // code for IE6, IE5
@@ -20,29 +17,38 @@ function getMessage() {
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText);
-            console += "<br>" +obj.message;
+            console += "<br>" + obj.message;
             var n = new Date().getTime();
-            document.getElementById("time").innerHTML = n ;
-            document.getElementById("status").innerHTML = obj.status ;
-            document.getElementById("image").src = obj.image;
-            document.getElementById("message").innerHTML = obj.message;
-            document.getElementById("console").innerHTML = console;
-            document.getElementById("console").scrollTop = document.getElementById("console").scrollHeight;
+            $("#time").text(n);
+            $("#status").text(obj.status);
+            $("#image").attr("src", obj.image);
+            $("#message").text(obj.message);
+            $("#console").html(console);
+            $("#console").scrollTop($("#console")[0].scrollHeight);
         }
     }
-    xmlhttp.open("GET",ip,true);
+    
+    getMessage();
+   
+});
+
+function updateIP() {    
+    ip = $("#txt").val();
+}
+
+function getMessage() {       
+    xmlhttp.open("GET", "http://" + ip, true);
     xmlhttp.send();
     window.setTimeout("getMessage();", 100);
 }
-getMessage();
 
 </script>
 
 </head>
 <body>    
-    Insert Full HTTP IP for Robot
-    <input type="text" name="txt" id="txt"/>
-    <input type="button" onclick="retrieve('txt');"/>
+    IP Address:
+    <input type="text" id="txt" >
+    <input type="button" onclick="updateIP();" value="Set IP"/>
     <table border="2">
         <tr><th>Message Type</th><th>Output </th></tr>
         <tr><td>Status</td><td><span id="status"></span> </td></tr>
