@@ -1,57 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script type="text/javascript"> 
-	
+<script type="text/javascript"> 
+	var console ="";
 	var ip = "http://localhost:85";
 	function retrieve(id) {
-	alert("retrieve id");
-	ip = document.getElementById(id).value;
-	
-	
-}
+		alert("retrieve id");
+		ip = document.getElementById(id).value;
+	}
     function getMessage() {
-      var xmlhttp;
-      if(window.XMLHttpRequest) {
-          // code for IE7+, Firefox, Chrome, Opera, Safari
-          xmlhttp=new XMLHttpRequest();
-      } else {
-        // code for IE6, IE5
-        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-      }
-      xmlhttp.onreadystatechange = function() {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                     
-	        var obj = JSON.parse(xmlhttp.responseText);	        
-          var n = new Date().getTime();
-          document.getElementById("time").innerHTML = n
-	        document.getElementById("status").innerHTML = obj.status 
-	        document.getElementById("image").src = obj.image
-	        document.getElementById("message").innerHTML = obj.message
-        }
-      }
-<<<<<<< HEAD
-      xmlhttp.open("GET",ip,true);
-=======
-      xmlhttp.open("GET","http://localhost:80/",true);
->>>>>>> 991bca8230c117d5f48c18f52a09c8e2481d6bb7
-      xmlhttp.send();
-      window.setTimeout("getMessage();", 100);
-    }
-    getMessage();
-  </script>
+    	var xmlhttp;
+   		if(window.XMLHttpRequest) {
+       		// code for IE7+, Firefox, Chrome, Opera, Safari
+       		xmlhttp=new XMLHttpRequest();
+      	} else {
+       		// code for IE6, IE5
+	        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+   		}
+     	xmlhttp.onreadystatechange = function() {
+		    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+		    	var obj = JSON.parse(xmlhttp.responseText);
+				console += "<br>" +obj.message;      
+		     	var n = new Date().getTime();
+				document.getElementById("time").innerHTML = n ;
+				document.getElementById("status").innerHTML = obj.status ;
+				document.getElementById("image").src = obj.image;
+				document.getElementById("message").innerHTML = obj.message;
+				document.getElementById("console").innerHTML = console;
+		    }
+		}
+		xmlhttp.open("GET",ip,true);
+		xmlhttp.send();
+		window.setTimeout("getMessage();", 100);
+   	}
+	getMessage();
+</script>
 </head>
 <body>    
-<b> Insert Full HTTP IP for Robot
-  <input type="text" name="txt" id="txt"/>
-<input type="button" onclick="retrieve('txt');"/>
+	Insert Full HTTP IP for Robot
+	<input type="text" name="txt" id="txt"/>
+	<input type="button" onclick="retrieve('txt');"/>
 	<table border="2">
-	<tr><th>Message Type</th><th>Output </th></tr>
-	<tr><td>Status</td><td>  <span id="status"></span> </td></tr>
-	<tr><td>Time</td><td><span id="time"; ></span></td></tr>
-	<tr><td>Robot Camera</td><td><img id="image" style="width:500px" style="length:500px"></td></tr>
-	<tr><td>Message</td><td><span id="message"></span> </td></tr>
+		<tr><th>Message Type</th><th>Output </th></tr>
+		<tr><td>Status</td><td><span id="status"></span> </td></tr>
+		<tr><td>Time</td><td><span id="time"; ></span></td></tr
+		<tr><td>Robot Camera</td><td><img id="image" style="width:500px" style="length:500px"></td></tr>
+		<tr><td>Message</td><td><span id="message"></span></td></tr>
 	</table>
-
+	<div id="console" style="height:200px;width:700px;border:2px solid #000;overflow:auto;"></div>
 </body>
 </html>
