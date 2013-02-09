@@ -88,4 +88,12 @@ public class MathX {
         
         return value;
     }
+    
+    public static boolean isWithin(double value, double target, double variance) {
+        if(abs(value - target) <= variance) {
+            return true;
+        }
+        
+        return false;
+    }
 }
