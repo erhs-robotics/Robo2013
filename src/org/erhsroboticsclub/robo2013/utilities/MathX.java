@@ -77,4 +77,23 @@ public class MathX {
         }
         return d2;
     }
+    
+    public static double map(double x, double in_min, long in_max, long out_min, long out_max){ 
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    }
+    
+    public static double clamp(double value, double min, double max) {
+        if(value > max) return max;
+        if(value < min) return min;
+        
+        return value;
+    }
+    
+    public static boolean isWithin(double value, double target, double variance) {
+        if(abs(value - target) <= variance) {
+            return true;
+        }
+        
+        return false;
+    }
 }

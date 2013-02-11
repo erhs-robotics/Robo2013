@@ -20,6 +20,7 @@ public class Robo2013 extends IterativeRobot {
     CANJaguar TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR;
     Messenger msg;
     Controls driveControls;
+    LinearAccelerator launcher;
     
 
     public void robotInit() {
@@ -36,6 +37,7 @@ public class Robo2013 extends IterativeRobot {
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }
+        launcher = new LinearAccelerator();
         drive = new RobotDrive(TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR);
         sticky = new Joystick(1);
         driveControls = new Controls(sticky);
@@ -79,6 +81,7 @@ public class Robo2013 extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {
+        launcher.launch();
         //drive.arcadeDrive(sticky);
         if (driveControls.FOV_Top()) {
             drive.drive(.75, .75);
