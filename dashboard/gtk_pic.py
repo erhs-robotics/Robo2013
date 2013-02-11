@@ -9,15 +9,17 @@ class MainWin:
         print "destroy signal occurred"
         gtk.main_quit()
 
-    def __init__(self):
+    def __init__(self, file_name):
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.connect("destroy", self.destroy)
         self.window.set_border_width(10)
         self.image=gtk.Image()
-        response=urllib2.urlopen(
-            'http://www.dailygalaxy.com/photos/uncategorized/2007/05/05/planet_x.jpg')
+        #response=urllib2.urlopen(
+        #    'http://www.dailygalaxy.com/photos/uncategorized/2007/05/05/planet_x.jpg')
         loader=gtk.gdk.PixbufLoader()
-        loader.write(response.read())
+        #loader.write(response.read())
+        file = open(file_name)
+        loader.write(file.read())
         loader.close()        
         self.image.set_from_pixbuf(loader.get_pixbuf())
         # This does the same thing, but by saving to a file
@@ -33,4 +35,4 @@ class MainWin:
         gtk.main()
 
 if __name__ == "__main__":
-    MainWin().main()
+    MainWin("target.png").main()
