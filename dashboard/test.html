@@ -28,7 +28,7 @@ $(document).ready(function() {
             n = n.toFixed(1);
             $("#time").text(n);
             $("#status").text(obj.status);
-            $("#image").attr("src", obj.image);
+            $("#image").attr("src", "http://" + obj.image);
             $("#message").text(obj.message);
             $("#console").html(console);
             $("#console").scrollTop($("#console")[0].scrollHeight);
