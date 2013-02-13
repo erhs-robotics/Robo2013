@@ -23,7 +23,7 @@ $(document).ready(function() {
         }
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText);
-            console += "<br>" + obj.message;
+            console += obj.message + "<br>";
             var n = (new Date() - start)/1000;
             n = n.toFixed(1);
             $("#time").text(n);
@@ -61,9 +61,9 @@ function getMessage() {
         <tr><th>Message Type</th><th>Output </th></tr>
         <tr><td>Status</td><td><span id="status"></span> </td></tr>
         <tr><td>Time</td><td><span id="time"; ></span></td></tr
-        <tr><td>Robot Camera</td><td><img id="image" style="width:500px" style="length:500px"></td></tr>
-        <tr><td>Message</td><td><span id="message"></span></td></tr>
+        <tr><td>Robot Camera</td><td><img id="image" style="height:300px" style="length:500px"></td></tr>
+        <tr><td>Message</td><td><div id="console" style="height:200px;border:2px solid #000;overflow:auto;"></div></td></tr>
     </table>
-    <div id="console" style="height:200px;width:700px;border:2px solid #000;overflow:auto;"></div>
+   <!-- <div id="console" style="height:200px;width:700px;border:2px solid #000;overflow:auto;"></div>-->
 </body>
 </html>
