@@ -23,7 +23,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         else:
             s.send_response(200)
             s.send_header("Content-Type", "application/json")
-            s.send_header("Access-Control-Allow-Origin", "*\r\n")
+            s.send_header("Access-Control-Allow-Origin", "*")
             s.end_headers()
             s.wfile.write('{"status": "Ready", "image" : "%s", "message" : "yo"}' % pic_addr)
 
