@@ -1,22 +1,37 @@
-import sys
-from SimpleHTTPServer import SimpleHTTPRequestHandler as HandlerClass
-from BaseHTTPServer import HTTPServer as ServerClass
-
 import commands
-
-if sys.argv[1:]:
-    port = int(sys.argv[1])
-else:
-    port = 8000
+import BaseHTTPServer
+from os import curdir, sep
     
 # Works on Ubuntu-based systems for sure
-current_ip = commands.getoutput("/sbin/ifconfig").split("wlan0")[1].split("inet addr:")[1].split(" ")[0]
-server_address = (current_ip, port)
+COMP_IP = commands.getoutput("/sbin/ifconfig").split("wlan0")[1].split("inet addr:")[1].split(" ")[0]
+pic_addr = "http://" + COMP_IP + "/target.png"
 
-protocol     = "HTTP/1.0"
-HandlerClass.protocol_version = protocol
-httpd = ServerClass(server_address, HandlerClass)
+HOST_NAME = COMP_IP
+PORT_NUMBER = 80
 
-sa = httpd.socket.getsockname()
-print "Serving HTTP on", sa[0], "port", sa[1], "..."
-httpd.serve_forever()
+class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+    def do_GET(s):
+        if s.path == "/target.png":
+            s.send_response(200)
+            s.send_header("Content-Type", "image/png")
+            s.end_headers()
+            f = open("target.png", "rb")
+            s.wfile.write(f.read())
+            f.close()
+        else:
+            s.send_response(200)
+            s.send_header("Content-Type", "application/json")
+            s.send_header("Access-Control-Allow-Origin", "*\r\n\r\n")
+            s.end_headers()
+            s.wfile.write('{"status": "Ready", "image" : "%s", "message" : "yo"}' % pic_addr)
+
+if __name__ == '__main__':
+    server_class = BaseHTTPServer.HTTPServer
+    httpd = server_class((HOST_NAME, PORT_NUMBER), MyHandler)
+    print "Server Starting - %s:%s" % (HOST_NAME, PORT_NUMBER)
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    httpd.server_close()
+    print "Server Stopping - %s:%s" % (HOST_NAME, PORT_NUMBER)
