@@ -1,12 +1,13 @@
 #!/usr/bin/python2
 import sys
-sys.path.append('lib')
 import cv2 
 from cv2 import cv
 import numpy as np
+import freenect
 from imgproc import *
 from Kinect import Kinect
-import freenect
+
+sys.path.append('lib')
 
 imgproc = Imgproc(-1)
 

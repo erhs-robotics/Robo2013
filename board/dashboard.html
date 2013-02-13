@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="jquery-1.9.1.min.js"></script>
+<script type="text/javascript"> 
+var console = "";
+var ip = "localhost:80";
+var xmlhttp;
+var start;
+var first = true;
+
+$(document).ready(function() {
+    $("#txt").val(ip);
+    if(window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+    } else {                  // code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    xmlhttp.onreadystatechange = function() {
+        if(first){
+            start = new Date();
+            first = false;
+        }
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var obj = JSON.parse(xmlhttp.responseText);
+            console += "<br>" + obj.message;
+            var n = (new Date() - start)/1000;
+            n = n.toFixed(1);
+            $("#time").text(n);
+            $("#status").text(obj.status);
+            $("#image").attr("src", obj.image);
+            $("#message").text(obj.message);
+            $("#console").html(console);
+            $("#console").scrollTop($("#console")[0].scrollHeight);
+        }
+    }
+    
+    getMessage();
+   
+});
+
+function updateIP() { 
+    start = new Date();  
+    ip = $("#txt").val();
+}
+
+function getMessage() {       
+    xmlhttp.open("GET", "http://" + ip, true);
+    xmlhttp.send();
+    window.setTimeout("getMessage();", 100);
+}
+
+</script>
+</head>
+
+<body>    
+    IP Address:
+    <input type="text" id="txt" >
+    <input type="button" onclick="updateIP();" value="Set IP"/>
+    <table border="2">
+        <tr><th>Message Type</th><th>Output </th></tr>
+        <tr><td>Status</td><td><span id="status"></span> </td></tr>
+        <tr><td>Time</td><td><span id="time"; ></span></td></tr
+        <tr><td>Robot Camera</td><td><img id="image" style="width:500px" style="length:500px"></td></tr>
+        <tr><td>Message</td><td><span id="message"></span></td></tr>
+    </table>
+    <div id="console" style="height:200px;width:700px;border:2px solid #000;overflow:auto;"></div>
+</body>
+</html>
