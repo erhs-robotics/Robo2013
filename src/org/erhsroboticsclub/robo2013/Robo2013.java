@@ -55,7 +55,7 @@ public class Robo2013 extends IterativeRobot {
         while (true) {
             try {
                 drive.drive(0, 0);                
-                DataInputStream in = Connector.openDataInputStream("socket://10.0.53.23:80");
+                DataInputStream in = Connector.openDataInputStream("http://10.0.53.23:80/crio");
                 msg.printLn("Connected");
                 
                 System.out.println("received: " + in.readUTF());
@@ -64,6 +64,9 @@ public class Robo2013 extends IterativeRobot {
                 msg.printLn("Success!");
 
             } catch (Exception ex) {
+                System.out.println(ex.getClass());
+                System.out.println(ex.getMessage());
+                System.out.println(ex.toString());
                 msg.printLn("Connection Failed!");
                 break;
             }

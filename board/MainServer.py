@@ -4,6 +4,17 @@ import commands
 import BaseHTTPServer
 from os import curdir, sep
 import sys
+import struct
+
+def pack_data(string):
+		data = []
+		utf8 = string.encode('utf-8')
+		length = len(utf8)
+		data.append(struct.pack('!H', length))
+		format = '!' + str(length) + 's'
+		data.append(struct.pack(format, utf8))
+		return data
+
 
 if len(sys.argv) > 1 and sys.argv[1] == "debug":
     COMP_IP = "localhost"
@@ -12,6 +23,8 @@ else:
     COMP_IP = commands.getoutput("/sbin/ifconfig").split("wlan0")[1].split("inet addr:")[1].split(" ")[0]
 
 pic_addr = "http://" + COMP_IP + "/target.png"
+
+COMP_IP = "10.0.53.23"
 
 HOST_NAME = COMP_IP
 PORT_NUMBER = 80
@@ -25,6 +38,15 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             f = open("target.png", "rb")
             s.wfile.write(f.read())
             f.close()
+        elif s.path == "/crio":
+            s.send_response(200)
+            s.send_header("Content-Type", "application/json")
+            s.send_header("Access-Control-Allow-Origin", "*")
+            s.end_headers() 
+            f = open("info.json", "r")
+            data = pack_data(f.read())         
+            s.wfile.write(data[0])
+            s.wfile.write(data[1])            
         else:
             s.send_response(200)
             s.send_header("Content-Type", "application/json")
