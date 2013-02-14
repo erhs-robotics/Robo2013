@@ -29,8 +29,9 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             s.send_response(200)
             s.send_header("Content-Type", "application/json")
             s.send_header("Access-Control-Allow-Origin", "*")
-            s.end_headers()           
-            s.wfile.write('{"status": "Ready", "image" : "%s", "message" : "yo"}' % pic_addr)
+            s.end_headers() 
+            f = open("info.json", "r")          
+            s.wfile.write(f.read())
 
 if __name__ == '__main__':
     server_class = BaseHTTPServer.HTTPServer
