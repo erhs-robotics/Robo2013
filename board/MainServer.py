@@ -3,9 +3,14 @@
 import commands
 import BaseHTTPServer
 from os import curdir, sep
-    
-# Works on Ubuntu-based systems for sure
-COMP_IP = commands.getoutput("/sbin/ifconfig").split("wlan0")[1].split("inet addr:")[1].split(" ")[0]
+import sys
+
+if len(sys.argv) > 1 and sys.argv[1] == "debug":
+    COMP_IP = "localhost"
+else:
+    # Works on Ubuntu-based systems for sure
+    COMP_IP = commands.getoutput("/sbin/ifconfig").split("wlan0")[1].split("inet addr:")[1].split(" ")[0]
+
 pic_addr = "http://" + COMP_IP + "/target.png"
 
 HOST_NAME = COMP_IP
@@ -24,7 +29,7 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             s.send_response(200)
             s.send_header("Content-Type", "application/json")
             s.send_header("Access-Control-Allow-Origin", "*")
-            s.end_headers()
+            s.end_headers()           
             s.wfile.write('{"status": "Ready", "image" : "%s", "message" : "yo"}' % pic_addr)
 
 if __name__ == '__main__':
