@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="dashboard.css">
+<link rel="stylesheet" type="text/css" href="960_12_col.css">
 <script type="text/javascript" src="jquery-1.9.1.min.js"></script>
 <script type="text/javascript"> 
 var console = "";
@@ -54,16 +56,23 @@ function getMessage() {
 </head>
 
 <body>    
-    IP Address:
-    <input type="text" id="txt" >
-    <input type="button" onclick="updateIP();" value="Set IP"/>
-    <table border="2">
-        <tr><th>Message Type</th><th>Output </th></tr>
-        <tr><td>Status</td><td><span id="status"></span> </td></tr>
-        <tr><td>Time</td><td><span id="time"; ></span></td></tr
-        <tr><td>Robot Camera</td><td><img id="image" style="height:300px" style="length:500px"></td></tr>
-        <tr><td>Message</td><td><div id="console" style="height:200px;border:2px solid #000;overflow:auto;"></div></td></tr>
-    </table>
-   <!-- <div id="console" style="height:200px;width:700px;border:2px solid #000;overflow:auto;"></div>-->
+    <section class="container_12 content">
+        <div class="grid_12">
+            IP Address:
+            <input type="text" id="txt">
+            <input type="button" onclick="updateIP();" value="Set IP"/>
+        </div>
+        <div class="clear"></div>
+        
+        <div class="grid_4"><h2>Robot Camera</h2></td><td><img id="image" style="width: 300px;"></div>
+        <div class="grid_8"><h2>Message Console</h2><div id="console" style="height:220px;border:2px solid #0f0;overflow:auto;"></div></div>
+        <div class="clear"></div>
+        
+        <div class="grid_12">
+            <label>Status</label>  <span id="status"></span><br>
+            <label>Time  </label>  <span id="time">  </span><br>
+            <label>Other </label>  <span id="thing"> </span><br>
+        </div>
+   </section>
 </body>
 </html>

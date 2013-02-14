@@ -1,0 +1,29 @@
+/*
+ * dashboard.css
+ * February 2013
+ * To make the dashboard look pretty
+ * for the mechanical people
+ * @author Nick
+ */
+ 
+body {
+    background-color: black;
+    color: #0f0;
+    font-family: Lucida Console, Monaco, monospace;
+    font-size: 85%;
+    line-height: 1.5;
+}
+
+label {
+	width: 130px;
+	float: left;
+	text-align: left;
+	margin-right: 0.5em;
+	display: block;
+	color: #0f0;
+	font-weight: bold;
+}
+
+.content {
+    background-color: #232323;
+}
