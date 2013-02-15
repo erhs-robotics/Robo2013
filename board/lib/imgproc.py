@@ -5,12 +5,11 @@ import cPickle
 import sys
 from Rectangle import Rectangle
 
-
 class Imgproc:
 
-    # MIN 31, 69, 144
-    # MAX 92, 198, 255
-
+	# MIN 31, 69, 144
+	# MAX 92, 198, 255
+	
 	def __init__(self, cam):
 		if cam >= 0:
 			self.camera = cv2.VideoCapture(cam)
@@ -18,9 +17,17 @@ class Imgproc:
 		#self.GREEN_MAX = np.array([100, 255, 255], np.uint8)
 		self.GREEN_MIN = np.array([31,69,144], np.uint8) #70, 138, 156
 		self.GREEN_MAX = np.array([92,198,255], np.uint8) # 100, 255, 255
-        
+		
 		self.YELLOW_MIN = np.array([0, 100, 100], np.uint8)
 		self.YELLOW_MAX = np.array([30, 255, 255], np.uint8)
+		self.LOW = 1.208333333
+		self.MED = 2.571428571
+		self.HIGH = 4.5
+		self.THRESHHOLD = 0.1
+		self.LOW_HEIGHT = 0.4826 + 0.3048# meters from floor to center
+		self.MED_HEIGHT = 2.25108  + 0.2667# meters from floor to center
+		self.HIGH_HEIGHT = 2.64478 + 0.1524# meters from floor to center
+		
 		
 	def getCameraImage(self):
 		_, self.cam_img = self.camera.read()
@@ -40,8 +47,8 @@ class Imgproc:
 		self.contours, _ = cv2.findContours(image,
 											cv2.RETR_LIST,
 											cv2.CHAIN_APPROX_SIMPLE)
-        #this is for a bug in opencv, it should be fixed in the newest
-        #version or a later version
+		#this is for a bug in opencv, it should be fixed in the newest
+		#version or a later version
 		tmp = cPickle.dumps(self.contours)
 		self.contours = cPickle.loads(tmp)
 		
@@ -98,3 +105,30 @@ class Imgproc:
 		rects = self.getBoundingRectangles(rects_contours)
 		return rects
 		
+	def filterRects(self, rects):
+		filtered = []
+		for rect in rects:
+			height = self.getTargetHeight(rect)
+			if height != 0:
+				filtered.append((rect, height))
+		return filtered
+		
+	def getTargetHeight(self, rect):
+		ratio = rect.width / rect.height
+		#First filter out anything to small
+		if rect.width <= 5 or rect.height <= 5:
+			return 0
+		if abs(ratio - self.LOW) <= self.THRESHHOLD:
+			return self.LOW_HEIGHT
+		elif abs(ratio - self.MED) <= self.THRESHHOLD:
+			return self.MED_HEIGHT
+		elif abs(ratio - self.HIGH) <= self.THRESHHOLD:
+			return self.HIGH_HEIGHT
+		else:
+			return 0		
+
+	def labelRects(self, img, rects):
+		for i in range(len(rects)):
+			cv2.putText(img, "%d" % i, (rects[i].center_mass_x, rects[i].center_mass_y), cv2.FONT_HERSHEY_COMPLEX, 4, (0,255,255))
+
+

@@ -33,7 +33,7 @@ $(document).ready(function() {
             n = n.toFixed(1);
             $("#time").text(n);
             $("#status").text(obj.status);
-            $("#image").attr("src", obj.image);
+            $("#image").attr("src", "http://" + ip + "/target.png");
             $("#message").text(obj.message);
             $("#console").html(console);
             $("#console").scrollTop($("#console")[0].scrollHeight);
@@ -67,7 +67,7 @@ function getMessage() {
         </div>
         <div class="clear"></div>
         
-        <div class="grid_4"><h2>Robot Camera</h2></td><td><img id="image" style="width: 300px;"></div>
+        <div class="grid_4"><h2>Robot Camera</h2></td><td><img id="image" style="width: 300px; height: 225px;"></div>
         <div class="grid_8"><h2>Message Console</h2><div id="console" style="height:220px;border:2px solid #0f0;overflow:auto; background: #000;"></div></div>
         <div class="clear"></div>
         
