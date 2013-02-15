@@ -27,14 +27,15 @@ public class LinearAccelerator {
         loadArmM1 = new PWM(RoboMap.LOAD_ARM_MOTOR1);
         loadArmM2= new PWM(RoboMap.LOAD_ARM_MOTOR2);
         limitSwitch = new DigitalInput(RoboMap.LIMIT_SWITCH);
-        
+        /*
         try {
             primaryWheel = new CANJaguar(RoboMap.PRIMARY_LAUNCH_MOTOR);
             secondaryWheel = new CANJaguar(RoboMap.SECONDARY_LAUNCH_MOTOR);
             
         } catch(Exception e) {            
             
-        }        
+        }  
+        */
     }
     
     public void setWheels(double primary, double secondary) {

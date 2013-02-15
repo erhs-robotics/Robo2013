@@ -12,10 +12,13 @@ public class RoboMap {
     public static final int PRIMARY_LAUNCH_MOTOR = 8; // forward
     public static final int SECONDARY_LAUNCH_MOTOR = 9; // second
     
+    /* Digital Input */
+    public static final int LIMIT_SWITCH = 1;
+    
     /* Analog */
     public static final int GYRO = 1;
     public static final int ULTRASONIC = 2;
-    public static final int LIMIT_SWITCH = 3;
+    
     
     /* USB Input */
     public static final int LEFT_DRIVE_STICK = 1;
@@ -24,7 +27,7 @@ public class RoboMap {
     
     /* Controls */
     public static final int AUTO_AIM_BUTTON = 1;
-    public static final int FIRE_BUTTON = 2;
+    public static final int FIRE_BUTTON = 1;
     public static final int MANUAL_LAUNCHER_UP_BUTTON = 3;
     public static final int MANUAL_LAUNCHER_DOWN_BUTTON = 4;
     public static final int MANUAL_SET_SPEED_BUTTON = 5;
