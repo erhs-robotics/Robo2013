@@ -10,7 +10,7 @@ import org.erhsroboticsclub.robo2013.utilities.Messenger;
 public class Robo2013 extends IterativeRobot {
 
     private RobotDrive drive;
-    private Joystick stickL, stickR, stickC/*the controll stick*/;
+    private Joystick stickL, stickR;
     private CANJaguar TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR;
     private Messenger msg;
     private Controls controls;
@@ -41,7 +41,6 @@ public class Robo2013 extends IterativeRobot {
         drive = new RobotDrive(TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR);
         stickL = new Joystick(1);
         stickR = new Joystick(2);
-        controls = new Controls(stickC);
         msg.printLn("Done Loading: FRC 2013");
 
 
@@ -85,31 +84,16 @@ public class Robo2013 extends IterativeRobot {
      * This function is called periodically during operator control
      */
     public void teleopPeriodic() {       
-        drive.tankDrive(stickL.getY() * speed, stickR.getY() * speed);
-        
-        if(stickC.getRawButton(RoboMap.AUTO_AIM_BUTTON)) {
-            //auto aim code
-        }        
-        if(stickC.getRawButton(RoboMap.MANUAL_LAUNCHER_UP_BUTTON)) {
-            //move launcher ever so slightly up
-        } else if (stickC.getRawButton(RoboMap.MANUAL_LAUNCHER_DOWN_BUTTON)) {
-            //move launcher ever so slightly down
-        }
-        if(stickC.getRawButton(RoboMap.MANUAL_SET_SPEED_BUTTON)) {
-            double launch_speed = stickC.getThrottle();
-            launcher.setWheels(launch_speed, launch_speed);
-        }
-        if(stickC.getTrigger()) {//semi-auto aim
-            //turn to face target
-        }
-        
-        
-
+        drive.tankDrive(stickL.getY() * speed, stickR.getY() * speed);   
+            if (stickR.getRawButton(RoboMap.AUTO_AIM_BUTTON)) {}
+                //Auto aim, mothafuckas
+            if (stickR.getRawButton(RoboMap.MANUAL_LAUNCHER_UP_BUTTON)) {}
+                //Manually move launcher up a notch, mothafuckas
+            else if (stickR.getRawButton(RoboMap.MANUAL_LAUNCHER_DOWN_BUTTON)) {}
+                //Manually move launcher down a notch, mothafuckas
+            if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {}
+                //Makes this robot fire the mothafuckin frisbees
     }
-
-    /**
-     * This function is called periodically during test mode
-     */
     public void testPeriodic() {
     }
 }
