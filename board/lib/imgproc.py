@@ -7,8 +7,8 @@ from Rectangle import Rectangle
 
 class Imgproc:
 
-    # MIN 31, 69, 144
-    # MAX 92, 198, 255
+	# MIN 31, 69, 144
+	# MAX 92, 198, 255
 
 	def __init__(self, cam):
 		if cam >= 0:
@@ -17,7 +17,7 @@ class Imgproc:
 		#self.GREEN_MAX = np.array([100, 255, 255], np.uint8)
 		self.GREEN_MIN = np.array([31,69,144], np.uint8) #70, 138, 156
 		self.GREEN_MAX = np.array([92,198,255], np.uint8) # 100, 255, 255
-        
+		
 		self.YELLOW_MIN = np.array([0, 100, 100], np.uint8)
 		self.YELLOW_MAX = np.array([30, 255, 255], np.uint8)
 		self.LOW = 1.208333333
@@ -38,34 +38,34 @@ class Imgproc:
 		self.hsv_img = cv2.cvtColor(cam_img, cv2.COLOR_BGR2HSV)
 		return self.hsv_img
 
-    def getThreshImage(self, hsv_img, min_array, max_array):
-        self.thresh_img = cv2.inRange(hsv_img, min_array, max_array)
-        self.thresh_img = cv2.medianBlur(self.thresh_img, 5)
-        return self.thresh_img
-        
-    def getContours(self, image):
-        self.contours, _ = cv2.findContours(image,
-                                            cv2.RETR_LIST,
-                                            cv2.CHAIN_APPROX_SIMPLE)
-        #this is for a bug in opencv, it should be fixed in the newest
-        #version or a later version
-        tmp = cPickle.dumps(self.contours)
-        self.contours = cPickle.loads(tmp)
-        
-        return self.contours
-        
-    def fillContours(self, image, contours):
-        for i in range(len(contours)):
-            x, y, w, h = cv2.boundingRect(contours[i])
-            cv2.rectangle(image,(x,y),(x+w,y+h),(0,255,255),-1)
-            
-    def getBoundingRectangles(self, contours):
-        rects = []
-        for i in range(len(contours)):
-            center_x, center_y, width, height = cv2.boundingRect(contours[i])
-            rect = Rectangle(center_x, center_y, width, height)
-            rects.append(rect)
-        return rects
+	def getThreshImage(self, hsv_img, min_array, max_array):
+		self.thresh_img = cv2.inRange(hsv_img, min_array, max_array)
+		self.thresh_img = cv2.medianBlur(self.thresh_img, 5)
+		return self.thresh_img
+		
+	def getContours(self, image):
+		self.contours, _ = cv2.findContours(image,
+											cv2.RETR_LIST,
+											cv2.CHAIN_APPROX_SIMPLE)
+		#this is for a bug in opencv, it should be fixed in the newest
+		#version or a later version
+		tmp = cPickle.dumps(self.contours)
+		self.contours = cPickle.loads(tmp)
+		
+		return self.contours
+		
+	def fillContours(self, image, contours):
+		for i in range(len(contours)):
+			x, y, w, h = cv2.boundingRect(contours[i])
+			cv2.rectangle(image,(x,y),(x+w,y+h),(0,255,255),-1)
+			
+	def getBoundingRectangles(self, contours):
+		rects = []
+		for i in range(len(contours)):
+			center_x, center_y, width, height = cv2.boundingRect(contours[i])
+			rect = Rectangle(center_x, center_y, width, height)
+			rects.append(rect)
+		return rects
 
 	def getMaxRect(self, rects):
 		if len(rects) > 0:
@@ -127,7 +127,7 @@ class Imgproc:
 		else:
 			return 0		
 
-    def labelRects(self, img, rects):
-        for i in range(len(rects)):
-            cv2.putText(img, "%d" % i, (rects[i][0].center_mass_x, rects[i][0].center_mass_y), cv2.FONT_HERSHEY_COMPLEX, 4, (0,255,255))
+	def labelRects(self, img, rects):
+		for i in range(len(rects)):
+			cv2.putText(img, "%d" % i, (rects[i][0].center_mass_x, rects[i][0].center_mass_y), cv2.FONT_HERSHEY_COMPLEX, 4, (0,255,255))
 
