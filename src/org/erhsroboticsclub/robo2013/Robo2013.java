@@ -21,13 +21,16 @@ public class Robo2013 extends IterativeRobot {
     private Messenger msg;
     private Controls controls;
     private LinearAccelerator launcher;
+    private Com com;
     private final double speed = 0.5; 
+    
     
     
 
     public void robotInit() {
         
         msg = new Messenger();
+        com = new Com("http://10.0.53.23:80/");
         msg.printLn("Loading FRC 2013");
         try {
             TOP_LEFT_JAGUAR = new CANJaguar(RoboMap.TOP_LEFT_MOTOR);
@@ -56,12 +59,13 @@ public class Robo2013 extends IterativeRobot {
         while (true) {
             try {
                 drive.drive(0, 0);                
-                DataInputStream in = Connector.openDataInputStream("http://10.0.53.23:80/crio");
-                msg.printLn("Connected");
                 
-                System.out.println("received: " + in.readUTF());
+                msg.printLn("Connecting...");
+                String out = com.getJSON("crio");
                 
-                in.close();
+                System.out.println("received: " + out);
+                
+                
                 msg.printLn("Success!");
 
             } catch (Exception ex) {
