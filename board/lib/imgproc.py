@@ -5,7 +5,6 @@ import cPickle
 import sys
 from Rectangle import Rectangle
 
-
 class Imgproc:
 
     # MIN 31, 69, 144
@@ -97,4 +96,32 @@ class Imgproc:
 		
 		rects = self.getBoundingRectangles(rects_contours)
 		return rects
+		
+	def getTopRect(self, rects):
+	    top_rect = rects[0]
+	    for rect in rects:
+	        if rect.y < top_rect.y:
+	            top_rect = rect
+	    return top_rect
+	    
+    def getBottomRect(self, rects):
+        bottom_rect = rects[0]
+        for rect in rects:
+            if rect.y > bottom_rect.y:
+                bottom_rect = rect
+        return bottom_rect
+        
+    def getLeftRect(self, rects):
+        left_rect = rects[0]
+        for rect in rects:
+            if rect.x < left_rect.x:
+                left_rect = rect
+        return left_rect
+        
+    def getRightRect(self, rects):
+        right_rect = rects[0]
+        for rect in rects:
+            if rect.x > right_rect.x:
+                right_rect = rect
+        return right_rect
 		
