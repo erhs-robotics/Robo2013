@@ -9,7 +9,7 @@ class Imgproc:
 
 	# MIN 31, 69, 144
 	# MAX 92, 198, 255
-
+	
 	def __init__(self, cam):
 		if cam >= 0:
 			self.camera = cv2.VideoCapture(cam)
@@ -130,4 +130,5 @@ class Imgproc:
 	def labelRects(self, img, rects):
 		for i in range(len(rects)):
 			cv2.putText(img, "%d" % i, (rects[i][0].center_mass_x, rects[i][0].center_mass_y), cv2.FONT_HERSHEY_COMPLEX, 4, (0,255,255))
+
 
