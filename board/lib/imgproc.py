@@ -129,5 +129,5 @@ class Imgproc:
 
     def labelRects(self, img, rects):
         for i in range(len(rects)):
-            cv2.putText(img, "%d" % i, (rects[i][0].center_mass_x, rects[i][0].center_mass_y), cv2.FONT_HERSHEY_COMPLEX, 4, (0,255,255))
+            cv2.putText(img, "%d" % i, (rects[i].center_mass_x, rects[i].center_mass_y), cv2.FONT_HERSHEY_COMPLEX, 4, (0,255,255))
 
