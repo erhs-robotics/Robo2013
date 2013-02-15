@@ -19,8 +19,7 @@ import org.erhsroboticsclub.robo2013.utilities.MathX;
 public class LinearAccelerator {       
     private CANJaguar primaryWheel;
     private CANJaguar secondaryWheel;
-    private PWM loadArmM1, loadArmM2;
-    private final double STOW = 2.5, DEPLOY = 4, KP = 10;
+    private PWM loadArmM1, loadArmM2;    
     private DigitalInput limitSwitch;
     
 
