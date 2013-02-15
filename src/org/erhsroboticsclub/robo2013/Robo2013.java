@@ -3,6 +3,7 @@ package org.erhsroboticsclub.robo2013;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
+import java.util.Hashtable;
 import org.erhsroboticsclub.robo2013.utilities.Controls;
 import org.erhsroboticsclub.robo2013.utilities.Messenger; 
 
@@ -19,8 +20,10 @@ public class Robo2013 extends IterativeRobot {
     
     
     
+    
 
     public void robotInit() {
+        
         
         msg = new Messenger();
         com = new Com("http://10.0.53.23:80/");
@@ -56,8 +59,7 @@ public class Robo2013 extends IterativeRobot {
                 msg.printLn("Connecting...");
                 String out = com.getJSON("crio");
                 
-                System.out.println("received: " + out);
-                
+                System.out.println("received: " + out);                
                 
                 msg.printLn("Success!");
 
