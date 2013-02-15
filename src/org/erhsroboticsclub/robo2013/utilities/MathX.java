@@ -6,7 +6,7 @@ import com.sun.squawk.util.MathUtils;
  * Implements java.lang.Math and com.sun.squak.util.MathUtils to trig functions
  * to use degrees instead of Radians. For use in Physics class, specifically
  *
- * @author Nick
+ * @author Nick, Michael
  */
 public class MathX {
 
@@ -95,5 +95,9 @@ public class MathX {
         }
         
         return false;
+    }
+    
+    public static double sigmoid(double n) {
+        return 1 / (1 + MathX.pow(Math.E, -n));
     }
 }

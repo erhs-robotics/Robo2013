@@ -11,7 +11,7 @@ import javax.microedition.io.Connector;
 import javax.microedition.io.ServerSocketConnection;
 import javax.microedition.io.SocketConnection;
 import org.erhsroboticsclub.robo2013.utilities.Controls;
-import org.erhsroboticsclub.robo2013.utilities.Messenger;
+import org.erhsroboticsclub.robo2013.utilities.Messenger; 
 
 public class Robo2013 extends IterativeRobot {
 
@@ -21,7 +21,8 @@ public class Robo2013 extends IterativeRobot {
     private Messenger msg;
     private Controls controls;
     private LinearAccelerator launcher;
-    private final double speed = 0.5;    
+    private final double speed = 0.5; 
+    
     
 
     public void robotInit() {

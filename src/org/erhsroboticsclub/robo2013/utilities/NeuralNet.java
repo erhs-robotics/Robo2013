@@ -1,10 +1,10 @@
-package org.erhsroboticsclub.robo2013.utilities.neuralNet;
+package org.erhsroboticsclub.robo2013.utilities;
 
 
-import com.sun.squawk.util.Assert;
+
 import java.util.Random;
 
-public class  NeuronLayer{
+public class  NeuralNet{
 
     private double[][][] weights; //to next layer
     private double[][][] prevWeights;
@@ -15,7 +15,7 @@ public class  NeuronLayer{
     private final double alpha = 0.1; // learning rate
     private final double beta = 0.5; // learning momentum
 
-    public NeuronLayer(int[] layers) {
+    public NeuralNet(int[] layers) {
         nodesInLayers = layers;
         //init the output for each layer
         numLayers = layers.length;
@@ -68,7 +68,7 @@ public class  NeuronLayer{
                 }
                 //apply bias
                 sum += weights[i][j][nodesInLayers[i - 1]];
-                outputs[i][j] = Utils.sigmoid(sum);
+                outputs[i][j] = MathX.sigmoid(sum);
             }
 
         }
@@ -143,7 +143,7 @@ public class  NeuronLayer{
     public static void main(String[] args) {
 
         int[] layers = {2, 7, 7, 1};
-        NeuronLayer nn = new NeuronLayer(layers);
+        NeuralNet nn = new NeuralNet(layers);
         double[][][] data = {{{0, 0}, {0}},
                             {{0, 1}, {1}},
                             {{1, 0}, {1}},
