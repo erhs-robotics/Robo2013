@@ -5,6 +5,7 @@
 package org.erhsroboticsclub.robo2013;
 
 import com.sun.squawk.io.j2me.socket.Protocol;
+import edu.wpi.first.wpilibj.networktables2.util.List;
 import java.io.*;
 import java.*;
 import java.util.Hashtable;
@@ -44,5 +45,24 @@ public class Com {
         } catch (Exception e) {
         }
         return null;
+    }
+    
+    public void parseTargets(String targets) {
+        //split at '|'
+        int lasti = 0;
+        List targetInfo = new List();
+        for(int i=0;i<targets.length();i++) {
+            if(targets.charAt(i) == '|') {
+                targetInfo.add(targets.substring(lasti, i-1));
+                System.out.println(targets.substring(lasti, i-1));
+                lasti = i+1;
+            }
+        }
+        
+         List parsedTargets = new List();
+        //split at ','
+        for(int i=0;i<targetInfo.size();i++) {
+            
+        }
     }
 }

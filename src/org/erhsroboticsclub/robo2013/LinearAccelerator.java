@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import org.erhsroboticsclub.robo2013.utilities.MathX;
+import org.erhsroboticsclub.robo2013.utilities.Messenger;
 
 /**
  *
@@ -20,12 +21,13 @@ public class LinearAccelerator {
     private CANJaguar primaryWheel;
     private CANJaguar secondaryWheel;
     private PWM loadArmM1, loadArmM2;    
-    private DigitalInput limitSwitch;
+    public DigitalInput limitSwitch;
+    private Messenger msg = new Messenger();
     
 
     public LinearAccelerator() { 
         loadArmM1 = new PWM(RoboMap.LOAD_ARM_MOTOR1);
-        loadArmM2= new PWM(RoboMap.LOAD_ARM_MOTOR2);
+        loadArmM2 = new PWM(RoboMap.LOAD_ARM_MOTOR2);
         limitSwitch = new DigitalInput(RoboMap.LIMIT_SWITCH);
         /*
         try {
@@ -51,16 +53,18 @@ public class LinearAccelerator {
         loadArmM1.setRaw(255);
         loadArmM2.setRaw(255);
         
+        
         try {
             Thread.sleep(500);
-        } catch (InterruptedException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         
         while(true) {
-            if(limitSwitch.get()) {
+            if(!limitSwitch.get()) {
                 break;
             }
+            msg.printLn("looping");
         }
         
         loadArmM1.setRaw(127);

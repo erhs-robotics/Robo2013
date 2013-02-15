@@ -90,7 +90,8 @@ public class Robo2013 extends IterativeRobot {
     /**
      * This function is called periodically during operator control
      */
-    public void teleopPeriodic() {       
+    public void teleopPeriodic() {
+        System.out.println(launcher.limitSwitch.get());
         //drive.tankDrive(stickL.getY() * speed, stickR.getY() * speed);   
             if (stickR.getRawButton(RoboMap.AUTO_AIM_BUTTON)) {}
                 //Auto aim, mothafuckas
