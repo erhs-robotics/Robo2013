@@ -10,6 +10,7 @@ from imgproc import *
 from Kinect import Kinect
 import Lock
 
+json_template = '{"status": "%s", "image" : "http://localhost:80/target.png", "message" : "%s", "target" : "%s"}'
 imgproc = Imgproc(0)
 
 x_pos = 100
@@ -36,6 +37,8 @@ SCALE_FACTOR = 6
 while True:
 
     print "Loop Begin"
+    status = ""
+    msg = ""
 
     #rgb,_ = freenect.sync_get_video()
     #depth = kinect.get_depth()
@@ -43,11 +46,29 @@ while True:
     bgr = imgproc.getCameraImage()
     
     rects, rects_img = imgproc.doImgProc(bgr)
+    targets = imgproc.filterRects(rects)
+    target_str = ""
+    for target in targets:
+        dist = 0
+        string = "%s,%s,%s" % (target[0].x, dist, target[1])
+        target_str += string + "|"
+    status = "Found " + str(len(targets)) + " Targets"
+    
+    json = json_template % (status, msg, target_str)
+    
+    Lock.waitforlock("info.json")
+    Lock.lockfile("info.json")
+    info = open("info.json", "w")
+    info.seek(0)
+    info.write(json)
+    info.truncate()
+    info.close()
+    Lock.unlockfile("info.json") 
     
     Lock.waitforlock("target.png")
     Lock.lockfile("target.png")
     cv2.imwrite("target.png", cv2.resize(bgr, (bgr.shape[1]/SCALE_FACTOR, bgr.shape[0]/SCALE_FACTOR)), params)
-    Lock.unlockfile("target.png") 
+    Lock.unlockfile("target.png")
     
     #Build a two panel color image
     #d3 = np.dstack((depth,depth,depth)).astype(np.uint8)

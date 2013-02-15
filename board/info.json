@@ -1,1 +1,1 @@
-{"status": "Ready", "image" : "http://10.0.53.23:80/target.png", "message" : "yo"}
+{"status": "Found 0 Targets", "image" : "http://localhost:80/target.png", "message" : "", "target" : ""}
