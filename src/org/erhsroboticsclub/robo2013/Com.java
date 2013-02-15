@@ -20,9 +20,10 @@ public class Com {
         }
         
         public String getJSON(String url) throws IOException {
-            if(!url.startsWith("/")) url = "/" + url;
+            if(url.startsWith("/") && host.endsWith("/")) url = url.substring(1);
+            if(!url.startsWith("/") && !host.endsWith("/")) url = "/" + url;
             
-            DataInputStream in = Connector.openDataInputStream("http://10.0.53.23:80" + url);
+            DataInputStream in = Connector.openDataInputStream(host + url);
             String value = in.readUTF();                
             in.close();
             
