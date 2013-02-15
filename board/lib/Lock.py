@@ -1,8 +1,11 @@
 import os
 import time
 def lockfile(name):
-    lockfile = open(name + ".lock", 'w')
-    lockfile.close()
+    try:
+        lockfile = open(name + ".lock", 'w')
+        lockfile.close()
+    except:
+        pass
     
 def unlockfile(name):
     if islocked(name):
