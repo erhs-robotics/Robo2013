@@ -10,7 +10,6 @@ class Imgproc:
     # MIN 31, 69, 144
     # MAX 92, 198, 255
 
-<<<<<<< HEAD
 	def __init__(self, cam):
 		if cam >= 0:
 			self.camera = cv2.VideoCapture(cam)
@@ -38,27 +37,6 @@ class Imgproc:
 	def getHSVImage(self, cam_img):
 		self.hsv_img = cv2.cvtColor(cam_img, cv2.COLOR_BGR2HSV)
 		return self.hsv_img
-=======
-    def __init__(self, cam):
-        if cam >= 0:
-            self.camera = cv2.VideoCapture(cam)
-        #self.GREEN_MIN = np.array([50, 100, 100], np.uint8)
-        #self.GREEN_MAX = np.array([100, 255, 255], np.uint8)
-        self.GREEN_MIN = np.array([31,69,144], np.uint8) #70, 138, 156
-        self.GREEN_MAX = np.array([92,198,255], np.uint8) # 100, 255, 255
-        
-        self.YELLOW_MIN = np.array([0, 100, 100], np.uint8)
-        self.YELLOW_MAX = np.array([30, 255, 255], np.uint8)
-        
-    def getCameraImage(self):
-        _, self.cam_img = self.camera.read()
-        self.cam_img = cv2.blur(self.cam_img,(3,3))
-        return self.cam_img
-        
-    def getHSVImage(self, cam_img):
-        self.hsv_img = cv2.cvtColor(cam_img, cv2.COLOR_BGR2HSV)
-        return self.hsv_img
->>>>>>> fe257ae074404dedb76912ed6aa64e9f9780b7a2
 
     def getThreshImage(self, hsv_img, min_array, max_array):
         self.thresh_img = cv2.inRange(hsv_img, min_array, max_array)
