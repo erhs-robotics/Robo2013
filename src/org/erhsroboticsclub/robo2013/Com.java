@@ -9,25 +9,24 @@ import com.sun.squawk.io.j2me.socket.Protocol;
 import java.io.*;
 import java.*;
 import javax.microedition.io.Connection;
+import javax.microedition.io.Connector;
 
 
-public class Com{
-	Protocol socket;	
-        Connection connection; 	
+public class Com {
+	String host;
         
-        Com(String host){            
-            socket = new Protocol();
-            try {
-                connection =  socket.open("http", host, 0, true);                                
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }        
+        Com(String host){ 
+            this.host = host;                    
         }
         
-        public String getMessage() throws IOException {
-            DataInputStream in = socket.openDataInputStream();
-            String value = in.readUTF();
+        public String getJSON(String url) throws IOException {
+            if(!url.startsWith("/")) url = "/" + url;
+            
+            DataInputStream in = Connector.openDataInputStream("http://10.0.53.23:80" + url);
+            String value = in.readUTF();                
             in.close();
-            return value;
-        }
+            
+            return value;           
+        }       
+       
 }
