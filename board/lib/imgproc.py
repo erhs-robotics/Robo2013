@@ -89,7 +89,6 @@ class Imgproc:
             rects.append(rect)
         return rects
 
-<<<<<<< HEAD
 	def getMaxRect(self, rects):
 		if len(rects) > 0:
 			big = rects[0]
