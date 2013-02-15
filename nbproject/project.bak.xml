@@ -84,7 +84,7 @@
             <compilation-unit>
                 <package-root>src</package-root>
                 <classpath mode="boot">${sunspot.home}/lib/squawk.jar</classpath>
-                <classpath mode="compile">/home/michael/sunspotfrcsdk/lib/wpilibj.jar:/home/michael/sunspotfrcsdk/lib/networktables-crio.jar:/home/michael/Downloads/json-smart-1.1.1.jar</classpath>
+                <classpath mode="compile">/home/michael/sunspotfrcsdk/lib/wpilibj.jar:/home/michael/sunspotfrcsdk/lib/networktables-crio.jar</classpath>
                 <built-to>build</built-to>
                 <source-level>1.4</source-level>
             </compilation-unit>
