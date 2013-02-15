@@ -10,7 +10,7 @@ from imgproc import *
 from Kinect import Kinect
 import Lock
 
-json_template = '{"status": "%s", "image" : "http://localhost:80/target.png", "message" : "%s", "target" : "%s"}'
+json_template = '{"status": "%s", "message" : "%s", "target" : "%s"}'
 imgproc = Imgproc(0)
 
 x_pos = 100
