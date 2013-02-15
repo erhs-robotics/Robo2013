@@ -26,6 +26,9 @@ $(document).ready(function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText);
             console += obj.message + "<br>";
+            if (console.length > 200) {
+                console = console.slice(console.length-200, console.length);
+            }
             var n = (new Date() - start)/1000;
             n = n.toFixed(1);
             $("#time").text(n);
