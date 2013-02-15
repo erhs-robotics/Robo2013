@@ -1,15 +1,8 @@
 package org.erhsroboticsclub.robo2013;
 
 
-import com.sun.squawk.platform.posix.linux.natives.SocketImpl;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import javax.microedition.io.Connector;
-import javax.microedition.io.ServerSocketConnection;
-import javax.microedition.io.SocketConnection;
 import org.erhsroboticsclub.robo2013.utilities.Controls;
 import org.erhsroboticsclub.robo2013.utilities.Messenger; 
 
