@@ -56,23 +56,23 @@ while 1:
     if len(sys.argv) > 1:
         if action == 2:
             cam_img = cv2.imread(sys.argv[1], cv2.CV_LOAD_IMAGE_COLOR)
-            cam_img = cv2.cvtColor(cam_img, cv2.COLOR_RGB2BGR)
+            #cam_img = cv2.cvtColor(cam_img, cv2.COLOR_RGB2BGR)
         elif action == 1:
             cam_img = imgproc.getCameraImage()
     else:
         cam_img = kinect.get_video()
-        
-    
 
     rects, rects_img = imgproc.doImgProc(cam_img)
     for i in range(len(rects)):
         print rects[i].x + rects[i].width/2, rects[i].y + rects[i].height/2
+        
+    imgproc.labelRects(cam_img, rects)
     
     color = np.hstack((cam_img, imgproc.hsv_img)) #, imgproc.thresh_img, rects_img))
     binary = np.hstack((imgproc.thresh_img, rects_img))
     binary_3d = np.dstack((binary, binary, binary)).astype(np.uint8)
     all_images = np.hstack((color, binary_3d))
-    cv2.imshow('Original, HSV, Thresh, Rects', np.array(all_images[::2,::2,::-1]))
+    cv2.imshow('Original, HSV, Thresh, Rects', np.array(all_images[::2,::2,::1]))
     
     if cv2.waitKey(5) == 27:
         break

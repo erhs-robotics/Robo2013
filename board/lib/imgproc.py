@@ -5,12 +5,12 @@ import cPickle
 import sys
 from Rectangle import Rectangle
 
-
 class Imgproc:
 
     # MIN 31, 69, 144
     # MAX 92, 198, 255
 
+<<<<<<< HEAD
 	def __init__(self, cam):
 		if cam >= 0:
 			self.camera = cv2.VideoCapture(cam)
@@ -38,36 +38,58 @@ class Imgproc:
 	def getHSVImage(self, cam_img):
 		self.hsv_img = cv2.cvtColor(cam_img, cv2.COLOR_BGR2HSV)
 		return self.hsv_img
+=======
+    def __init__(self, cam):
+        if cam >= 0:
+            self.camera = cv2.VideoCapture(cam)
+        #self.GREEN_MIN = np.array([50, 100, 100], np.uint8)
+        #self.GREEN_MAX = np.array([100, 255, 255], np.uint8)
+        self.GREEN_MIN = np.array([31,69,144], np.uint8) #70, 138, 156
+        self.GREEN_MAX = np.array([92,198,255], np.uint8) # 100, 255, 255
+        
+        self.YELLOW_MIN = np.array([0, 100, 100], np.uint8)
+        self.YELLOW_MAX = np.array([30, 255, 255], np.uint8)
+        
+    def getCameraImage(self):
+        _, self.cam_img = self.camera.read()
+        self.cam_img = cv2.blur(self.cam_img,(3,3))
+        return self.cam_img
+        
+    def getHSVImage(self, cam_img):
+        self.hsv_img = cv2.cvtColor(cam_img, cv2.COLOR_BGR2HSV)
+        return self.hsv_img
+>>>>>>> fe257ae074404dedb76912ed6aa64e9f9780b7a2
 
-	def getThreshImage(self, hsv_img, min_array, max_array):
-		self.thresh_img = cv2.inRange(hsv_img, min_array, max_array)
-		self.thresh_img = cv2.medianBlur(self.thresh_img, 5)
-		return self.thresh_img
-		
-	def getContours(self, image):
-		self.contours, _ = cv2.findContours(image,
-											cv2.RETR_LIST,
-											cv2.CHAIN_APPROX_SIMPLE)
+    def getThreshImage(self, hsv_img, min_array, max_array):
+        self.thresh_img = cv2.inRange(hsv_img, min_array, max_array)
+        self.thresh_img = cv2.medianBlur(self.thresh_img, 5)
+        return self.thresh_img
+        
+    def getContours(self, image):
+        self.contours, _ = cv2.findContours(image,
+                                            cv2.RETR_LIST,
+                                            cv2.CHAIN_APPROX_SIMPLE)
         #this is for a bug in opencv, it should be fixed in the newest
         #version or a later version
-		tmp = cPickle.dumps(self.contours)
-		self.contours = cPickle.loads(tmp)
-		
-		return self.contours
-		
-	def fillContours(self, image, contours):
-		for i in range(len(contours)):
-			x, y, w, h = cv2.boundingRect(contours[i])
-			cv2.rectangle(image,(x,y),(x+w,y+h),(0,255,255),-1)
-			
-	def getBoundingRectangles(self, contours):
-		rects = []
-		for i in range(len(contours)):
-			center_x, center_y, width, height = cv2.boundingRect(contours[i])
-			rect = Rectangle(center_x, center_y, width, height)
-			rects.append(rect)
-		return rects
+        tmp = cPickle.dumps(self.contours)
+        self.contours = cPickle.loads(tmp)
+        
+        return self.contours
+        
+    def fillContours(self, image, contours):
+        for i in range(len(contours)):
+            x, y, w, h = cv2.boundingRect(contours[i])
+            cv2.rectangle(image,(x,y),(x+w,y+h),(0,255,255),-1)
+            
+    def getBoundingRectangles(self, contours):
+        rects = []
+        for i in range(len(contours)):
+            center_x, center_y, width, height = cv2.boundingRect(contours[i])
+            rect = Rectangle(center_x, center_y, width, height)
+            rects.append(rect)
+        return rects
 
+<<<<<<< HEAD
 	def getMaxRect(self, rects):
 		if len(rects) > 0:
 			big = rects[0]
@@ -126,7 +148,9 @@ class Imgproc:
 		elif abs(ratio - self.HIGH) <= self.THRESHHOLD:
 			return self.HIGH_HEIGHT
 		else:
-			return 0
-			
-		
-		
+			return 0		
+
+    def labelRects(self, img, rects):
+        for i in range(len(rects)):
+            cv2.putText(img, "%d" % i, (rects[i].center_mass_x, rects[i].center_mass_y), cv2.FONT_HERSHEY_COMPLEX, 4, (0,255,255))
+
