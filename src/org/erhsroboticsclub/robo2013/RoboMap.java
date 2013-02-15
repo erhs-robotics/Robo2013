@@ -22,6 +22,13 @@ public class RoboMap {
     public static final int RIGHT_DRIVE_STICK = 2;
     public static final int CONTROL_STICK = 3;
     
+    /* Controls */
+    public static final int AUTO_AIM_BUTTON = 1;
+    public static final int FIRE_BUTTON = 2;
+    public static final int MANUAL_LAUNCHER_UP_BUTTON = 3;
+    public static final int MANUAL_LAUNCHER_DOWN_BUTTON = 4;
+    public static final int MANUAL_SET_SPEED_BUTTON = 5;
+    
     
     
 }
