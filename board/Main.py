@@ -9,7 +9,7 @@ import freenect
 from imgproc import *
 from Kinect import Kinect
 
-imgproc = Imgproc(-1)
+imgproc = Imgproc(0)
 
 x_pos = 100
 y_pos = 100
@@ -30,6 +30,7 @@ print "Beginning"
 params = list()
 params.append(cv.CV_IMWRITE_PNG_COMPRESSION)
 params.append(8)
+SCALE_FACTOR = 6
             
 while True:
 
@@ -41,7 +42,7 @@ while True:
     bgr = kinect.get_video()
     rects, rects_img = imgproc.doImgProc(bgr)
     
-    cv2.imwrite("target.png", np.array(rgb[::2,::2,::-1]), params)
+    cv2.imwrite("target.png", cv2.resize(bgr, (bgr.shape[1]/SCALE_FACTOR, bgr.shape[0]/SCALE_FACTOR)) , params)
     
     max_rect = imgproc.getMaxRect(rects)
     if max_rect:
@@ -56,7 +57,7 @@ while True:
     distance = kinect.get_depth_at(x_pos, y_pos)
     print distance * 100 / 2.54# meters->feet->in
     
-    # Build a two panel color image
+     Build a two panel color image
     d3 = np.dstack((depth,depth,depth)).astype(np.uint8)
     da = np.hstack((d3,rgb))
     
