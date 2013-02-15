@@ -15,7 +15,6 @@ def pack_data(string):
 		data.append(struct.pack(format, utf8))
 		return data
 
-
 if len(sys.argv) > 1 and sys.argv[1] == "debug":
     COMP_IP = "localhost"
 else:
@@ -23,8 +22,6 @@ else:
     COMP_IP = commands.getoutput("/sbin/ifconfig").split("wlan0")[1].split("inet addr:")[1].split(" ")[0]
 
 pic_addr = "http://" + COMP_IP + "/target.png"
-
-COMP_IP = "10.0.53.23"
 
 HOST_NAME = COMP_IP
 PORT_NUMBER = 80
