@@ -26,6 +26,9 @@ $(document).ready(function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
             var obj = JSON.parse(xmlhttp.responseText);
             console += obj.message + "<br>";
+            if (console.length > 200) {
+                console = console.slice(console.length-200, console.length);
+            }
             var n = (new Date() - start)/1000;
             n = n.toFixed(1);
             $("#time").text(n);
@@ -65,7 +68,7 @@ function getMessage() {
         <div class="clear"></div>
         
         <div class="grid_4"><h2>Robot Camera</h2></td><td><img id="image" style="width: 300px;"></div>
-        <div class="grid_8"><h2>Message Console</h2><div id="console" style="height:220px;border:2px solid #0f0;overflow:auto;"></div></div>
+        <div class="grid_8"><h2>Message Console</h2><div id="console" style="height:220px;border:2px solid #0f0;overflow:auto; background: #000;"></div></div>
         <div class="clear"></div>
         
         <div class="grid_12">
