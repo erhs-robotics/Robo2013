@@ -15,7 +15,7 @@ public class RoboMap {
     /* Analog */
     public static final int GYRO = 1;
     public static final int ULTRASONIC = 2;
-    public static final int POTENTIOMETER = 3;
+    public static final int LIMIT_SWITCH = 3;
     
     /* USB Input */
     public static final int LEFT_DRIVE_STICK = 1;
