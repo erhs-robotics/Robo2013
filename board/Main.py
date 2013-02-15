@@ -8,6 +8,7 @@ import numpy as np
 import freenect
 from imgproc import *
 from Kinect import Kinect
+import Lock
 
 imgproc = Imgproc(0)
 
@@ -23,7 +24,7 @@ cv2.namedWindow('Depth and RGB')
 cv.CreateTrackbar("X", 'Depth and RGB', x_pos, 632, update_x)
 cv.CreateTrackbar("Y", 'Depth and RGB', y_pos, 479, update_y)
 
-kinect = Kinect()
+
 
 print "Beginning"
 
@@ -36,32 +37,22 @@ while True:
 
     print "Loop Begin"
 
-    rgb,_ = freenect.sync_get_video()
-    depth = kinect.get_depth()
+    #rgb,_ = freenect.sync_get_video()
+    #depth = kinect.get_depth()
     
-    bgr = kinect.get_video()
+    bgr = imgproc.getCameraImage()
+    
     rects, rects_img = imgproc.doImgProc(bgr)
     
-    cv2.imwrite("target.png", cv2.resize(bgr, (bgr.shape[1]/SCALE_FACTOR, bgr.shape[0]/SCALE_FACTOR)) , params)
+    Lock.waitforlock("target.png")
+    Lock.lockfile("target.png")
+    cv2.imwrite("target.png", cv2.resize(bgr, (bgr.shape[1]/SCALE_FACTOR, bgr.shape[0]/SCALE_FACTOR)), params)
+    Lock.unlockfile("target.png") 
     
-    max_rect = imgproc.getMaxRect(rects)
-    if max_rect:
-        print max_rect.x, max_rect.y
-        x_pos = max_rect.x
-        y_pos = max_rect.y
-    else:
-        print "No Taget Found!"
-    
-    cv2.circle(rgb, (x_pos, y_pos), 2, (255,255,0), 5)   
-    
-    distance = kinect.get_depth_at(x_pos, y_pos)
-    print distance * 100 / 2.54# meters->feet->in
-    
-     Build a two panel color image
-    d3 = np.dstack((depth,depth,depth)).astype(np.uint8)
-    da = np.hstack((d3,rgb))
-    
-    cv2.imshow('Depth and RGB',np.array(da[::2,::2,::-1]))
+    #Build a two panel color image
+    #d3 = np.dstack((depth,depth,depth)).astype(np.uint8)
+    #da = np.hstack((d3,rgb))
+   
     cv2.imshow('RGB Mods', rects_img)
     if cv2.waitKey(5) == 27:
         break

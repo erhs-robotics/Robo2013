@@ -4,7 +4,10 @@ import commands
 import BaseHTTPServer
 from os import curdir, sep
 import sys
+sys.path.append('lib')
 import struct
+import Lock
+
 
 def pack_data(string):
 		data = []
@@ -32,9 +35,13 @@ class MyHandler(BaseHTTPServer.BaseHTTPRequestHandler):
             s.send_response(200)
             s.send_header("Content-Type", "image/png")
             s.end_headers()
+            
+            Lock.waitforlock("target.png")
+            Lock.lockfile("target.png")
             f = open("target.png", "rb")
             s.wfile.write(f.read())
             f.close()
+            Lock.unlockfile("target.png")
         elif s.path == "/crio":
             s.send_response(200)
             s.send_header("Content-Type", "application/json")
