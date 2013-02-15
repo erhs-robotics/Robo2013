@@ -1,13 +1,13 @@
 #!/usr/bin/python2
 import sys
+import os
+sys.path.append('lib')
 import cv2 
 from cv2 import cv
 import numpy as np
 import freenect
 from imgproc import *
 from Kinect import Kinect
-
-sys.path.append('lib')
 
 imgproc = Imgproc(-1)
 
@@ -25,13 +25,23 @@ cv.CreateTrackbar("Y", 'Depth and RGB', y_pos, 479, update_y)
 
 kinect = Kinect()
 
+print "Beginning"
+
+params = list()
+params.append(cv.CV_IMWRITE_PNG_COMPRESSION)
+params.append(8)
+            
 while True:
+
+    print "Loop Begin"
 
     rgb,_ = freenect.sync_get_video()
     depth = kinect.get_depth()
     
     bgr = kinect.get_video()
     rects, rects_img = imgproc.doImgProc(bgr)
+    
+    cv2.imwrite("target.png", np.array(rgb[::2,::2,::-1]), params)
     
     max_rect = imgproc.getMaxRect(rects)
     if max_rect:
