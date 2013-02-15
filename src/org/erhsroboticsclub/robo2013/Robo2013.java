@@ -57,9 +57,9 @@ public class Robo2013 extends IterativeRobot {
                 drive.drive(0, 0);                
                 
                 msg.printLn("Connecting...");
-                String out = com.getJSON("crio");
+                Hashtable table = com.getValues("crio");
                 
-                System.out.println("received: " + out);                
+                System.out.println("received: " + table.get("status"));                
                 
                 msg.printLn("Success!");
 
