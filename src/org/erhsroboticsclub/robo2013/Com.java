@@ -12,6 +12,7 @@ import java.util.Hashtable;
 import javax.microedition.io.Connection;
 import javax.microedition.io.Connector;
 import org.erhsroboticsclub.robo2013.utilities.SSJSONParser;
+import org.erhsroboticsclub.robo2013.utilities.Target;
 
 public class Com {
 
@@ -47,22 +48,24 @@ public class Com {
         return null;
     }
     
-    public void parseTargets(String targets) {
+    
+    
+    public List parseTargets(String targets) {
+        List parsedTargets = new List();
         //split at '|'
-        int lasti = 0;
-        List targetInfo = new List();
-        for(int i=0;i<targets.length();i++) {
-            if(targets.charAt(i) == '|') {
-                targetInfo.add(targets.substring(lasti, i-1));
-                System.out.println(targets.substring(lasti, i-1));
-                lasti = i+1;
+        
+        List targetInfo = SSJSONParser.splitString(targets, "|");
+        for(int i=0;i<targetInfo.size();i++) {
+            String s = (String) targetInfo.get(i);
+            List items = SSJSONParser.splitString(s, ",");
+            if(items.size() == 3) {
+                Target t = new Target();
+                t.x = Double.parseDouble((String)items.get(0));
+                t.distance = Double.parseDouble((String)items.get(1));
+                t.height = Double.parseDouble((String)items.get(2));
+                parsedTargets.add(t);
             }
         }
-        
-         List parsedTargets = new List();
-        //split at ','
-        for(int i=0;i<targetInfo.size();i++) {
-            
-        }
+        return parsedTargets;        
     }
 }
