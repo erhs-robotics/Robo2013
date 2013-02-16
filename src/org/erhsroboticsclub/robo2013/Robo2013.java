@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import java.util.Hashtable;
 import org.erhsroboticsclub.robo2013.utilities.Controls;
+import org.erhsroboticsclub.robo2013.utilities.MathX;
 import org.erhsroboticsclub.robo2013.utilities.Messenger;
 
 public class Robo2013 extends IterativeRobot {
@@ -86,6 +87,12 @@ public class Robo2013 extends IterativeRobot {
         if (stickR.getRawButton(RoboMap.MANUAL_LAUNCHER_UP_BUTTON)) {
         } else if (stickR.getRawButton(RoboMap.MANUAL_LAUNCHER_DOWN_BUTTON)) {
         }
+        //double value = stickL.getY();
+        //value = MathX.map(value, -1, 1, 0, 255);
+        //msg.printLn("" + value);
+        
+        //launcher.loadArmM1.setRaw((int)value);
+        //launcher.loadArmM2.setRaw((int)value);
 
         if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
             msg.printLn("Launch!");

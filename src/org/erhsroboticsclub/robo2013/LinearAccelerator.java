@@ -20,7 +20,7 @@ import org.erhsroboticsclub.robo2013.utilities.Messenger;
 public class LinearAccelerator {       
     private CANJaguar primaryWheel;
     private CANJaguar secondaryWheel;
-    private PWM loadArmM1, loadArmM2;    
+    public PWM loadArmM1, loadArmM2;    
     public DigitalInput limitSwitch;
     private Messenger msg = new Messenger();
     
@@ -50,8 +50,8 @@ public class LinearAccelerator {
     }
     
     public void launch() {                
-        loadArmM1.setRaw(255);
-        loadArmM2.setRaw(255);
+        loadArmM1.setRaw(1);
+        loadArmM2.setRaw(1);
         
         
         try {
