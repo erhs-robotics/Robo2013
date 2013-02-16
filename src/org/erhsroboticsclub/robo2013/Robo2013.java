@@ -53,29 +53,16 @@ public class Robo2013 extends IterativeRobot {
     public void autonomousInit() {
         drive.setSafetyEnabled(false);
         msg.clearConsole();
-       
         
-
+        
+        
+        
+        autonomous();
     }
 
-    /**
-     * This function is called periodically during autonomous
-     */
-    public void autonomousPeriodic() {
-        switch(mode) {
-            case 0://turn to face target
-                break;
-            case 1://auto aim to target
-                break;
-            case 2://wait for motors to be up to speed
-                break;
-            case 3://fire
-                break;
-                
-                
-                
-                
-        }
+    
+    public void autonomous() {
+        
     }
 
     public void teleopInit() {
@@ -90,11 +77,11 @@ public class Robo2013 extends IterativeRobot {
         System.out.println(launcher.limitSwitch.get());
         //drive.tankDrive(stickL.getY() * speed, stickR.getY() * speed);   
             if (stickR.getRawButton(RoboMap.AUTO_AIM_BUTTON)) {}
-                //Auto aim, mothafuckas
+               
             if (stickR.getRawButton(RoboMap.MANUAL_LAUNCHER_UP_BUTTON)) {}
-                //Manually move launcher up a notch, mothafuckas
+                
             else if (stickR.getRawButton(RoboMap.MANUAL_LAUNCHER_DOWN_BUTTON)) {}
-                //Manually move launcher down a notch, mothafuckas
+                
             if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
                 msg.printLn("Launch!");
                 launcher.launch();
