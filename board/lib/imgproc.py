@@ -13,10 +13,10 @@ class Imgproc:
 	def __init__(self, cam):
 		if cam >= 0:
 			self.camera = cv2.VideoCapture(cam)
-		#self.GREEN_MIN = np.array([50, 100, 100], np.uint8)
-		#self.GREEN_MAX = np.array([100, 255, 255], np.uint8)
-		self.GREEN_MIN = np.array([31,69,144], np.uint8) #70, 138, 156
-		self.GREEN_MAX = np.array([92,198,255], np.uint8) # 100, 255, 255
+		self.GREEN_MIN = np.array([50, 100, 100], np.uint8)
+		self.GREEN_MAX = np.array([100, 255, 255], np.uint8)
+		#self.GREEN_MIN = np.array([31,69,144], np.uint8) #70, 138, 156
+		#self.GREEN_MAX = np.array([92,198,255], np.uint8) # 100, 255, 255
 		
 		self.YELLOW_MIN = np.array([0, 100, 100], np.uint8)
 		self.YELLOW_MAX = np.array([30, 255, 255], np.uint8)
@@ -129,6 +129,6 @@ class Imgproc:
 
 	def labelRects(self, img, rects):
 		for i in range(len(rects)):
-			cv2.putText(img, "%d" % i, (rects[i].center_mass_x, rects[i].center_mass_y), cv2.FONT_HERSHEY_COMPLEX, 4, (0,255,255))
+			cv2.putText(img, str(i), (rects[i].center_mass_x, rects[i].center_mass_y), cv2.FONT_HERSHEY_DUPLEX, 3, (0,0,255), thickness=5)
 
 
