@@ -30,12 +30,12 @@ class Imgproc:
 		
 		
 	def getCameraImage(self):
-		_, self.cam_img = self.camera.read()
+		_, self.cam_img = self.camera.read()#define cam_img CV_8U?
 		self.cam_img = cv2.blur(self.cam_img,(3,3))
 		return self.cam_img
 		
 	def getHSVImage(self, cam_img):
-		self.hsv_img = cv2.cvtColor(cam_img, cv2.COLOR_BGR2HSV)
+		self.hsv_img = cv2.cvtColor(cam_img, cv2.COLOR_BGR2HSV)#define hsv_img CV_32F?
 		return self.hsv_img
 
 	def getThreshImage(self, hsv_img, min_array, max_array):
