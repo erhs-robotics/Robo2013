@@ -2,9 +2,6 @@ package org.erhsroboticsclub.robo2013;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
-import java.util.Hashtable;
-import org.erhsroboticsclub.robo2013.utilities.Controls;
-import org.erhsroboticsclub.robo2013.utilities.MathX;
 import org.erhsroboticsclub.robo2013.utilities.Messenger;
 
 public class Robo2013 extends IterativeRobot {
@@ -13,12 +10,8 @@ public class Robo2013 extends IterativeRobot {
     private Joystick stickL, stickR;
     private CANJaguar TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR;
     private Messenger msg;
-    private Controls controls;
     private LinearAccelerator launcher;
-    private final double speed = 0.5;
-    private int mode = 0;
     private AI agent;
-
 
     /*
      * Called once cRIO boots up
@@ -26,24 +19,20 @@ public class Robo2013 extends IterativeRobot {
     public void robotInit() {
         msg = new Messenger();
         msg.printLn("Loading FRC 2013");
-        /*
-         try {
-         TOP_LEFT_JAGUAR = new CANJaguar(RoboMap.TOP_LEFT_MOTOR);
-         BOTTOM_LEFT_JAGUAR = new CANJaguar(RoboMap.BOTTOM_LEFT_MOTOR);
-         TOP_RIGHT_JAGUAR = new CANJaguar(RoboMap.TOP_RIGHT_MOTOR);
-         BOTTOM_RIGHT_JAGUAR = new CANJaguar(RoboMap.BOTTOM_RIGHT_MOTOR);
-
-         } catch (CANTimeoutException ex) {
-         ex.printStackTrace();
-         }
-         */
+        try {
+            TOP_LEFT_JAGUAR = new CANJaguar(RoboMap.TOP_LEFT_DRIVE_MOTOR);
+            BOTTOM_LEFT_JAGUAR = new CANJaguar(RoboMap.BOTTOM_LEFT_DRIVE_MOTOR);
+            TOP_RIGHT_JAGUAR = new CANJaguar(RoboMap.TOP_RIGHT_DRIVE_MOTOR);
+            BOTTOM_RIGHT_JAGUAR = new CANJaguar(RoboMap.BOTTOM_RIGHT_DRIVE_MOTOR);
+        } catch (CANTimeoutException ex) {
+            ex.printStackTrace();
+        }
         launcher = new LinearAccelerator();
-        //drive = new RobotDrive(TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR);
-        stickL = new Joystick(1);
-        stickR = new Joystick(1);
-        agent = new AI(null);
+        drive = new RobotDrive(TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR);
+        stickL = new Joystick(RoboMap.LEFT_DRIVE_STICK);
+        stickR = new Joystick(RoboMap.RIGHT_DRIVE_STICK);
+        agent = new AI(drive, launcher);
         msg.printLn("Done Loading: FRC 2013");
-
     }
 
     /*
@@ -52,9 +41,7 @@ public class Robo2013 extends IterativeRobot {
     public void autonomousInit() {
         drive.setSafetyEnabled(false);
         msg.clearConsole();
-
-
-
+        msg.printLn("Auto Started");
 
         autonomous();//start autonomous
     }
@@ -63,37 +50,55 @@ public class Robo2013 extends IterativeRobot {
      * Called once by autonomousInit
      */
     public void autonomous() {
-        // 0) turn to face target
-        // 1) auto aim launcher
-        // 2) wait for motor to come up to speed
-        // 3) fire all firsbees
+        // 0) set wheels to proper speed
+        // 1) turn to face target
+        // 2) auto aim launcher
+        // 3) wait for motor to come up to speed
+        // 4) fire all firsbees
+        int targetNumber = 0;
+        launcher.setWheels(launcher.AUTO_SHOOT_SPEED, launcher.AUTO_SHOOT_SPEED);
+        agent.turnToTarget(targetNumber);
+        agent.autoAimLauncher();
+        Timer.delay(5);
+        for (int i = 0; i < 3; i++) {
+            launcher.launch();
+        }
     }
 
     /*
      * Called once at the start of teleop mode
      */
     public void teleopInit() {
+        drive.setSafetyEnabled(false);
+        msg.clearConsole();
+        msg.printLn("Teleop Started");
     }
 
     /**
      * Called periodically during operator control
      */
     public void teleopPeriodic() {
-        System.out.println(launcher.limitSwitch.get());
-        //drive.tankDrive(stickL.getY() * speed, stickR.getY() * speed);   
+        /* Simple Tank Drive **************************************************/
+        drive.tankDrive(stickL.getY(), stickR.getY()); 
+
+        /* Adjust shooting angle **********************************************/
         if (stickR.getRawButton(RoboMap.AUTO_AIM_BUTTON)) {
+            agent.autoAimLauncher();
         }
-
         if (stickR.getRawButton(RoboMap.MANUAL_LAUNCHER_UP_BUTTON)) {
+            launcher.bumpLauncherUp();
         } else if (stickR.getRawButton(RoboMap.MANUAL_LAUNCHER_DOWN_BUTTON)) {
+            launcher.bumpLauncherDown();
         }
-        //double value = stickL.getY();
-        //value = MathX.map(value, -1, 1, 0, 255);
-        //msg.printLn("" + value);
-        
-        //launcher.loadArmM1.setRaw((int)value);
-        //launcher.loadArmM2.setRaw((int)value);
 
+        /* Auto Turn To Target ************************************************/
+        if (stickR.getRawButton(RoboMap.TURN_TO_TARGET_BUTTON)) {
+            // Needs adjustment, need a way to specify which target we
+            // are actually turning to
+            agent.turnToTarget(0);
+        }
+
+        /* Fire the frisbee ***************************************************/
         if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
             msg.printLn("Launch!");
             launcher.launch();

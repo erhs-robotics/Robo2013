@@ -3,8 +3,8 @@ package org.erhsroboticsclub.robo2013.utilities;
 import com.sun.squawk.util.MathUtils;
 
 /**
- * Implements java.lang.Math and com.sun.squak.util.MathUtils to trig functions
- * to use degrees instead of Radians. For use in Physics class, specifically
+ * Contains a lot of useful math functions that FRC doesn't normally gives us.
+ * Also adjusts trig functions to use degrees instead of radians.
  *
  * @author Nick, Michael
  */
@@ -63,40 +63,44 @@ public class MathX {
     public static double sqrt(double d) {
         return java.lang.Math.sqrt(d);
     }
-    
+
     public static double max(double d1, double d2) {
         if (d1 > d2) {
             return d1;
         }
         return d2;
     }
-    
+
     public static double min(double d1, double d2) {
         if (d1 < d2) {
             return d1;
         }
         return d2;
     }
-    
-    public static double map(double x, double in_min, long in_max, long out_min, long out_max){ 
+
+    public static double map(double x, double in_min, long in_max, long out_min, long out_max) {
         return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
     }
-    
+
     public static double clamp(double value, double min, double max) {
-        if(value > max) return max;
-        if(value < min) return min;
-        
+        if (value > max) {
+            return max;
+        }
+        if (value < min) {
+            return min;
+        }
+
         return value;
     }
-    
+
     public static boolean isWithin(double value, double target, double variance) {
-        if(abs(value - target) <= variance) {
+        if (abs(value - target) <= variance) {
             return true;
         }
-        
+
         return false;
     }
-    
+
     public static double sigmoid(double n) {
         return 1 / (1 + MathX.pow(Math.E, -n));
     }

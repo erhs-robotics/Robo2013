@@ -1,6 +1,5 @@
 package org.erhsroboticsclub.robo2013;
 
-import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.networktables2.util.List;
 import java.util.Hashtable;
@@ -15,11 +14,12 @@ public class AI {
     private Messenger msg;
     private Com com;
     private PIDControllerX pid;
+    private LinearAccelerator launcher;
 
-    public AI(RobotDrive drive) {
+    public AI(RobotDrive drive, LinearAccelerator launcher) {
         this.drive = drive;
+        this.launcher = launcher;
         pid = new PIDControllerX(1, 0, 10);
-
     }
 
     private List getAllTargets() {
@@ -36,25 +36,23 @@ public class AI {
                 high = t;
             }
         }
-
         return high;
     }
 
     public void turnToTarget(int t) {
         pid.setSetpoint(320);
-        
+
         Target target;
-        
 
         do {
             List list = getAllTargets();
             target = (Target) list.get(t);
             double correction = pid.doPID(target.x);
             drive.tankDrive(correction, -correction);
-            
-        } while(!MathX.isWithin(target.x, 320, 7));
+        } while (!MathX.isWithin(target.x, 320, 7));
+    }
 
-
-
+    public void autoAimLauncher() {
+        // ToDo: Auto aim launcher angle
     }
 }
