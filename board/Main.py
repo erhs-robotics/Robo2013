@@ -32,7 +32,7 @@ print "Beginning"
 params = list()
 params.append(cv.CV_IMWRITE_PNG_COMPRESSION)
 params.append(8)
-SCALE_FACTOR = 6
+SCALE_FACTOR = 3
             
 while True:
 
@@ -46,6 +46,7 @@ while True:
     bgr = imgproc.getCameraImage()
     
     rects, rects_img = imgproc.doImgProc(bgr)
+    #imgproc.labelRects(bgr, rects)
     targets = imgproc.filterRects(rects)
     target_str = ""
     for target in targets:
