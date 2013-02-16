@@ -15,8 +15,9 @@ public class Robo2013 extends IterativeRobot {
     private Messenger msg;
     private Controls controls;
     private LinearAccelerator launcher;
-    private Com com;
+    
     private final double speed = 0.5; 
+    private int mode = 0;
     
     
     
@@ -26,7 +27,7 @@ public class Robo2013 extends IterativeRobot {
         
         
         msg = new Messenger();
-        com = new Com("http://10.0.53.23:80/");
+        
         msg.printLn("Loading FRC 2013");
         /*
         try {
@@ -51,27 +52,8 @@ public class Robo2013 extends IterativeRobot {
 
     public void autonomousInit() {
         drive.setSafetyEnabled(false);
-
         msg.clearConsole();
-        while (true) {
-            try {
-                drive.drive(0, 0);                
-                
-                msg.printLn("Connecting...");
-                Hashtable table = com.getValues("crio");
-                
-                System.out.println("received: " + table.get("status"));                
-                
-                msg.printLn("Success!");
-
-            } catch (Exception ex) {
-                System.out.println(ex.getClass());
-                System.out.println(ex.getMessage());
-                System.out.println(ex.toString());
-                msg.printLn("Connection Failed!");
-                break;
-            }
-        }
+       
         
 
     }
@@ -80,6 +62,20 @@ public class Robo2013 extends IterativeRobot {
      * This function is called periodically during autonomous
      */
     public void autonomousPeriodic() {
+        switch(mode) {
+            case 0://turn to face target
+                break;
+            case 1://auto aim to target
+                break;
+            case 2://wait for motors to be up to speed
+                break;
+            case 3://fire
+                break;
+                
+                
+                
+                
+        }
     }
 
     public void teleopInit() {
