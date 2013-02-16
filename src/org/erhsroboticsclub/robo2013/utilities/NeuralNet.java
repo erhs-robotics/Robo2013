@@ -1,10 +1,8 @@
 package org.erhsroboticsclub.robo2013.utilities;
 
-
-
 import java.util.Random;
 
-public class  NeuralNet{
+public class NeuralNet {
 
     private double[][][] weights; //to next layer
     private double[][][] prevWeights;
@@ -140,14 +138,41 @@ public class  NeuralNet{
         return weights;
     }
 
+    public String outputWeights() {
+        String str = "{";
+        for (int i = 1; i < weights.length; i++) {
+            str += "{";
+            for (int j = 0; j < weights[i].length; j++) {
+                str += "{";
+                for (int k = 0; k < weights[i][j].length; k++) {
+                    str += String.valueOf(weights[i][j][k]);
+                    if (k != weights[i][j].length - 1) {
+                        str += ", ";
+                    }
+                }
+                str += "}";
+                if (j != weights[i].length - 1) {
+                    str += ", ";
+                }
+            }
+            str += "}";
+            if (i != weights.length - 1) {
+                str += ", ";
+            }
+        }
+        str += "}";
+
+        return str;
+    }
+
     public static void main(String[] args) {
 
         int[] layers = {2, 7, 7, 1};
         NeuralNet nn = new NeuralNet(layers);
         double[][][] data = {{{0, 0}, {0}},
-                            {{0, 1}, {1}},
-                            {{1, 0}, {1}},
-                            {{1, 1}, {0}}};
+            {{0, 1}, {1}},
+            {{1, 0}, {1}},
+            {{1, 1}, {0}}};
         // Train the nn
         double mse = 0.11;
         int i = 0;
@@ -178,7 +203,7 @@ public class  NeuralNet{
             System.out.print("Output:");
             System.out.println(nn.getOutputs()[0]);
         }
-        
+
 
 
     }
