@@ -16,6 +16,7 @@ public class Robo2013 extends IterativeRobot {
     private LinearAccelerator launcher;
     private final double speed = 0.5;
     private int mode = 0;
+    private AI agent;
 
 
     /*
@@ -39,6 +40,7 @@ public class Robo2013 extends IterativeRobot {
         //drive = new RobotDrive(TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR);
         stickL = new Joystick(1);
         stickR = new Joystick(1);
+        agent = new AI(null);
         msg.printLn("Done Loading: FRC 2013");
 
     }
@@ -60,6 +62,10 @@ public class Robo2013 extends IterativeRobot {
      * Called once by autonomousInit
      */
     public void autonomous() {
+        // 0) turn to face target
+        // 1) auto aim launcher
+        // 2) wait for motor to come up to speed
+        // 3) fire all firsbees
     }
 
     /*
