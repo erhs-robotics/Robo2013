@@ -80,4 +80,20 @@ public class SSJSONParser {
         return table;
     }
     
+    public static List splitString(String str, String split) {
+        List list = new List();
+        int last = 0;
+        for(int i=0;i<str.length();i++) {
+            if(i + split.length() > str.length()) break;
+            String seg = str.substring(i, i + split.length());
+            if(seg.equals(split)) {
+                list.add(str.substring(last, i));
+                i += split.length();
+                last = i;
+            }
+        }
+        list.add(str.substring(last, str.length()));
+        return list;
+    }
+    
 }
