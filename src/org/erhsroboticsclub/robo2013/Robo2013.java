@@ -15,7 +15,7 @@ public class Robo2013 extends IterativeRobot {
     private final double speed = 0.5;
 
     /*
-     * Called once cRIO boots up
+     * Called once the cRIO boots up
      */
     public void robotInit() {
         msg = new Messenger();
@@ -47,7 +47,8 @@ public class Robo2013 extends IterativeRobot {
         msg.printLn("Auto Started");
 
         try {
-            autonomousA();//start autonomous
+            autonomousA();//start autonomous (Plan A)
+            //autonomousB();//start autonomous (Plan B)
         } catch (Exception e) {
             msg.printLn("Auto mode failed!");
             msg.printLn(e.getMessage());
@@ -63,10 +64,10 @@ public class Robo2013 extends IterativeRobot {
         int fails = 0;
         boolean success;
 
-        // 0) set wheels to proper speed
+        // 0) Set wheels to proper speed
         msg.printLn("Starting up launcher...");
         launcher.setWheels(launcher.AUTO_SHOOT_SPEED, launcher.AUTO_SHOOT_SPEED);
-        // 1) turn to face target 
+        // 1) Turn to face target 
         msg.printLn("Finding target...");
         do {
             success = agent.turnToTarget(targetNumber);
@@ -82,7 +83,7 @@ public class Robo2013 extends IterativeRobot {
             }
         } while (!success);
 
-        // 2) auto aim launcher
+        // 2) Auto aim launcher
         msg.printLn("Aiming launcher...");
         fails = 0;
         do {
@@ -98,15 +99,26 @@ public class Robo2013 extends IterativeRobot {
                 msg.printLn("Retrying...");
             }
         } while (!success);
-        // 3) wait for motor to come up to speed
+        // 3) Wait for motors to come up to speed
         msg.printLn("Waiting for motors...");
         Timer.delay(5);
-        // 4) fire all frisbees
+        // 4) Fire all frisbees
         msg.printLn("Starting launch!");
         for (int i = 0; i < 3; i++) {
             msg.printLn("Launching disk " + (i+1) + "...");
             launcher.launch();
         }
+    }
+    
+    /* Plan B autonomous
+     * Called once by autonomousInit
+     */
+    private void autonomousB() {
+        msg.printLn("Autonomous B:");
+        // 0) Set the wheels to proper speed
+        // 1) Set the launch angle
+        // 2) Wait for motors to come up to speed
+        // 3) Fire all frisbees
     }   
     
 
