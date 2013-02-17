@@ -56,19 +56,20 @@ public class Robo2013 extends IterativeRobot {
      * Called once by autonomousInit
      */
     public void autonomous() {
+        int targetNumber = 1; //should be the top
+        
         // 0) set wheels to proper speed
-        // 1) turn to face target
-        // 2) auto aim launcher
-        // 3) wait for motor to come up to speed
-        // 4) fire all firsbees
-        int targetNumber = 0;
         launcher.setWheels(launcher.AUTO_SHOOT_SPEED, launcher.AUTO_SHOOT_SPEED);
+        // 1) turn to face target
         agent.turnToTarget(targetNumber);
+        // 2) auto aim launcher
         agent.autoAimLauncher();
+        // 3) wait for motor to come up to speed
         Timer.delay(5);
+        // 4) fire all frisbees
         for (int i = 0; i < 3; i++) {
             launcher.launch();
-        }
+        }       
     }
 
     /*
