@@ -12,6 +12,7 @@ public class Robo2013 extends IterativeRobot {
     private Messenger msg;
     private LinearAccelerator launcher;
     private AI agent;
+    private final double speed = 0.5;
 
     /*
      * Called once cRIO boots up
@@ -79,7 +80,7 @@ public class Robo2013 extends IterativeRobot {
      */
     public void teleopPeriodic() {
         /* Simple Tank Drive **************************************************/
-        drive.tankDrive(stickL.getY(), stickR.getY()); 
+        drive.tankDrive(stickL.getY() * speed, stickR.getY() * speed); 
 
         /* Adjust shooting angle **********************************************/
         if (stickR.getRawButton(RoboMap.AUTO_AIM_BUTTON)) {
