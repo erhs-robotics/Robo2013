@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.networktables2.util.List;
 import java.util.Hashtable;
 import org.erhsroboticsclub.robo2013.utilities.MathX;
 import org.erhsroboticsclub.robo2013.utilities.Messenger;
+import org.erhsroboticsclub.robo2013.utilities.NeuralNet;
 import org.erhsroboticsclub.robo2013.utilities.PIDControllerX;
 import org.erhsroboticsclub.robo2013.utilities.Target;
 
@@ -15,6 +16,7 @@ public class AI {
     private Com com;
     private PIDControllerX pid;
     private LinearAccelerator launcher;
+    private NeuralNet nn;
 
     public AI(RobotDrive drive, LinearAccelerator launcher) {
         this.drive = drive;
@@ -22,6 +24,13 @@ public class AI {
         pid = new PIDControllerX(1, 0, 10);
         com = new Com("http://10.0.53.23");
         msg = new Messenger();
+        /* Neural Network Layers ****/
+        // 0) Input Layer - (distance to target)
+        // 1) Hidden Layer - 7 nodes
+        // 2) Hidden Layer - 7 nodes
+        // 3) Output Layer - (angle of attack in percent)
+        int[] layers = {1, 7, 7, 1};
+        nn = new NeuralNet(layers);
     }
 
     private List getAllTargets() {
@@ -84,7 +93,12 @@ public class AI {
         pid.reset();
     }
 
-    public void autoAimLauncher() {
-        // ToDo: Auto aim launcher angle
+    public void autoAimLauncher(int t) {
+        List list = getAllTargets();
+        Target target = (Target)list.get(t);
+        double[] input = {target.distance};
+        nn.calcOutputs(input);
+        double aot = nn.getOutputs()[0];
+        launcher.setAngle(aot);
     }
 }

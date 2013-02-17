@@ -65,7 +65,7 @@ public class Robo2013 extends IterativeRobot {
         // 1) turn to face target
         agent.turnToTarget(targetNumber);
         // 2) auto aim launcher
-        agent.autoAimLauncher();
+        agent.autoAimLauncher(targetNumber);
         // 3) wait for motor to come up to speed
         Timer.delay(5);
         // 4) fire all frisbees
@@ -92,7 +92,7 @@ public class Robo2013 extends IterativeRobot {
 
         /* Adjust shooting angle **********************************************/
         if (stickR.getRawButton(RoboMap.AUTO_AIM_BUTTON)) {
-            agent.autoAimLauncher();
+            agent.autoAimLauncher(0);
         }
         if (stickR.getRawButton(RoboMap.MANUAL_LAUNCHER_UP_BUTTON)) {
             launcher.bumpLauncherUp();
