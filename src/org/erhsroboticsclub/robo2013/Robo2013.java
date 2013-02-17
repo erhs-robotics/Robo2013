@@ -45,10 +45,10 @@ public class Robo2013 extends IterativeRobot {
         Watchdog.getInstance().kill();
         msg.clearConsole();
         msg.printLn("Auto Started");
-        
+
         try {
             autonomous();//start autonomous
-        } catch(Exception e) {
+        } catch (Exception e) {
             msg.printLn("Auto mode failed!");
             msg.printLn(e.getMessage());
         }
@@ -59,19 +59,47 @@ public class Robo2013 extends IterativeRobot {
      */
     public void autonomous() {
         int targetNumber = 1; //should be the top
-        
+        int fails = 0;
+        boolean success;
+
         // 0) set wheels to proper speed
         launcher.setWheels(launcher.AUTO_SHOOT_SPEED, launcher.AUTO_SHOOT_SPEED);
-        // 1) turn to face target
-        agent.turnToTarget(targetNumber);
+        // 1) turn to face target 
+        do {
+            success = agent.turnToTarget(targetNumber);
+            if (!success) {
+                msg.printLn("turnToTarget failed!");
+                fails++;
+            }
+            if (fails > 500) {
+                msg.printLn("Giving up...");
+                break;
+            } else {
+                msg.printLn("Retrying...");
+            }
+        } while (!success);
+
         // 2) auto aim launcher
-        agent.autoAimLauncher(targetNumber);
+        fails = 0;
+        do {
+            agent.autoAimLauncher(targetNumber);
+            if (!success) {
+                msg.printLn("turnToTarget failed!");
+                fails++;
+            }
+            if (fails > 500) {
+                msg.printLn("Giving up...");
+                break;
+            } else {
+                msg.printLn("Retrying...");
+            }
+        } while (!success);
         // 3) wait for motor to come up to speed
         Timer.delay(5);
         // 4) fire all frisbees
         for (int i = 0; i < 3; i++) {
             launcher.launch();
-        }       
+        }
     }
 
     /*
@@ -88,7 +116,7 @@ public class Robo2013 extends IterativeRobot {
      */
     public void teleopPeriodic() {
         /* Simple Tank Drive **************************************************/
-        drive.tankDrive(stickL.getY() * speed, stickR.getY() * speed); 
+        drive.tankDrive(stickL.getY() * speed, stickR.getY() * speed);
 
         /* Adjust shooting angle **********************************************/
         if (stickR.getRawButton(RoboMap.AUTO_AIM_BUTTON)) {
@@ -101,14 +129,14 @@ public class Robo2013 extends IterativeRobot {
         }
 
         /* Auto Turn To Target ************************************************/
-        if (stickR.getRawButton(RoboMap.TURN_TO_TARGET_BUTTON)) {
-            // Needs adjustment, need a way to specify which target we
-            // are actually turning to
+        if (stickR.getRawButton(RoboMap.TURN_TO_TARGET_BUTTON)) // Needs adjustment, need a way to specify which target we
+        // are actually turning to
+        {
             agent.turnToTarget(0);
         }
 
         /* Fire the frisbee ***************************************************/
-        if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {            
+        if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
             launcher.launch();
         }
     }

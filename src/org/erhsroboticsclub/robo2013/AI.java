@@ -57,52 +57,40 @@ public class AI {
         return high;
     }
 
-    public void turnToTarget(int t) {
+    public boolean turnToTarget(int t) {
         pid.setSetpoint(320);
 
         Target target = new Target(0, 0, 0);
-        int target_fails = 0;
-        int com_fails = 0;
 
         do {
             List list = getAllTargets();
             if (list != null) {
                 if (t > list.size() - 1) {
                     msg.printLn("No target '" + t + "'");
-                    target_fails += 1;
-                    if (target_fails >= 500) {
-                        msg.printLn("Giving up...");
-                        break;
-                    } else {
-                        msg.printLn("Retrying...");
-                    }
+                    return false;
                 }
                 target = (Target) list.get(t);
                 double correction = pid.doPID(target.x);
                 drive.tankDrive(correction, -correction);
             } else {
-                msg.printLn("BeagleBoard not responding!");
-                com_fails += 1;
-                if (com_fails >= 500) {
-                        msg.printLn("Giving up...");
-                        break;
-                } else {
-                        msg.printLn("Retrying...");
-                }
+                return false;
             }
         } while (!MathX.isWithin(target.x, 320, 7));
         pid.reset();
+        return true;
     }
 
     public boolean autoAimLauncher(int t) {
         List list = getAllTargets();
-        if(list == null) return false;
-        if(t >= list.size()) {
+        if (list == null) {
+            return false;
+        }
+        if (t >= list.size()) {
             msg.printLn("No target '" + t + "'");
             return false;
         }
-        Target target = (Target)list.get(t);
-        
+        Target target = (Target) list.get(t);
+
         double[] input = {target.distance};
         nn.calcOutputs(input);
         double aot = nn.getOutputs()[0];
