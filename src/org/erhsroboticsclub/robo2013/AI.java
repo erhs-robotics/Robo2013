@@ -36,6 +36,7 @@ public class AI {
     private List getAllTargets() {
         Hashtable table = com.getValues("crio");
         if (table == null) {
+            msg.printLn("BeagleBoard not responding!");
             return null;
         }
         return com.parseTargets((String) table.get("targets"));
@@ -93,12 +94,19 @@ public class AI {
         pid.reset();
     }
 
-    public void autoAimLauncher(int t) {
+    public boolean autoAimLauncher(int t) {
         List list = getAllTargets();
+        if(list == null) return false;
+        if(t >= list.size()) {
+            msg.printLn("No target '" + t + "'");
+            return false;
+        }
         Target target = (Target)list.get(t);
+        
         double[] input = {target.distance};
         nn.calcOutputs(input);
         double aot = nn.getOutputs()[0];
         launcher.setAngle(aot);
+        return true;
     }
 }
