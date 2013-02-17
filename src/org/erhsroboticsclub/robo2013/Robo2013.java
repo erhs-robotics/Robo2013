@@ -58,7 +58,7 @@ public class Robo2013 extends IterativeRobot {
     /* Plan A autonomous
      * Called once by autonomousInit
      */
-    private void autonomousA() {
+    private void autonomousA() throws Exception {
         msg.printLn("Autonomous A:");
         int targetNumber = 1; //should be the top
         int fails = 0;
@@ -70,6 +70,9 @@ public class Robo2013 extends IterativeRobot {
         // 1) Turn to face target 
         msg.printLn("Finding target...");
         do {
+            if(!isAutonomous()) {
+                throw new Exception("Ran out of time!");
+            }
             success = agent.turnToTarget(targetNumber);
             if (!success) {
                 msg.printLn("turnToTarget failed!");
@@ -87,6 +90,9 @@ public class Robo2013 extends IterativeRobot {
         msg.printLn("Aiming launcher...");
         fails = 0;
         do {
+             if(!isAutonomous()) {
+                throw new Exception("Ran out of time!");
+            }
             agent.autoAimLauncher(targetNumber);
             if (!success) {
                 msg.printLn("turnToTarget failed!");
