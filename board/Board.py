@@ -32,7 +32,7 @@ def encodeTargets(targets):
     target_str = ""
     for target in targets:
         dist = 0
-        string = "%s,%s,%s" % (target[0].x, dist, target[1])
+        string = "%s,%s,%s" % (target[0].center_mass_x, dist, target[1])
         target_str += string + "|"
     status = "Found " + str(len(targets)) + " Targets"
     
