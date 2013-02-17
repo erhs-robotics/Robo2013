@@ -47,24 +47,27 @@ public class Robo2013 extends IterativeRobot {
         msg.printLn("Auto Started");
 
         try {
-            autonomous();//start autonomous
+            autonomousA();//start autonomous
         } catch (Exception e) {
             msg.printLn("Auto mode failed!");
             msg.printLn(e.getMessage());
         }
     }
 
-    /*
+    /* Plan A autonomous
      * Called once by autonomousInit
      */
-    public void autonomous() {
+    private void autonomousA() {
+        msg.printLn("Autonomous A:");
         int targetNumber = 1; //should be the top
         int fails = 0;
         boolean success;
 
         // 0) set wheels to proper speed
+        msg.printLn("Starting up launcher...");
         launcher.setWheels(launcher.AUTO_SHOOT_SPEED, launcher.AUTO_SHOOT_SPEED);
         // 1) turn to face target 
+        msg.printLn("Finding target...");
         do {
             success = agent.turnToTarget(targetNumber);
             if (!success) {
@@ -80,6 +83,7 @@ public class Robo2013 extends IterativeRobot {
         } while (!success);
 
         // 2) auto aim launcher
+        msg.printLn("Aiming launcher...");
         fails = 0;
         do {
             agent.autoAimLauncher(targetNumber);
@@ -95,12 +99,16 @@ public class Robo2013 extends IterativeRobot {
             }
         } while (!success);
         // 3) wait for motor to come up to speed
+        msg.printLn("Waiting for motors...");
         Timer.delay(5);
         // 4) fire all frisbees
+        msg.printLn("Starting launch!");
         for (int i = 0; i < 3; i++) {
+            msg.printLn("Launching disk " + (i+1) + "...");
             launcher.launch();
         }
-    }
+    }   
+    
 
     /*
      * Called once at the start of teleop mode
