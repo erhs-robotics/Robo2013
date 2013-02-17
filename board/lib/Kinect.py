@@ -16,6 +16,14 @@ class Kinect:
     def get_video(self):
         rgb = freenect.sync_get_video()[0]
         return cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
+
+    # needs testing!!!
+    def get_IR_image(self):
+        ir = freenect.sync_get_video(0, freenect.VIDEO_IR_10BIT)
+        return ir
+
+
+
         
     def get_raw_depth_at(self, x, y):
         return self.get_depth()[y][x]
