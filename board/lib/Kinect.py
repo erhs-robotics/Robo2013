@@ -4,11 +4,10 @@ import cv2
 
 class Kinect:
     def __init__(self):
-        pass
-        #try:
-        #    _,_ = get_depth()
-        #except:
-        #    raise Exception("Kinect not found!")
+        try:
+            _,_ = get_depth()
+        except:
+            raise Exception("Kinect not found!")
     
     def get_depth(self):
         return freenect.sync_get_depth()[0]
@@ -16,6 +15,9 @@ class Kinect:
     def get_video(self):
         rgb = freenect.sync_get_video()[0]
         return cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
+        
+    def get_video_rgb(self):
+    	return freenect.sync_get_video()[0]
 
     # needs testing!!!
     def get_IR_image(self):
