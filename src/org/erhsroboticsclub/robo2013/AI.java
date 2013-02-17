@@ -21,6 +21,7 @@ public class AI {
         this.launcher = launcher;
         pid = new PIDControllerX(1, 0, 10);
         com = new Com("http://10.0.53.23");
+        msg = new Messenger();
     }
 
     private List getAllTargets() {
