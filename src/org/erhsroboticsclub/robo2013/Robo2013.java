@@ -26,7 +26,8 @@ public class Robo2013 extends IterativeRobot {
             TOP_RIGHT_JAGUAR = new CANJaguar(RoboMap.TOP_RIGHT_DRIVE_MOTOR);
             BOTTOM_RIGHT_JAGUAR = new CANJaguar(RoboMap.BOTTOM_RIGHT_DRIVE_MOTOR);
         } catch (CANTimeoutException ex) {
-            ex.printStackTrace();
+            msg.printLn("CAN network failed!");
+            msg.printLn(ex.getMessage());
         }
         launcher = new LinearAccelerator();
         drive = new RobotDrive(TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR);
