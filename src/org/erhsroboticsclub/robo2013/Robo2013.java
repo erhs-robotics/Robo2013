@@ -43,8 +43,13 @@ public class Robo2013 extends IterativeRobot {
         drive.setSafetyEnabled(false);
         msg.clearConsole();
         msg.printLn("Auto Started");
-
-        autonomous();//start autonomous
+        
+        try {
+            autonomous();//start autonomous
+        } catch(Exception e) {
+            msg.printLn("Auto mode failed!");
+            msg.printLn(e.getMessage());
+        }
     }
 
     /*
@@ -100,8 +105,7 @@ public class Robo2013 extends IterativeRobot {
         }
 
         /* Fire the frisbee ***************************************************/
-        if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
-            msg.printLn("Launch!");
+        if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {            
             launcher.launch();
         }
     }
