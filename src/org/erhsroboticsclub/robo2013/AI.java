@@ -81,6 +81,7 @@ public class AI {
                 }
             }
         } while (!MathX.isWithin(target.x, 320, 7));
+        pid.reset();
     }
 
     public void autoAimLauncher() {
