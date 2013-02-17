@@ -42,6 +42,7 @@ public class Robo2013 extends IterativeRobot {
      */
     public void autonomousInit() {
         drive.setSafetyEnabled(false);
+        Watchdog.getInstance().kill();
         msg.clearConsole();
         msg.printLn("Auto Started");
         
