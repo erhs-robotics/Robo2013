@@ -26,11 +26,17 @@ public class AI {
 
     private List getAllTargets() {
         Hashtable table = com.getValues("crio");
+        if (table == null) {
+            return null;
+        }
         return com.parseTargets((String) table.get("targets"));
     }
 
     public Target getTopTarget() {
         List targets = getAllTargets();
+        if (targets == null) {
+            return null;
+        }
         Target high = (Target) targets.get(0);
         for (int i = 0; i < targets.size(); i++) {
             Target t = (Target) targets.get(i);
@@ -44,13 +50,36 @@ public class AI {
     public void turnToTarget(int t) {
         pid.setSetpoint(320);
 
-        Target target;
+        Target target = new Target(0, 0, 0);
+        int target_fails = 0;
+        int com_fails = 0;
 
         do {
             List list = getAllTargets();
-            target = (Target) list.get(t);
-            double correction = pid.doPID(target.x);
-            drive.tankDrive(correction, -correction);
+            if (list != null) {
+                if (t > list.size() - 1) {
+                    msg.printLn("No target '" + t + "'");
+                    target_fails += 1;
+                    if (target_fails >= 500) {
+                        msg.printLn("Giving up...");
+                        break;
+                    } else {
+                        msg.printLn("Retrying...");
+                    }
+                }
+                target = (Target) list.get(t);
+                double correction = pid.doPID(target.x);
+                drive.tankDrive(correction, -correction);
+            } else {
+                msg.printLn("BeagleBoard not responding!");
+                com_fails += 1;
+                if (com_fails >= 500) {
+                        msg.printLn("Giving up...");
+                        break;
+                } else {
+                        msg.printLn("Retrying...");
+                }
+            }
         } while (!MathX.isWithin(target.x, 320, 7));
     }
 
