@@ -13,8 +13,6 @@ import Lock
 imgproc = Imgproc(0)
 #kinect = Kinect()
 
-x_pos = 100
-y_pos = 100
 params = [cv.CV_IMWRITE_PNG_COMPRESSION, 8]
 SCALE_FACTOR = 3
 msg = ""
