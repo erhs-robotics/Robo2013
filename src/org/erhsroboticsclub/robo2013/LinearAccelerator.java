@@ -52,11 +52,17 @@ public class LinearAccelerator {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        double time = Timer.getFPGATimestamp();
         while (true) {
             if (!limitSwitch.get()) {
                 break;
             }
-            msg.printLn("Feeding Disc");
+            // stops the launch if it has taken more than 10 seconds
+            if(Timer.getFPGATimestamp() - time > 10000) {
+                msg.printLn("Limit switch not found!");
+                msg.printLn("Stopping launch...");
+                break;
+            }
         }
         loadArmM1.setRaw(127);
         loadArmM2.setRaw(127);
