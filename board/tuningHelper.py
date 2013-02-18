@@ -39,7 +39,7 @@ else:
 
 kinect = None
 #if len(sys.argv) < 1:
-kinect = Kinect()
+#kinect = Kinect()
 
 cv2.namedWindow('Original, HSV, Thresh, Rects')
 cv2.namedWindow('Tuning Window')
