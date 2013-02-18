@@ -65,10 +65,8 @@ class Imgproc:
 			center_x, center_y, width, height = cv2.boundingRect(contours[i])
 			rect = Rectangle(center_x, center_y, width, height)
 			rects.append(rect)
-		print rects
-		sorted_rects = sorted(rects, key=lambda x:x.area)
-		print sorted_rects
-		return rects
+		sorted_rects = sorted(rects, key=lambda x:x.x)
+		return sorted_rects
 
 	def getMaxRect(self, rects):
 		if len(rects) > 0:
@@ -106,7 +104,7 @@ class Imgproc:
 		rects_contours = self.getContours(rects_img.copy())
 		
 		rects = self.getBoundingRectangles(rects_contours)
-		#sorted_rects = sorted(rects, key=lambda x:x.x)
+		sorted_rects = sorted(rects, key=lambda x:x.x)
 		return sorted_rects
 		
 	def filterRects(self, rects):
