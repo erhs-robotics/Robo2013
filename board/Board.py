@@ -18,14 +18,14 @@ SCALE_FACTOR = 3
 msg = ""
             
 def getTargets():
-    rgb = kinect.get_IR_image()
+    image = kinect.get_IR_image()
     depth = kinect.get_depth()   
     
-    rects = imgproc.getRect(rgb)
+    targets = imgproc.getRect(image)
     
     #targets = imgproc.filterRects(rects)
-    imgproc.labelRects(bgr, rects)
-    return targets, bgr
+    imgproc.labelRects(image, targets)
+    return targets, image
     
 def encodeTargets(targets):
     json_template = '{"status": "%s", "message" : "%s", "target" : "%s"}'
@@ -56,6 +56,7 @@ def writeInfo(image, json):
     
 if __name__ == '__main__':      
     while True:
+        print "Looping"
         rects, bgr = getTargets()
         json = encodeTargets(rects)
         writeInfo(bgr, json)  
