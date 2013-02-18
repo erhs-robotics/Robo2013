@@ -65,7 +65,8 @@ class Imgproc:
 			center_x, center_y, width, height = cv2.boundingRect(contours[i])
 			rect = Rectangle(center_x, center_y, width, height)
 			rects.append(rect)
-		sorted_rects = sorted(rects, key=lambda x:x.x)
+
+		sorted_rects = sorted(rects, key=lambda rect:rect.x)
 		return sorted_rects
 
 	def getMaxRect(self, rects):
