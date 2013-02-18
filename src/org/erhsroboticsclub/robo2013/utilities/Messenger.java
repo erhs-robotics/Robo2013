@@ -17,6 +17,12 @@ public class Messenger {
     private String msg[];
     private final String EMPTY_SPACE = "                             ";
     private final int MAX_MESSAGE_LENGTH = 20;
+    private final DriverStationLCD.Line[] LINE = {DriverStationLCD.Line.kUser1,
+                                                  DriverStationLCD.Line.kUser2, 
+                                                  DriverStationLCD.Line.kUser3, 
+                                                  DriverStationLCD.Line.kUser4,
+                                                  DriverStationLCD.Line.kUser5,
+                                                  DriverStationLCD.Line.kUser6};
 
     public Messenger() {
         driverLCD = DriverStationLCD.getInstance();
@@ -57,12 +63,9 @@ public class Messenger {
      * Clears the DriverStation LCD
      */
     public final void clearConsole() {
-        driverLCD.println(DriverStationLCD.Line.kUser1, 1, EMPTY_SPACE);
-        driverLCD.println(DriverStationLCD.Line.kUser2, 1, EMPTY_SPACE);
-        driverLCD.println(DriverStationLCD.Line.kUser3, 1, EMPTY_SPACE);
-        driverLCD.println(DriverStationLCD.Line.kUser4, 1, EMPTY_SPACE);
-        driverLCD.println(DriverStationLCD.Line.kUser5, 1, EMPTY_SPACE);
-        driverLCD.println(DriverStationLCD.Line.kUser6, 1, EMPTY_SPACE);
+        for (int i = 0; i < 6; i++) {
+            driverLCD.println(LINE[i], 1, EMPTY_SPACE);
+        }        
     }
 
     /**
@@ -86,15 +89,13 @@ public class Messenger {
         clearConsole();
         moveUp();
 
-        String time = String.valueOf((int)Timer.getFPGATimestamp());
+        String time = String.valueOf((int) Timer.getFPGATimestamp());
         msg[0] = "[" + time + "] " + s;
-
-        write(DriverStationLCD.Line.kUser1, msg[5]);
-        write(DriverStationLCD.Line.kUser2, msg[4]);
-        write(DriverStationLCD.Line.kUser3, msg[3]);
-        write(DriverStationLCD.Line.kUser4, msg[2]);
-        write(DriverStationLCD.Line.kUser5, msg[1]);
-        write(DriverStationLCD.Line.kUser6, msg[0]);
+        
+        for (int i = 0; i < 6; i++) {
+            write(LINE[i], msg[5 - i]);
+        }
+        
         driverLCD.updateLCD();
     }
 }
