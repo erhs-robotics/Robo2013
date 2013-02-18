@@ -27,9 +27,13 @@ public class RoboMap {
     
     /* Controls */
     public static final int AUTO_AIM_BUTTON = 1;
-    public static final int FIRE_BUTTON = 1;
+    public static final int FIRE_BUTTON = 1; //LEFT
     public static final int MANUAL_LAUNCHER_UP_BUTTON = 3;
     public static final int MANUAL_LAUNCHER_DOWN_BUTTON = 4;
     public static final int MANUAL_SET_SPEED_BUTTON = 5;
     public static final int TURN_TO_TARGET_BUTTON = 6;
+    public static final int TURN_TO_TARGET_0 = 4; //LEFT
+    public static final int TURN_TO_TARGET_1 = 3; //LEFT
+    public static final int TURN_TO_TARGET_2 = 5; //LEFT
+    public static final int TURN_TO_TARGET_3 = 2; //LEFT
 }
