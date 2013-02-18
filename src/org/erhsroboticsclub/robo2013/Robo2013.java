@@ -13,6 +13,7 @@ public class Robo2013 extends IterativeRobot {
     private LinearAccelerator launcher;
     private AI agent;
     private final double speed = 0.5;
+    private int target = 0;
 
     /*
      * Called once the cRIO boots up
@@ -186,12 +187,26 @@ public class Robo2013 extends IterativeRobot {
         if (stickR.getRawButton(RoboMap.TURN_TO_TARGET_BUTTON)) // Needs adjustment, need a way to specify which target we
         // are actually turning to
         {
-            agent.turnToTarget(0);
+            agent.turnToTarget(target);
         }
 
         /* Fire the frisbee ***************************************************/
         if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
             launcher.launch();
+        }
+        
+        //Tell the AI which target to aim to
+        if(stickL.getRawButton(RoboMap.TURN_TO_TARGET_0)) {
+            target = 0;
+        }
+        if(stickL.getRawButton(RoboMap.TURN_TO_TARGET_1)) {
+            target = 1;
+        }
+        if(stickL.getRawButton(RoboMap.TURN_TO_TARGET_2)) {
+            target = 2;
+        }
+        if(stickL.getRawButton(RoboMap.TURN_TO_TARGET_3)) {
+            target = 3;
         }
     }
 }
