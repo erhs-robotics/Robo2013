@@ -89,7 +89,9 @@ class Imgproc:
 		
 		rects = self.getBoundingRectangles(rects_contours)
 		
-		return (rects, rects_img)		
+		sorted_rects = sorted(rects, key=lambda x:x.x)
+		
+		return (sorted_rects, rects_img)		
 		
 	def getRect(self, img):
 		img = cv2.blur(img,(3,3))
@@ -103,7 +105,8 @@ class Imgproc:
 		rects_contours = self.getContours(rects_img.copy())
 		
 		rects = self.getBoundingRectangles(rects_contours)
-		return rects
+		sorted_rects = sorted(rects, key=lambda x:x.x)
+		return sorted_rects
 		
 	def filterRects(self, rects):
 		filtered = []
@@ -128,8 +131,7 @@ class Imgproc:
 			return 0
 
 	def labelRects(self, img, rects):
-		sorted_rects = sorted(rects, key=lambda x:x.x)
-		for i in range(len(sorted_rects)):
+		for i in range(len(rects)):
 			cv2.putText(img, str(i), (rects[i].center_mass_x - 29, rects[i].center_mass_y + 29), cv2.FONT_HERSHEY_DUPLEX, 3, (0,0,255), thickness=5)
 
 
