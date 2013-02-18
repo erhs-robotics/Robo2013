@@ -10,53 +10,37 @@ from imgproc import *
 from Kinect import Kinect
 import Lock
 
-json_template = '{"status": "%s", "message" : "%s", "target" : "%s"}'
 imgproc = Imgproc(0)
+#kinect = Kinect()
 
-x_pos = 100
-y_pos = 100
-def update_x(value):
-    global x_pos
-    x_pos = value
-def update_y(value):
-    global y_pos
-    y_pos = value
-cv2.namedWindow('Depth and RGB')
-cv.CreateTrackbar("X", 'Depth and RGB', x_pos, 632, update_x)
-cv.CreateTrackbar("Y", 'Depth and RGB', y_pos, 479, update_y)
-
-
-
-print "Beginning"
-
-params = list()
-params.append(cv.CV_IMWRITE_PNG_COMPRESSION)
-params.append(8)
+params = [cv.CV_IMWRITE_PNG_COMPRESSION, 8]
 SCALE_FACTOR = 3
+msg = ""
             
-while True:
-
-    print "Loop Begin"
-    status = ""
-    msg = ""
-
+def getTargets():
     #rgb,_ = freenect.sync_get_video()
-    #depth = kinect.get_depth()
-    
+    #depth = kinect.get_depth()    
     bgr = imgproc.getCameraImage()
     
     rects, rects_img = imgproc.doImgProc(bgr)
-    #imgproc.labelRects(bgr, rects)
+    
     targets = imgproc.filterRects(rects)
+    #imgproc.labelRects(bgr, rects)
+    return targets, bgr, rects_img
+    
+def encodeTargets(targets):
+    json_template = '{"status": "%s", "message" : "%s", "target" : "%s"}'
     target_str = ""
     for target in targets:
         dist = 0
-        string = "%s,%s,%s" % (target[0].x, dist, target[1])
+        string = "%s,%s,%s" % (target[0].center_mass_x, dist, target[1])
         target_str += string + "|"
     status = "Found " + str(len(targets)) + " Targets"
     
     json = json_template % (status, msg, target_str)
-    
+    return json
+
+def writeInfo(image, json):
     Lock.waitforlock("info.json")
     Lock.lockfile("info.json")
     info = open("info.json", "w")
@@ -71,10 +55,11 @@ while True:
     cv2.imwrite("target.png", cv2.resize(bgr, (bgr.shape[1]/SCALE_FACTOR, bgr.shape[0]/SCALE_FACTOR)), params)
     Lock.unlockfile("target.png")
     
-    #Build a two panel color image
-    #d3 = np.dstack((depth,depth,depth)).astype(np.uint8)
-    #da = np.hstack((d3,rgb))
-   
-    cv2.imshow('RGB Mods', rects_img)
-    if cv2.waitKey(5) == 27:
-        break
+if __name__ == '__main__':      
+    while True:
+        rects, bgr, rects_img = getTargets()
+        json = encodeTargets(rects)
+        writeInfo(bgr, json)
+        cv2.imshow('RGB Mods', bgr)
+        if cv2.waitKey(5) == 27:
+            break

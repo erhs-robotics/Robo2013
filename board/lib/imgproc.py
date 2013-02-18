@@ -13,17 +13,19 @@ class Imgproc:
 	def __init__(self, cam):
 		if cam >= 0:
 			self.camera = cv2.VideoCapture(cam)
-		self.GREEN_MIN = np.array([50, 100, 100], np.uint8)
-		self.GREEN_MAX = np.array([100, 255, 255], np.uint8)
+		#self.GREEN_MIN = np.array([50, 100, 100], np.uint8)
+		#self.GREEN_MAX = np.array([100, 255, 255], np.uint8)
 		#self.GREEN_MIN = np.array([31,69,144], np.uint8) #70, 138, 156
 		#self.GREEN_MAX = np.array([92,198,255], np.uint8) # 100, 255, 255
+		self.GREEN_MIN = np.array([100, 100, 100], np.uint8)
+		self.GREEN_MAX = np.array([255, 255, 255], np.uint8)
 		
 		self.YELLOW_MIN = np.array([0, 100, 100], np.uint8)
 		self.YELLOW_MAX = np.array([30, 255, 255], np.uint8)
-		self.LOW = 1.208333333
-		self.MED = 2.571428571
-		self.HIGH = 4.5
-		self.THRESHHOLD = 0.1
+		self.LOW = 1.208333333 # width / height
+		self.MED = 2.571428571 # width / height
+		self.HIGH = 4.5 # width / height
+		self.THRESHHOLD = 0.1 # width / height
 		self.LOW_HEIGHT = 0.4826 + 0.3048# meters from floor to center
 		self.MED_HEIGHT = 2.25108  + 0.2667# meters from floor to center
 		self.HIGH_HEIGHT = 2.64478 + 0.1524# meters from floor to center
@@ -65,7 +67,9 @@ class Imgproc:
 			center_x, center_y, width, height = cv2.boundingRect(contours[i])
 			rect = Rectangle(center_x, center_y, width, height)
 			rects.append(rect)
-		return rects
+
+		sorted_rects = sorted(rects, key=lambda rect:rect.x)
+		return sorted_rects
 
 	def getMaxRect(self, rects):
 		if len(rects) > 0:
@@ -77,8 +81,8 @@ class Imgproc:
 	
 	def doImgProc(self, cam_img):
 		cam_img = cv2.blur(cam_img,(4,4))
-		hsv_img = self.getHSVImage(cam_img)
-		
+		hsv_img = cam_img#self.getHSVImage(cam_img)
+		self.hsv_img = hsv_img
 		thresh_img = self.getThreshImage(hsv_img, self.GREEN_MIN, self.GREEN_MAX)
 		thresh_contours = self.getContours(thresh_img.copy())
 		
@@ -93,8 +97,8 @@ class Imgproc:
 		
 	def getRect(self, img):
 		img = cv2.blur(img,(3,3))
-		hsv_img = self.getHSVImage(img)
-		
+		hsv_img = img#self.getHSVImage(img)
+		self.hsv_img = img
 		thresh_img = self.getThreshImage(hsv_img, self.GREEN_MIN, self.GREEN_MAX)
 		thresh_contours = self.getContours(thresh_img.copy())
 		
@@ -103,7 +107,8 @@ class Imgproc:
 		rects_contours = self.getContours(rects_img.copy())
 		
 		rects = self.getBoundingRectangles(rects_contours)
-		return rects
+		sorted_rects = sorted(rects, key=lambda x:x.x)
+		return sorted_rects
 		
 	def filterRects(self, rects):
 		filtered = []
@@ -125,7 +130,7 @@ class Imgproc:
 		elif abs(ratio - self.HIGH) <= self.THRESHHOLD:
 			return self.HIGH_HEIGHT
 		else:
-			return 0		
+			return 0
 
 	def labelRects(self, img, rects):
 		for i in range(len(rects)):

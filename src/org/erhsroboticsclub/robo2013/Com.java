@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.erhsroboticsclub.robo2013;
 
 import com.sun.squawk.io.j2me.socket.Protocol;
@@ -30,7 +26,6 @@ public class Com {
             url = "/" + url;
         }
 
-
         DataInputStream in = Connector.openDataInputStream(host + url);
         String value = in.readUTF();
         in.close();
@@ -47,25 +42,23 @@ public class Com {
         }
         return null;
     }
-    
-    
-    
+
     public List parseTargets(String targets) {
         List parsedTargets = new List();
-        //split at '|'
         
+        //split at '|'
         List targetInfo = SSJSONParser.splitString(targets, "|");
-        for(int i=0;i<targetInfo.size();i++) {
+        for (int i = 0; i < targetInfo.size(); i++) {
             String s = (String) targetInfo.get(i);
             List items = SSJSONParser.splitString(s, ",");
-            if(items.size() == 3) {
+            if (items.size() == 3) {
                 Target t = new Target();
-                t.x = Double.parseDouble((String)items.get(0));
-                t.distance = Double.parseDouble((String)items.get(1));
-                t.height = Double.parseDouble((String)items.get(2));
+                t.x = Double.parseDouble((String) items.get(0));
+                t.distance = Double.parseDouble((String) items.get(1));
+                t.height = Double.parseDouble((String) items.get(2));
                 parsedTargets.add(t);
             }
         }
-        return parsedTargets;        
+        return parsedTargets;
     }
 }

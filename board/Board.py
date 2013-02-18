@@ -1,43 +1,62 @@
 #!/usr/bin/python2
-"""Specifically for testing code on the Beagle Board"""
-import sys, os
+import sys
+import os
 sys.path.append('lib')
-import cv2, freenect
+import cv2 
 from cv2 import cv
 import numpy as np
-
+import freenect
 from imgproc import *
 from Kinect import Kinect
+import Lock
 
 imgproc = Imgproc(-1)
-
 kinect = Kinect()
 
-params = list()
-params.append(cv.CV_IMWRITE_PNG_COMPRESSION)
-params.append(8)
-
-x_pos = 0
-y_pos = 0
+params = [cv.CV_IMWRITE_PNG_COMPRESSION, 8]
+SCALE_FACTOR = 3
+msg = ""
             
-while True:
-    depth = kinect.get_depth()
+def getTargets():
+    image = kinect.get_IR_image()
+    depth = kinect.get_depth()   
     
-    bgr = kinect.get_video()
-    rects, rects_img = imgproc.doImgProc(bgr)
+    targets = imgproc.getRect(image)
     
-    cv2.imwrite("target.png", np.array(bgr[::2,::2,::-1]), params)
+    #targets = imgproc.filterRects(rects)
+    imgproc.labelRects(image, targets)
+    return targets, image
     
-    max_rect = imgproc.getMaxRect(rects)
-    if max_rect:
-        print max_rect.x, max_rect.y
-        x_pos = max_rect.x
-        y_pos = max_rect.y
-    else:
-        print "No Target Found!"
+def encodeTargets(targets):
+    json_template = '{"status": "%s", "message" : "%s", "target" : "%s"}'
+    target_str = ""
+    for target in targets:
+        dist = kinect.get_depth_at(target.x, target.y)
+        string = "%s,%s,%s" % (target.center_mass_x, dist, 0)
+        target_str += string + "|"
+    status = "Found " + str(len(targets)) + " Targets"
     
-    distance = kinect.get_depth_at(x_pos, y_pos)
-    print distance * 100 / 2.54
+    json = json_template % (status, msg, target_str)
+    return json
+
+def writeInfo(image, json):
+    Lock.waitforlock("info.json")
+    Lock.lockfile("info.json")
+    info = open("info.json", "w")
+    info.seek(0)
+    info.write(json)
+    info.truncate()
+    info.close()
+    Lock.unlockfile("info.json") 
     
-    if cv2.waitKey(5) == 27:
-        break
+    Lock.waitforlock("target.png")
+    Lock.lockfile("target.png")
+    cv2.imwrite("target.png", cv2.resize(bgr, (bgr.shape[1]/SCALE_FACTOR, bgr.shape[0]/SCALE_FACTOR)), params)
+    Lock.unlockfile("target.png")
+    
+if __name__ == '__main__':      
+    while True:
+        print "Looping"
+        rects, bgr = getTargets()
+        json = encodeTargets(rects)
+        writeInfo(bgr, json)  

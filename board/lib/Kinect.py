@@ -1,6 +1,8 @@
 import freenect
 from math import tan
 import cv2
+import numpy as np
+import cPickle
 
 class Kinect:
     def __init__(self):
@@ -16,6 +18,14 @@ class Kinect:
     def get_video(self):
         rgb = freenect.sync_get_video()[0]
         return cv2.cvtColor(rgb, cv2.COLOR_RGB2BGR)
+        
+    def get_video_rgb(self):
+    	return freenect.sync_get_video()[0]
+
+    # needs testing!!!
+    def get_IR_image(self):
+        ir = freenect.sync_get_video(0, freenect.VIDEO_IR_8BIT)[0]           
+        return np.dstack((ir, ir, ir)).astype(np.uint8)
         
     def get_raw_depth_at(self, x, y):
         return self.get_depth()[y][x]

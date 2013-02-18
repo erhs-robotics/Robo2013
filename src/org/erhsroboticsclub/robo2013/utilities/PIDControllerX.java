@@ -13,13 +13,14 @@ import edu.wpi.first.wpilibj.Timer;
 public class PIDControllerX {
     private double Kp, Ki, Kd, setpoint;
     private double lastError, totalError, lastTime;
-    private boolean firstrun = true;
+    private boolean firstrun;
     
 
     public PIDControllerX(double Kp, double Ki, double Kd) {
         this.Kp = Kp;
         this.Ki = Ki;
         this.Kd = Kd;
+        firstrun = true;
         this.lastError = 0;
         this.totalError = 0;
         this.lastTime = 0;
@@ -51,5 +52,8 @@ public class PIDControllerX {
     
     public void reset() {
         firstrun = true;
+        this.lastError = 0;
+        this.totalError = 0;
+        this.lastTime = 0;
     }
 }

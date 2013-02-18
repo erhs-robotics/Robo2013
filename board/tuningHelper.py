@@ -60,7 +60,8 @@ while 1:
         elif action == 1:
             cam_img = imgproc.getCameraImage()
     else:
-        cam_img = kinect.get_video()
+        cam_img = kinect.get_IR_image()
+        #rgb_img = kinect.get_video()
 
     rects, rects_img = imgproc.doImgProc(cam_img)
     for i in range(len(rects)):
