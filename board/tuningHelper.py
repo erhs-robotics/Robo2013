@@ -39,7 +39,7 @@ else:
 
 kinect = None
 #if len(sys.argv) < 1:
-#kinect = Kinect()
+kinect = Kinect()
 
 cv2.namedWindow('Original, HSV, Thresh, Rects')
 cv2.namedWindow('Tuning Window')
@@ -60,7 +60,7 @@ while 1:
         elif action == 1:
             cam_img = imgproc.getCameraImage()
     else:
-        cam_img = kinect.get_video()
+        cam_img = kinect.get_IR_image()
 
     rects, rects_img = imgproc.doImgProc(cam_img)
     for i in range(len(rects)):

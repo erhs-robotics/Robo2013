@@ -79,8 +79,8 @@ class Imgproc:
 	
 	def doImgProc(self, cam_img):
 		cam_img = cv2.blur(cam_img,(4,4))
-		hsv_img = self.getHSVImage(cam_img)
-		
+		hsv_img = cam_img#self.getHSVImage(cam_img)
+		self.hsv_img = hsv_img
 		thresh_img = self.getThreshImage(hsv_img, self.GREEN_MIN, self.GREEN_MAX)
 		thresh_contours = self.getContours(thresh_img.copy())
 		
@@ -95,7 +95,7 @@ class Imgproc:
 		
 	def getRect(self, img):
 		img = cv2.blur(img,(3,3))
-		hsv_img = self.getHSVImage(img)
+		hsv_img = img#self.getHSVImage(img)
 		
 		thresh_img = self.getThreshImage(hsv_img, self.GREEN_MIN, self.GREEN_MAX)
 		thresh_contours = self.getContours(thresh_img.copy())

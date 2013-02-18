@@ -1,13 +1,16 @@
 import freenect
 from math import tan
 import cv2
+import numpy as np
+import cPickle
 
 class Kinect:
     def __init__(self):
-        try:
-            _,_ = get_depth()
-        except:
-            raise Exception("Kinect not found!")
+        pass
+        #try:
+        #    _,_ = get_depth()
+        #except:
+        #    raise Exception("Kinect not found!")
     
     def get_depth(self):
         return freenect.sync_get_depth()[0]
@@ -21,11 +24,8 @@ class Kinect:
 
     # needs testing!!!
     def get_IR_image(self):
-        ir = freenect.sync_get_video(0, freenect.VIDEO_IR_10BIT)
-        return ir
-
-
-
+        ir = freenect.sync_get_video(0, freenect.VIDEO_IR_8BIT)[0]           
+        return np.dstack((ir, ir, ir)).astype(np.uint8)
         
     def get_raw_depth_at(self, x, y):
         return self.get_depth()[y][x]
