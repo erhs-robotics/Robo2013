@@ -7,3 +7,6 @@ class Rectangle:
 		self.center_mass_x = x + width/2
 		self.center_mass_y = y + height/2
 		self.area = width * height
+	def __repr__(self):
+		info = (self.x, self.y, self.width, self.height)
+		return "[%s, %s, %s, %s]" % info

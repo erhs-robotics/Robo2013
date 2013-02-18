@@ -63,8 +63,8 @@ while 1:
         cam_img = kinect.get_video()
 
     rects, rects_img = imgproc.doImgProc(cam_img)
-    for i in range(len(rects)):
-        print rects[i].x + rects[i].width/2, rects[i].y + rects[i].height/2
+    #for i in range(len(rects)):
+    #    print rects[i].x + rects[i].width/2, rects[i].y + rects[i].height/2
         
     imgproc.labelRects(cam_img, rects)
     
