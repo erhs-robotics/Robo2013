@@ -125,13 +125,10 @@ class Imgproc:
 		elif abs(ratio - self.HIGH) <= self.THRESHHOLD:
 			return self.HIGH_HEIGHT
 		else:
-			return 0		
-	
-	def getRectX(self, rect):
-		return rect.x
+			return 0
 
 	def labelRects(self, img, rects):
-		sorted_rects = sorted(rects, key=self.getRectX)
+		sorted_rects = sorted(rects, key=lambda x:x.x)
 		for i in range(len(sorted_rects)):
 			cv2.putText(img, str(i), (rects[i].center_mass_x - 29, rects[i].center_mass_y + 29), cv2.FONT_HERSHEY_DUPLEX, 3, (0,0,255), thickness=5)
 
