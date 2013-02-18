@@ -126,9 +126,13 @@ class Imgproc:
 			return self.HIGH_HEIGHT
 		else:
 			return 0		
+	
+	def getRectX(self, rect):
+		return rect.x
 
 	def labelRects(self, img, rects):
-		for i in range(len(rects)):
+		sorted_rects = sorted(rects, key=getRectX)
+		for i in range(len(sorted_rects)):
 			cv2.putText(img, str(i), (rects[i].center_mass_x - 29, rects[i].center_mass_y + 29), cv2.FONT_HERSHEY_DUPLEX, 3, (0,0,255), thickness=5)
 
 
