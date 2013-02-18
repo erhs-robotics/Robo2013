@@ -122,9 +122,21 @@ public class Robo2013 extends IterativeRobot {
     private void autonomousB() {
         msg.printLn("Autonomous B:");
         // 0) Set the wheels to proper speed
+        msg.printLn("Starting up launcher...");
+        launcher.setWheels(launcher.AUTO_SHOOT_SPEED, launcher.AUTO_SHOOT_SPEED);
         // 1) Set the launch angle
+        double angle = 0.5;
+        msg.printLn("Setting angle to " + angle + "...");
+        launcher.setAngle(0.5);
         // 2) Wait for motors to come up to speed
+        msg.printLn("Waiting for motors...");
+        Timer.delay(7);
         // 3) Fire all frisbees
+        msg.printLn("Starting launch!");
+        for (int i = 0; i < 3; i++) {
+            msg.printLn("Launching disk " + (i+1) + "...");
+            launcher.launch();
+        }
     }   
     
 
