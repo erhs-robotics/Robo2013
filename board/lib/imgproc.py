@@ -13,10 +13,12 @@ class Imgproc:
 	def __init__(self, cam):
 		if cam >= 0:
 			self.camera = cv2.VideoCapture(cam)
-		self.GREEN_MIN = np.array([50, 100, 100], np.uint8)
-		self.GREEN_MAX = np.array([100, 255, 255], np.uint8)
+		#self.GREEN_MIN = np.array([50, 100, 100], np.uint8)
+		#self.GREEN_MAX = np.array([100, 255, 255], np.uint8)
 		#self.GREEN_MIN = np.array([31,69,144], np.uint8) #70, 138, 156
 		#self.GREEN_MAX = np.array([92,198,255], np.uint8) # 100, 255, 255
+		self.GREEN_MIN = np.array([100, 100, 100], np.uint8)
+		self.GREEN_MAX = np.array([255, 255, 255], np.uint8)
 		
 		self.YELLOW_MIN = np.array([0, 100, 100], np.uint8)
 		self.YELLOW_MAX = np.array([30, 255, 255], np.uint8)
@@ -96,7 +98,7 @@ class Imgproc:
 	def getRect(self, img):
 		img = cv2.blur(img,(3,3))
 		hsv_img = img#self.getHSVImage(img)
-		
+		self.hsv_img = img
 		thresh_img = self.getThreshImage(hsv_img, self.GREEN_MIN, self.GREEN_MAX)
 		thresh_contours = self.getContours(thresh_img.copy())
 		
