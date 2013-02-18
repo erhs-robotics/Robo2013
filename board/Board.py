@@ -18,21 +18,21 @@ SCALE_FACTOR = 3
 msg = ""
             
 def getTargets():
-    rgb = kinect.get_video()
+    rgb = kinect.get_IR_image()
     depth = kinect.get_depth()   
     
     rects = imgproc.getRect(rgb)
     
-    targets = imgproc.filterRects(rects)
-    #imgproc.labelRects(bgr, rects)
+    #targets = imgproc.filterRects(rects)
+    imgproc.labelRects(bgr, rects)
     return targets, bgr
     
 def encodeTargets(targets):
     json_template = '{"status": "%s", "message" : "%s", "target" : "%s"}'
     target_str = ""
     for target in targets:
-        dist = 0
-        string = "%s,%s,%s" % (target[0].center_mass_x, dist, target[1])
+        dist = kinect.get_depth_at(target.x, target.y)
+        string = "%s,%s,%s" % (target.center_mass_x, dist, 0)
         target_str += string + "|"
     status = "Found " + str(len(targets)) + " Targets"
     
