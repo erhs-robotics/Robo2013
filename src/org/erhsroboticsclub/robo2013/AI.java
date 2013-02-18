@@ -25,11 +25,11 @@ public class AI {
         com = new Com("http://10.0.53.23");
         msg = new Messenger();
         /* Neural Network Layers ****/
-        // 0) Input Layer - (distance to target)
+        // 0) Input Layer - (distance to target), (height of target)
         // 1) Hidden Layer - 7 nodes
         // 2) Hidden Layer - 7 nodes
         // 3) Output Layer - (angle of attack in percent)
-        int[] layers = {1, 7, 7, 1};
+        int[] layers = {2, 7, 7, 1};
         nn = new NeuralNet(layers);
     }
 
@@ -91,7 +91,7 @@ public class AI {
         }
         Target target = (Target) list.get(t);
 
-        double[] input = {target.distance};
+        double[] input = {target.distance, target.height};
         nn.calcOutputs(input);
         double aot = nn.getOutputs()[0];
         launcher.setAngle(aot);
