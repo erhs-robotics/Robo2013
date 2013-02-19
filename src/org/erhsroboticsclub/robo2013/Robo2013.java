@@ -214,11 +214,12 @@ public class Robo2013 extends IterativeRobot {
             target = 3;
         }
         try {
-            double z = stickR.getZ();
+            double z = stickL.getThrottle();
+            //System.out.println("Z: " + z);
             if (z >= 0.8) {
-                launcher.elevatorMotor.setX(0.15);
+                launcher.elevatorMotor.setX(0.20);
             } else if (z <= -0.8) {
-                launcher.elevatorMotor.setX(-0.15);
+                launcher.elevatorMotor.setX(-0.60);
             } else {
                 launcher.elevatorMotor.setX(0);
             }
