@@ -30,7 +30,7 @@ public class LinearAccelerator {
         limitSwitch = new DigitalInput(RoboMap.LIMIT_SWITCH);
         anglePotentiometer = new AnalogChannel(RoboMap.LAUNCHER_ANGLE_POT);
         pid = new PIDControllerX(0.1, 0, 10);
-        pid.capOutput(-1, 1);
+        pid.capOutput(-0.15, 0.15);
 
         try {
             primaryWheel = new CANJaguar(RoboMap.PRIMARY_LAUNCH_MOTOR);
