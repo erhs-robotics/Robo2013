@@ -93,6 +93,11 @@ public class LinearAccelerator {
             
         }
     }
+    
+    public double getAngle() {
+        double voltage = anglePotentiometer.getAverageVoltage();
+        return MathX.map(voltage, 0, 5, 0, 35);        
+    }
 
     // done, untested
     public void bumpLauncherUp() {
