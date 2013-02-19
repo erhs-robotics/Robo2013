@@ -14,7 +14,7 @@ public class LinearAccelerator {
 
     private CANJaguar primaryWheel;
     private CANJaguar secondaryWheel;
-    private CANJaguar elevatorMotor;
+    public CANJaguar elevatorMotor;
     public PWM loadArmM1, loadArmM2;
     public DigitalInput limitSwitch;
     public AnalogChannel anglePotentiometer;

@@ -12,7 +12,7 @@ public class Robo2013 extends IterativeRobot {
     private Messenger msg;
     private LinearAccelerator launcher;
     private AI agent;
-    private final double speed = 1;
+    private final double speed = 0.8;
     private int target = 0;
 
     /*
@@ -71,7 +71,7 @@ public class Robo2013 extends IterativeRobot {
         // 1) Turn to face target 
         msg.printLn("Finding target...");
         do {
-            if(!isAutonomous()) {
+            if (!isAutonomous()) {
                 throw new Exception("Ran out of time!");
             }
             success = agent.turnToTarget(targetNumber);
@@ -91,7 +91,7 @@ public class Robo2013 extends IterativeRobot {
         msg.printLn("Aiming launcher...");
         fails = 0;
         do {
-             if(!isAutonomous()) {
+            if (!isAutonomous()) {
                 throw new Exception("Ran out of time!");
             }
             agent.autoAimLauncher(targetNumber);
@@ -112,11 +112,11 @@ public class Robo2013 extends IterativeRobot {
         // 4) Fire all frisbees
         msg.printLn("Starting launch!");
         for (int i = 0; i < 3; i++) {
-            msg.printLn("Launching disk " + (i+1) + "...");
+            msg.printLn("Launching disk " + (i + 1) + "...");
             launcher.launch();
         }
     }
-    
+
     /* Plan B autonomous
      * Called once by autonomousInit
      */
@@ -135,11 +135,11 @@ public class Robo2013 extends IterativeRobot {
         // 3) Fire all frisbees
         msg.printLn("Starting launch!");
         for (int i = 0; i < 3; i++) {
-            msg.printLn("Launching disk " + (i+1) + "...");
+            msg.printLn("Launching disk " + (i + 1) + "...");
             launcher.launch();
         }
-    }   
-    
+    }
+
     /* Plan C autonomous
      * Called once by autonomousInit
      */
@@ -151,11 +151,11 @@ public class Robo2013 extends IterativeRobot {
         // 1) move a specific distance to the target?
         // 2) Fire all frisbees
         msg.printLn("Starting Launch");
-        for (int i = 0; i < 3; i++) { 
-            msg.printLn("Launching Disk " + (i+1));
+        for (int i = 0; i < 3; i++) {
+            msg.printLn("Launching Disk " + (i + 1));
         }
     }
-    
+
 
     /*
      * Called once at the start of teleop mode
@@ -195,19 +195,35 @@ public class Robo2013 extends IterativeRobot {
         if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
             launcher.launch();
         }
-        
+
         //Tell the AI which target to aim to
-        if(stickL.getRawButton(RoboMap.TURN_TO_TARGET_0)) {
+        if (stickL.getRawButton(RoboMap.TURN_TO_TARGET_0)) {
             target = 0;
         }
-        if(stickL.getRawButton(RoboMap.TURN_TO_TARGET_1)) {
+        if (stickL.getRawButton(RoboMap.TURN_TO_TARGET_1)) {
             target = 1;
         }
-        if(stickL.getRawButton(RoboMap.TURN_TO_TARGET_2)) {
+        if (stickL.getRawButton(RoboMap.TURN_TO_TARGET_2)) {
             target = 2;
         }
-        if(stickL.getRawButton(RoboMap.TURN_TO_TARGET_3)) {
+        if (stickL.getRawButton(RoboMap.TURN_TO_TARGET_3)) {
             target = 3;
+        }
+        try {
+            double z = stickR.getZ();
+            if (z >= 0.8) {
+                try {
+                    launcher.elevatorMotor.setX(0.15);
+                } catch (CANTimeoutException ex) {
+                    ex.printStackTrace();
+                }
+            } else if (z <= -0.8) {
+                launcher.elevatorMotor.setX(-0.15);
+            } else {
+                launcher.elevatorMotor.setX(0);
+            }
+        } catch (CANTimeoutException ex) {
+            ex.printStackTrace();
         }
     }
 }
