@@ -12,7 +12,7 @@ public class Robo2013 extends IterativeRobot {
     private Messenger msg;
     private LinearAccelerator launcher;
     private AI agent;
-    private final double speed = 0.8;
+    private final double SPEED = 1;
     private int target = 0;
 
     /*
@@ -32,6 +32,10 @@ public class Robo2013 extends IterativeRobot {
         }
         launcher = new LinearAccelerator();
         drive = new RobotDrive(TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR);
+        drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
+        drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
+        drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
+        drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
         stickL = new Joystick(RoboMap.LEFT_DRIVE_STICK);
         stickR = new Joystick(RoboMap.RIGHT_DRIVE_STICK);
         agent = new AI(drive, launcher);
@@ -171,7 +175,7 @@ public class Robo2013 extends IterativeRobot {
      */
     public void teleopPeriodic() {
         /* Simple Tank Drive **************************************************/
-        drive.tankDrive(stickL.getY() * speed, stickR.getY() * speed);
+        drive.tankDrive(stickL.getY() * SPEED, stickR.getY() * SPEED);
         System.out.println(launcher.anglePotentiometer.getAverageVoltage());
 
         /* Adjust shooting angle **********************************************/
