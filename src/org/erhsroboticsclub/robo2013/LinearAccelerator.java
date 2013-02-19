@@ -6,7 +6,9 @@ import edu.wpi.first.wpilibj.AnalogChannel;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
+import org.erhsroboticsclub.robo2013.utilities.MathX;
 import org.erhsroboticsclub.robo2013.utilities.Messenger;
+import org.erhsroboticsclub.robo2013.utilities.PIDControllerX;
 
 public class LinearAccelerator {
 
@@ -17,6 +19,7 @@ public class LinearAccelerator {
     public DigitalInput limitSwitch;
     public AnalogChannel anglePotentiometer;
     private Messenger msg = new Messenger();
+    private PIDControllerX pid;
     
     public final double AUTO_SHOOT_SPEED = .8;
     private final double BUMP_TIME = .3;
@@ -26,6 +29,7 @@ public class LinearAccelerator {
         loadArmM2 = new PWM(RoboMap.LOAD_ARM_MOTOR2);
         limitSwitch = new DigitalInput(RoboMap.LIMIT_SWITCH);
         anglePotentiometer = new AnalogChannel(RoboMap.LAUNCHER_ANGLE_POT);
+        pid = new PIDControllerX(0.1, 0, 10);
 
         try {
             primaryWheel = new CANJaguar(RoboMap.PRIMARY_LAUNCH_MOTOR);
@@ -70,8 +74,23 @@ public class LinearAccelerator {
 
     // not done
     public void setAngle(double angle) {
-        double voltage = anglePotentiometer.getAverageVoltage();
-        while (true) {;
+        double setpoint = MathX.map(angle, 0, 35, 0, 5);
+        
+        while (true) {
+            double voltage = anglePotentiometer.getAverageVoltage();
+            double error = setpoint - voltage;
+            if(MathX.isWithin(voltage, setpoint, .5)) {
+                break;
+            }
+            double correction = pid.doPID(error);
+            try {
+                elevatorMotor.setX(correction);
+            } catch (CANTimeoutException ex) {
+                ex.printStackTrace();
+            }
+            
+            
+            
         }
     }
 
