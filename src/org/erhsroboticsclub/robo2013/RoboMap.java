@@ -16,7 +16,7 @@ public class RoboMap {
     public static final int LOAD_ARM_MOTOR2 = 2;
     
     /* Digital Input */
-    public static final int LIMIT_SWITCH = 1;
+    public static final int LIMIT_SWITCH = 2;
     
     /* USB Input */
     public static final int LEFT_DRIVE_STICK = 1;
