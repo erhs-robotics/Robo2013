@@ -216,11 +216,7 @@ public class Robo2013 extends IterativeRobot {
         try {
             double z = stickR.getZ();
             if (z >= 0.8) {
-                try {
-                    launcher.elevatorMotor.setX(0.15);
-                } catch (CANTimeoutException ex) {
-                    ex.printStackTrace();
-                }
+                launcher.elevatorMotor.setX(0.15);
             } else if (z <= -0.8) {
                 launcher.elevatorMotor.setX(-0.15);
             } else {
