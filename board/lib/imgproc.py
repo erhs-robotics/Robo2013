@@ -51,8 +51,8 @@ class Imgproc:
 											cv2.CHAIN_APPROX_SIMPLE)
 		#this is for a bug in opencv, it should be fixed in the newest
 		#version or a later version
-		tmp = cPickle.dumps(self.contours)
-		self.contours = cPickle.loads(tmp)
+		#tmp = cPickle.dumps(self.contours)
+		#self.contours = cPickle.loads(tmp)
 		
 		return self.contours
 		
@@ -100,13 +100,9 @@ class Imgproc:
 		hsv_img = img#self.getHSVImage(img)
 		self.hsv_img = img
 		thresh_img = self.getThreshImage(hsv_img, self.GREEN_MIN, self.GREEN_MAX)
-		thresh_contours = self.getContours(thresh_img.copy())
+		thresh_contours = self.getContours(thresh_img)		
 		
-		self.fillContours(img, thresh_contours)
-		rects_img = cv2.inRange(img, self.YELLOW_MIN, self.YELLOW_MAX)
-		rects_contours = self.getContours(rects_img.copy())
-		
-		rects = self.getBoundingRectangles(rects_contours)
+		rects = self.getBoundingRectangles(thresh_contours)
 		sorted_rects = sorted(rects, key=lambda x:x.x)
 		return sorted_rects
 		
@@ -119,8 +115,9 @@ class Imgproc:
 		return filtered
 		
 	def getTargetHeight(self, rect):
-		ratio = rect.width / rect.height
+		ratio = float(rect.width) / float(rect.height)
 		#First filter out anything to small
+		#print rect, " r: ", ratio 
 		if rect.width <= 5 or rect.height <= 5:
 			return 0
 		if abs(ratio - self.LOW) <= self.THRESHHOLD:
@@ -133,7 +130,10 @@ class Imgproc:
 			return 0
 
 	def labelRects(self, img, rects):
-		for i in range(len(rects)):
-			cv2.putText(img, str(i), (rects[i].center_mass_x - 29, rects[i].center_mass_y + 29), cv2.FONT_HERSHEY_DUPLEX, 3, (0,0,255), thickness=5)
+		try:
+			for i in range(len(rects)):
+				cv2.putText(img, str(i), (rects[0][i].center_mass_x - 29, rects[0][i].center_mass_y + 29), cv2.FONT_HERSHEY_DUPLEX, 3, (0,0,255), thickness=5)
+		except:
+			pass
 
 
