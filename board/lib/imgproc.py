@@ -118,7 +118,7 @@ class Imgproc:
 		ratio = float(rect.width) / float(rect.height)
 		#First filter out anything to small
 		#print rect, " r: ", ratio 
-		if rect.width <= 5 or rect.height <= 5:
+		if rect.area <= 400:
 			return None
 		if abs(ratio - self.LOW) <= self.THRESHHOLD:
 			return self.LOW_HEIGHT
