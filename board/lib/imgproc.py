@@ -13,13 +13,12 @@ class Imgproc:
 	def __init__(self, cam):
 		if cam >= 0:
 			self.camera = cv2.VideoCapture(cam)
-		#self.GREEN_MIN = np.array([50, 100, 100], np.uint8)
-		#self.GREEN_MAX = np.array([100, 255, 255], np.uint8)
-		#self.GREEN_MIN = np.array([31,69,144], np.uint8) #70, 138, 156
-		#self.GREEN_MAX = np.array([92,198,255], np.uint8) # 100, 255, 255
-		self.GREEN_MIN = np.array([100, 100, 100], np.uint8)
-		self.GREEN_MAX = np.array([255, 255, 255], np.uint8)
-		
+		#self.COLOR_MIN = np.array([50, 100, 100], np.uint8)
+		#self.COLOR_MAX = np.array([100, 255, 255], np.uint8)
+		#self.COLOR_MIN = np.array([31,69,144], np.uint8) #70, 138, 156
+		#self.COLOR_MAX = np.array([92,198,255], np.uint8) # 100, 255, 255
+		self.COLOR_MIN = np.array([100, 100, 100], np.uint8)
+		self.COLOR_MAX = np.array([255, 255, 255], np.uint8)		
 		self.YELLOW_MIN = np.array([0, 100, 100], np.uint8)
 		self.YELLOW_MAX = np.array([30, 255, 255], np.uint8)
 		self.LOW = 1.178571429 # width / height
@@ -83,7 +82,7 @@ class Imgproc:
 		cam_img = cv2.blur(cam_img,(4,4))
 		hsv_img = cam_img#self.getHSVImage(cam_img)
 		self.hsv_img = hsv_img
-		thresh_img = self.getThreshImage(hsv_img, self.GREEN_MIN, self.GREEN_MAX)
+		thresh_img = self.getThreshImage(hsv_img, self.COLOR_MIN, self.COLOR_MAX)
 		thresh_contours = self.getContours(thresh_img.copy())
 		
 		#cv2.drawContours(cam_img, thresh_contours, -1, (0,0,255), 3)
@@ -99,7 +98,7 @@ class Imgproc:
 		img = cv2.blur(img,(3,3))
 		hsv_img = img#self.getHSVImage(img)
 		self.hsv_img = img
-		thresh_img = self.getThreshImage(hsv_img, self.GREEN_MIN, self.GREEN_MAX)
+		thresh_img = self.getThreshImage(hsv_img, self.COLOR_MIN, self.COLOR_MAX)
 		thresh_contours = self.getContours(thresh_img)		
 		
 		rects = self.getBoundingRectangles(thresh_contours)

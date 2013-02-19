@@ -10,22 +10,22 @@ from imgproc import *
 from Kinect import Kinect
 
 def update_lowerH(value):
-    imgproc.GREEN_MIN[0] = value
+    imgproc.COLOR_MIN[0] = value
 
 def update_lowerS(value):
-    imgproc.GREEN_MIN[1] = value
+    imgproc.COLOR_MIN[1] = value
     
 def update_lowerV(value):
-    imgproc.GREEN_MIN[2] = value
+    imgproc.COLOR_MIN[2] = value
     
 def update_upperH(value):
-    imgproc.GREEN_MAX[0] = value
+    imgproc.COLOR_MAX[0] = value
     
 def update_upperS(value):
-    imgproc.GREEN_MAX[1] = value
+    imgproc.COLOR_MAX[1] = value
     
 def update_upperV(value):
-    imgproc.GREEN_MAX[2] = value
+    imgproc.COLOR_MAX[2] = value
     
 # 1 - Webcam
 # 2 - File
@@ -43,12 +43,12 @@ kinect = Kinect()
 
 cv2.namedWindow('Original, HSV, Thresh, Rects')
 cv2.namedWindow('Tuning Window')
-cv.CreateTrackbar("Lower H", 'Tuning Window', imgproc.GREEN_MIN[0], 255, update_lowerH)
-cv.CreateTrackbar("Lower S", 'Tuning Window', imgproc.GREEN_MIN[1], 255, update_lowerS)
-cv.CreateTrackbar("Lower V", 'Tuning Window', imgproc.GREEN_MIN[2], 255, update_lowerV)
-cv.CreateTrackbar("Upper H", 'Tuning Window', imgproc.GREEN_MAX[0], 255, update_upperH)
-cv.CreateTrackbar("Upper S", 'Tuning Window', imgproc.GREEN_MAX[1], 255, update_upperS)
-cv.CreateTrackbar("Upper V", 'Tuning Window', imgproc.GREEN_MAX[2], 255, update_upperV)
+cv.CreateTrackbar("Lower H", 'Tuning Window', imgproc.COLOR_MIN[0], 255, update_lowerH)
+cv.CreateTrackbar("Lower S", 'Tuning Window', imgproc.COLOR_MIN[1], 255, update_lowerS)
+cv.CreateTrackbar("Lower V", 'Tuning Window', imgproc.COLOR_MIN[2], 255, update_lowerV)
+cv.CreateTrackbar("Upper H", 'Tuning Window', imgproc.COLOR_MAX[0], 255, update_upperH)
+cv.CreateTrackbar("Upper S", 'Tuning Window', imgproc.COLOR_MAX[1], 255, update_upperS)
+cv.CreateTrackbar("Upper V", 'Tuning Window', imgproc.COLOR_MAX[2], 255, update_upperV)
 
 while 1:
     
