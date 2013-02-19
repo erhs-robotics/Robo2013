@@ -22,10 +22,10 @@ class Imgproc:
 		
 		self.YELLOW_MIN = np.array([0, 100, 100], np.uint8)
 		self.YELLOW_MAX = np.array([30, 255, 255], np.uint8)
-		self.LOW = 1.208333333 # width / height
-		self.MED = 2.571428571 # width / height
-		self.HIGH = 4.5 # width / height
-		self.THRESHHOLD = 0.1 # width / height
+		self.LOW = 1.178571429 # width / height
+		self.MED = 2.32 # width / height
+		self.HIGH = 3.625 # width / height
+		self.THRESHHOLD = 0.575 # width / height
 		self.LOW_HEIGHT = 0.4826 + 0.3048# meters from floor to center
 		self.MED_HEIGHT = 2.25108  + 0.2667# meters from floor to center
 		self.HIGH_HEIGHT = 2.64478 + 0.1524# meters from floor to center
