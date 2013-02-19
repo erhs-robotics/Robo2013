@@ -22,6 +22,7 @@ public class AI {
         this.drive = drive;
         this.launcher = launcher;
         pid = new PIDControllerX(1, 0, 10);
+        pid.capOutput(-1, 1);
         com = new Com("http://10.0.53.23");
         msg = new Messenger();
         /* Neural Network Layers ****/
