@@ -3,7 +3,7 @@ from cv2 import cv
 import numpy as np
 import cPickle
 import sys
-from Rectangle import Rectangle
+from Target import Target
 
 class Imgproc:
 
@@ -65,7 +65,7 @@ class Imgproc:
 		rects = []
 		for i in range(len(contours)):
 			center_x, center_y, width, height = cv2.boundingRect(contours[i])
-			rect = Rectangle(center_x, center_y, width, height)
+			rect = Target(center_x, center_y, width, height)
 			rects.append(rect)
 
 		sorted_rects = sorted(rects, key=lambda rect:rect.x)
@@ -110,8 +110,9 @@ class Imgproc:
 		filtered = []
 		for rect in rects:
 			height = self.getTargetHeight(rect)
-			if height != 0:
-				filtered.append((rect, height))
+			if height != None:
+				rect.target_height = height
+				filtered.append(rect)
 		return filtered
 		
 	def getTargetHeight(self, rect):
@@ -119,7 +120,7 @@ class Imgproc:
 		#First filter out anything to small
 		#print rect, " r: ", ratio 
 		if rect.width <= 5 or rect.height <= 5:
-			return 0
+			return None
 		if abs(ratio - self.LOW) <= self.THRESHHOLD:
 			return self.LOW_HEIGHT
 		elif abs(ratio - self.MED) <= self.THRESHHOLD:
@@ -127,12 +128,12 @@ class Imgproc:
 		elif abs(ratio - self.HIGH) <= self.THRESHHOLD:
 			return self.HIGH_HEIGHT
 		else:
-			return 0
+			return None
 
 	def labelRects(self, img, rects):
 		try:
 			for i in range(len(rects)):
-				cv2.putText(img, str(i), (rects[0][i].center_mass_x - 29, rects[0][i].center_mass_y + 29), cv2.FONT_HERSHEY_DUPLEX, 3, (0,0,255), thickness=5)
+				cv2.putText(img, str(i), (rects[i].center_mass_x - 29, rects[i].center_mass_y + 29), cv2.FONT_HERSHEY_DUPLEX, 3, (0,0,255), thickness=5)
 		except:
 			pass
 
