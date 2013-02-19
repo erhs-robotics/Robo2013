@@ -12,7 +12,7 @@ public class Robo2013 extends IterativeRobot {
     private Messenger msg;
     private LinearAccelerator launcher;
     private AI agent;
-    private final double speed = 0.5;
+    private final double speed = 1;
     private int target = 0;
 
     /*
@@ -172,6 +172,7 @@ public class Robo2013 extends IterativeRobot {
     public void teleopPeriodic() {
         /* Simple Tank Drive **************************************************/
         drive.tankDrive(stickL.getY() * speed, stickR.getY() * speed);
+        System.out.println(launcher.anglePotentiometer.getAverageVoltage());
 
         /* Adjust shooting angle **********************************************/
         if (stickR.getRawButton(RoboMap.AUTO_AIM_BUTTON)) {
