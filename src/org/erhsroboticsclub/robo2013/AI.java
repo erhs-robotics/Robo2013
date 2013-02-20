@@ -95,7 +95,7 @@ public class AI {
         double[] input = {target.distance, target.height};
         nn.calcOutputs(input);
         double aot = nn.getOutputs()[0];
-        launcher.setAngle(aot);
+        //launcher.setAngle(aot);
         return true;
     }
 }

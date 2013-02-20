@@ -2,6 +2,7 @@ package org.erhsroboticsclub.robo2013;
 
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
+import org.erhsroboticsclub.robo2013.utilities.MathX;
 import org.erhsroboticsclub.robo2013.utilities.Messenger;
 
 public class Robo2013 extends IterativeRobot {
@@ -14,6 +15,7 @@ public class Robo2013 extends IterativeRobot {
     private AI agent;
     private final double SPEED = 1;
     private int target = 0;
+    private boolean buttonDown = false;
 
     /*
      * Called once the cRIO boots up
@@ -31,6 +33,7 @@ public class Robo2013 extends IterativeRobot {
             msg.printLn(ex.getMessage());
         }
         launcher = new LinearAccelerator();
+
         drive = new RobotDrive(TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR);
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
@@ -132,7 +135,7 @@ public class Robo2013 extends IterativeRobot {
         // 1) Set the launch angle
         double angle = 0.5;
         msg.printLn("Setting angle to " + angle + "...");
-        launcher.setAngle(0.5);
+        //launcher.setAngle(0.5);
         // 2) Wait for motors to come up to speed
         msg.printLn("Waiting for motors...");
         Timer.delay(7);
@@ -168,37 +171,54 @@ public class Robo2013 extends IterativeRobot {
         drive.setSafetyEnabled(false);
         msg.clearConsole();
         msg.printLn("Teleop Started");
+
     }
 
     /**
      * Called periodically during operator control
      */
     public void teleopPeriodic() {
+        launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED, LinearAccelerator.AUTO_SHOOT_SPEED);
         /* Simple Tank Drive **************************************************/
         drive.tankDrive(stickL.getY() * SPEED, stickR.getY() * SPEED);
-        System.out.println(launcher.anglePotentiometer.getAverageVoltage());
+        //System.out.println(launcher.anglePotentiometer.getAverageVoltage());
 
         /* Adjust shooting angle **********************************************/
-        if (stickR.getRawButton(RoboMap.AUTO_AIM_BUTTON)) {
-            agent.autoAimLauncher(0);
-        }
-        if (stickR.getRawButton(RoboMap.MANUAL_LAUNCHER_UP_BUTTON)) {
-            launcher.bumpLauncherUp();
-        } else if (stickR.getRawButton(RoboMap.MANUAL_LAUNCHER_DOWN_BUTTON)) {
-            launcher.bumpLauncherDown();
-        }
+        /*
+         if (stickR.getRawButton(RoboMap.AUTO_AIM_BUTTON)) {
+         agent.autoAimLauncher(0);
+         }
+         if (stickR.getRawButton(RoboMap.MANUAL_LAUNCHER_UP_BUTTON)) {
+         launcher.bumpLauncherUp();
+         } else if (stickR.getRawButton(RoboMap.MANUAL_LAUNCHER_DOWN_BUTTON)) {
+         launcher.bumpLauncherDown();
+         }
+         */
 
         /* Auto Turn To Target ************************************************/
-        if (stickR.getRawButton(RoboMap.TURN_TO_TARGET_BUTTON)) // Needs adjustment, need a way to specify which target we
-        // are actually turning to
-        {
-            agent.turnToTarget(target);
-        }
+        /*
+         if (stickR.getRawButton(RoboMap.TURN_TO_TARGET_BUTTON)) // Needs adjustment, need a way to specify which target we
+         // are actually turning to
+         {
+         agent.turnToTarget(target);
+         }
+         * /
 
-        /* Fire the frisbee ***************************************************/
+         /* Fire the frisbee ***************************************************/
         if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
             launcher.launch();
         }
+        /*
+         if(stickR.getRawButton(5)) {
+         launcher.pid.tune(launcher.pid.Kp + 0.1, launcher.pid.Ki, launcher.pid.Kd);
+         msg.printLn("P:" + launcher.pid.Kp);
+         }
+        
+         if(stickR.getRawButton(4)) {
+         launcher.pid.tune(launcher.pid.Kp - 0.1, launcher.pid.Ki, launcher.pid.Kd);
+         msg.printLn("P:" + launcher.pid.Kp);
+         }
+         */
 
         //Tell the AI which target to aim to
         if (stickL.getRawButton(RoboMap.TURN_TO_TARGET_0)) {
@@ -213,18 +233,29 @@ public class Robo2013 extends IterativeRobot {
         if (stickL.getRawButton(RoboMap.TURN_TO_TARGET_3)) {
             target = 3;
         }
-        try {
-            double z = stickL.getThrottle();
-            //System.out.println("Z: " + z);
-            if (z >= 0.8) {
-                launcher.elevatorMotor.setX(0.20);
-            } else if (z <= -0.8) {
-                launcher.elevatorMotor.setX(-0.60);
-            } else {
-                launcher.elevatorMotor.setX(0);
-            }
-        } catch (CANTimeoutException ex) {
-            ex.printStackTrace();
+        if (stickL.getRawButton(5) && !buttonDown) {
+            launcher.setAngle(launcher.angle + 0.1);
+            buttonDown = true;
+        } else if (stickL.getRawButton(3) && !buttonDown) {
+            launcher.setAngle(launcher.angle - 0.1);
+            buttonDown = true;
         }
+
+        if (!stickL.getRawButton(5)) {
+            buttonDown = false;
+        } else if (!stickL.getRawButton(3)) {
+            buttonDown = false;
+        }
+
+
+        if (stickR.getRawButton(1)) {
+            launcher.setAngle(14);
+        } else {
+            double angle = MathX.map(stickR.getZ(), 1, -1, 0, 30);
+            launcher.setAngle(angle);
+        }
+
+        launcher.doAngle();
+        System.out.println("angle:" + launcher.angle);
     }
 }
