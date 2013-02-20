@@ -77,12 +77,12 @@ public class LinearAccelerator {
     
     public void adjustAngle() {
         double setpoint = MathX.map(angle, 0, 35, 4.14, 4.75);
-        double voltage = anglePotentiometer.getAverageVoltage();
-        double error = setpoint - voltage;                    
-        double correction = pid.doPID(error);
+        double voltage = anglePotentiometer.getAverageVoltage();        
+        pid.setSetpoint(setpoint);
+        double correction = pid.doPID(voltage);
         
         try {
-            elevatorMotor.setX(correction);
+            elevatorMotor.setX(-correction);
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }
