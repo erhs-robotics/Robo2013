@@ -15,7 +15,6 @@ public class Robo2013 extends IterativeRobot {
     private AI agent;
     private final double SPEED = 1;
     private int target = 0;
-    private boolean buttonDown = false;
 
     /*
      * Called once the cRIO boots up
@@ -154,7 +153,7 @@ public class Robo2013 extends IterativeRobot {
         msg.printLn("Autonomous C:");
         // 0) Set the wheels to the proper speed
         msg.printLn("Starting up launcher...");
-        launcher.setWheels(launcher.AUTO_SHOOT_SPEED, launcher.AUTO_SHOOT_SPEED);
+        launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED, LinearAccelerator.AUTO_SHOOT_SPEED);
         // 1) move a specific distance to the target?
         // 2) Fire all frisbees
         msg.printLn("Starting Launch");
@@ -181,46 +180,23 @@ public class Robo2013 extends IterativeRobot {
         launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED, LinearAccelerator.AUTO_SHOOT_SPEED);
         /* Simple Tank Drive **************************************************/
         drive.tankDrive(stickL.getY() * SPEED, stickR.getY() * SPEED);
-        //System.out.println(launcher.anglePotentiometer.getAverageVoltage());
 
-        /* Adjust shooting angle **********************************************/
-        /*
-         if (stickR.getRawButton(RoboMap.AUTO_AIM_BUTTON)) {
-         agent.autoAimLauncher(0);
-         }
-         if (stickR.getRawButton(RoboMap.MANUAL_LAUNCHER_UP_BUTTON)) {
-         launcher.bumpLauncherUp();
-         } else if (stickR.getRawButton(RoboMap.MANUAL_LAUNCHER_DOWN_BUTTON)) {
-         launcher.bumpLauncherDown();
-         }
-         */
+        /* Auto aim laincher **************************************************/
+        if (stickR.getRawButton(RoboMap.AUTO_AIM_BUTTON)) {
+            agent.autoAimLauncher(0);
+        }
 
         /* Auto Turn To Target ************************************************/
-        /*
-         if (stickR.getRawButton(RoboMap.TURN_TO_TARGET_BUTTON)) // Needs adjustment, need a way to specify which target we
-         // are actually turning to
-         {
-         agent.turnToTarget(target);
-         }
-         * /
+        if (stickR.getRawButton(RoboMap.TURN_TO_TARGET_BUTTON)) {
+            agent.turnToTarget(target);
+        }
 
-         /* Fire the frisbee ***************************************************/
+        /* Fire the frisbee ***************************************************/
         if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
             launcher.launch();
         }
-        /*
-         if(stickR.getRawButton(5)) {
-         launcher.pid.tune(launcher.pid.Kp + 0.1, launcher.pid.Ki, launcher.pid.Kd);
-         msg.printLn("P:" + launcher.pid.Kp);
-         }
-        
-         if(stickR.getRawButton(4)) {
-         launcher.pid.tune(launcher.pid.Kp - 0.1, launcher.pid.Ki, launcher.pid.Kd);
-         msg.printLn("P:" + launcher.pid.Kp);
-         }
-         */
 
-        //Tell the AI which target to aim to
+        /* Tell the AI which target to aim to *********************************/
         if (stickL.getRawButton(RoboMap.TURN_TO_TARGET_0)) {
             target = 0;
         }
@@ -233,29 +209,16 @@ public class Robo2013 extends IterativeRobot {
         if (stickL.getRawButton(RoboMap.TURN_TO_TARGET_3)) {
             target = 3;
         }
-        if (stickL.getRawButton(5) && !buttonDown) {
-            launcher.setAngle(launcher.angle + 0.1);
-            buttonDown = true;
-        } else if (stickL.getRawButton(3) && !buttonDown) {
-            launcher.setAngle(launcher.angle - 0.1);
-            buttonDown = true;
-        }
 
-        if (!stickL.getRawButton(5)) {
-            buttonDown = false;
-        } else if (!stickL.getRawButton(3)) {
-            buttonDown = false;
-        }
-
-
-        if (stickR.getRawButton(1)) {
+        /* Setting the launch angle *******************************************/
+        if (stickR.getRawButton(RoboMap.COLLECT_LAUNCHER_ANGLE_BUTTON)) {
             launcher.setAngle(14);
         } else {
             double angle = MathX.map(stickR.getZ(), 1, -1, 0, 30);
             launcher.setAngle(angle);
         }
 
-        launcher.doAngle();
-        System.out.println("angle:" + launcher.angle);
+        launcher.adjustAngle();
+        msg.printOnLn("Angle: " + launcher.getAngle(), DriverStationLCD.Line.kUser1);
     }
 }

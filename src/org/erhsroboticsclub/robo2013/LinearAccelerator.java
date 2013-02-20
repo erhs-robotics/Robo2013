@@ -15,16 +15,16 @@ public class LinearAccelerator {
 
     private CANJaguar primaryWheel;
     private CANJaguar secondaryWheel;
-    public CANJaguar elevatorMotor;
-    public PWM loadArmM1, loadArmM2;
-    public DigitalInput limitSwitch;
-    public AnalogChannel anglePotentiometer;
+    private CANJaguar elevatorMotor;
+    private PWM loadArmM1, loadArmM2;
+    private DigitalInput limitSwitch;
+    private AnalogChannel anglePotentiometer;
     private Messenger msg = new Messenger();
-    public PIDControllerX pid;
+    private PIDControllerX pid;    
+    private double angle = 31;
+    
     public static final double AUTO_SHOOT_SPEED = -.8;
     private final double BUMP_TIME = .3;
-    public Joystick stick;
-    public double angle = 31;
 
     public LinearAccelerator() {
         loadArmM1 = new PWM(RoboMap.LOAD_ARM_MOTOR1);
@@ -33,8 +33,7 @@ public class LinearAccelerator {
         anglePotentiometer = new AnalogChannel(RoboMap.LAUNCHER_ANGLE_POT);
         pid = new PIDControllerX(2.8, 0.01, 0);
         pid.capOutput(-0.75, 0.75);
-        stick = new Joystick(2);
-
+        
         try {
             primaryWheel = new CANJaguar(RoboMap.PRIMARY_LAUNCH_MOTOR);
             secondaryWheel = new CANJaguar(RoboMap.SECONDARY_LAUNCH_MOTOR);
@@ -75,27 +74,18 @@ public class LinearAccelerator {
         loadArmM1.setRaw(127);
         loadArmM2.setRaw(127);
     }
-
-    // not done
-    public void doAngle() {
+    
+    public void adjustAngle() {
         double setpoint = MathX.map(angle, 0, 35, 4.14, 4.75);
-        msg.printLn("Set: " + setpoint);
-
-
         double voltage = anglePotentiometer.getAverageVoltage();
-        double error = setpoint - voltage;
-        //if (MathX.isWithin(voltage, setpoint, .05)) {
-        //    break;
-        //}            
+        double error = setpoint - voltage;                    
         double correction = pid.doPID(error);
-        //System.out.println("error: " + error);
+        
         try {
             elevatorMotor.setX(correction);
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }
-        
-        
     }
     
     public void setAngle(double angle) {
@@ -103,29 +93,11 @@ public class LinearAccelerator {
     }
 
     public double getAngle() {
+        return angle;
+    }
+    
+    public double gePOTasAngle() {
         double voltage = anglePotentiometer.getAverageVoltage();
         return MathX.map(voltage, 0, 5, 0, 35);
-    }
-
-    // done, untested
-    public void bumpLauncherUp() {
-        try {
-            elevatorMotor.setX(1);
-            Timer.delay(BUMP_TIME);
-            elevatorMotor.setX(0);
-        } catch (CANTimeoutException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    // done, untested
-    public void bumpLauncherDown() {
-        try {
-            elevatorMotor.setX(-1);
-            Timer.delay(BUMP_TIME);
-            elevatorMotor.setX(0);
-        } catch (CANTimeoutException ex) {
-            ex.printStackTrace();
-        }
     }
 }

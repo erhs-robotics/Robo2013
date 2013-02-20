@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
  * @author michael
  */
 public class PIDControllerX {
-    public double Kp, Ki, Kd, setpoint;
+    private double Kp, Ki, Kd, setpoint;
     private double lastError, totalError, lastTime;
     private boolean firstrun;
     private double min = 0, max = 0;
@@ -64,6 +64,22 @@ public class PIDControllerX {
         }
         
         return correction;
+    }
+
+    public double getKd() {
+        return Kd;
+    }
+
+    public double getKi() {
+        return Ki;
+    }
+
+    public double getKp() {
+        return Kp;
+    }
+
+    public double getSetpoint() {
+        return setpoint;
     }
     
     public void reset() {
