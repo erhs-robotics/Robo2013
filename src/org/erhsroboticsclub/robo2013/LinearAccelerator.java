@@ -75,6 +75,13 @@ public class LinearAccelerator {
         loadArmM2.setRaw(127);
     }
     
+    public void waitForAngle(double sleep) {
+        double start = Timer.getFPGATimestamp();
+        while(Timer.getFPGATimestamp() - start < sleep) {
+            adjustAngle();            
+        }
+    }
+    
     public void adjustAngle() {
         double setpoint = MathX.map(angle, 0, 35, 4.14, 4.75);
         double voltage = anglePotentiometer.getAverageVoltage();        
