@@ -43,12 +43,9 @@ public class NeuralNet {
                 }
             }
         }
-
-
     }
 
     public void calcOutputs(double[] inputs) {
-
         //place inputs in input layer
         for (int i = 0; i < nodesInLayers[0]; i++) {
             outputs[0][i] = inputs[i];
@@ -68,9 +65,7 @@ public class NeuralNet {
                 sum += weights[i][j][nodesInLayers[i - 1]];
                 outputs[i][j] = MathX.sigmoid(sum);
             }
-
         }
-
     }
 
     public void bpgt(double[] input, double[] target) {
@@ -115,10 +110,6 @@ public class NeuralNet {
                 }
             }
         }
-
-
-
-
     }
 
     public double mse(double[] targets) {
@@ -203,8 +194,5 @@ public class NeuralNet {
             System.out.print("Output:");
             System.out.println(nn.getOutputs()[0]);
         }
-
-
-
     }
 }

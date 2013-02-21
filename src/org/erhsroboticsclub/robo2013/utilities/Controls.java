@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 
 /**
  *
- * @author Michael, Nick, Kamyar
+ * @author Michael, Nick
  */
 public class Controls {
 

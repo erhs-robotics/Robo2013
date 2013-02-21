@@ -37,7 +37,6 @@ public class SSJSONParser {
 
                 tokens.add(msg);
             }
-
         }
         return tokens;
     }   
@@ -75,8 +74,7 @@ public class SSJSONParser {
             }
 
         }
-
-
+        
         return table;
     }
     
@@ -94,6 +92,5 @@ public class SSJSONParser {
         }
         list.add(str.substring(last, str.length()));
         return list;
-    }
-    
+    }    
 }

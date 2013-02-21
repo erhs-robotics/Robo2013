@@ -14,8 +14,7 @@ public class PIDControllerX {
     private double Kp, Ki, Kd, setpoint;
     private double lastError, totalError, lastTime;
     private boolean firstrun;
-    private double min = 0, max = 0;
-    
+    private double min = 0, max = 0;    
 
     public PIDControllerX(double Kp, double Ki, double Kd) {
         this.Kp = Kp;
@@ -55,8 +54,8 @@ public class PIDControllerX {
             correction = Kp * error + Ki * totalError + Kd * (de/dt);
             totalError += error * dt;            
         }
-        lastError = error;
         
+        lastError = error;        
         lastTime = Timer.getFPGATimestamp();
         
         if(min != max) {

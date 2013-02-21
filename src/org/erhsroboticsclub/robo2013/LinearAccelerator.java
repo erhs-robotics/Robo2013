@@ -1,9 +1,8 @@
 package org.erhsroboticsclub.robo2013;
 
+import edu.wpi.first.wpilibj.AnalogChannel;
 import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.AnalogChannel;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
@@ -23,8 +22,7 @@ public class LinearAccelerator {
     private PIDControllerX pid;    
     private double angle = 31;
     
-    public static final double AUTO_SHOOT_SPEED = -.8;
-    private final double BUMP_TIME = .3;
+    public static final double AUTO_SHOOT_SPEED = -.8;    
 
     public LinearAccelerator() {
         loadArmM1 = new PWM(RoboMap.LOAD_ARM_MOTOR1);
