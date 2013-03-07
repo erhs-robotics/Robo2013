@@ -1,0 +1,122 @@
+#! /usr/bin/python2
+
+from optparse import OptionParser
+import re, os, fnmatch
+from xml.dom.minidom import parse
+
+def walk_up(bottom):
+	bottom = os.path.realpath(bottom)
+
+	#get files in current dir
+	try:
+		names = os.listdir(bottom)
+	except Exception as e:
+		print e
+		return
+
+
+	dirs, nondirs = [], []
+	for name in names:
+		if os.path.isdir(os.path.join(bottom, name)):
+			dirs.append(name)
+		else:
+			nondirs.append(name)
+
+	yield bottom, dirs, nondirs
+
+	new_path = os.path.realpath(os.path.join(bottom, '..'))
+
+	# see if we are at the top
+	if new_path == bottom:
+		return
+
+	for x in walk_up(new_path):
+		yield x
+
+def locate(pattern, root=os.curdir):    
+    for path, dirs, files in walk_up(os.path.abspath(root)):
+        for filename in fnmatch.filter(files, pattern):
+            return os.path.join(path, filename)
+
+def checkVersion(version):
+	if re.match("(\d+).(\d+).(\d+)$", version):
+		return True
+	return False
+
+def parseVersion(data):
+	if checkVersion(data):
+		nums = data.split('.')
+		return [int(nums[0]), int(nums[1]), int(nums[2])]
+	else:
+		return False
+		
+		
+def parseVersionFile(path):
+	f = open(path)
+	data = f.read()
+	f.close()
+	p = parseVersion(data)
+	if p == False:
+		print "Corrupted version file!"
+		exit()
+	return p
+	
+def versionToString(version):
+	return '%s.%s.%s' % (version[0], version[1], version[2])
+	
+
+		
+parser = OptionParser()
+parser.add_option("-M", "--major", action="store_true", dest="major", help="bumps a.b.c to (a+1).0.0")
+parser.add_option("-m", "--minor", action="store_true", dest="minor", help="bumps a.b.c to a.(b+1).0")
+parser.add_option("-p", "--patch", action="store_true", dest="patch", help="bumps a.b.c to a.b.(c+1)")
+parser.add_option("-v", "--version", dest="version", help="specifies a version")
+parser.add_option("-i", "--init", action="store_true", dest="init", help="creates a new version file")
+
+(options, args) = parser.parse_args()
+
+if options.init:
+	f = open('.version', 'w')
+	f.truncate()
+	f.write('0.0.0')
+	f.close()
+	exit()
+
+# Find .version
+path = locate('.version')
+
+if path:	
+	version = parseVersionFile(path)
+	isoptions = True
+	if options.major:
+		version[0] += 1
+		version[1] = 0
+		version[2] = 0
+	elif options.minor:
+		version[1] += 1
+		version[2] = 0
+	elif options.patch:
+		version[2] += 1
+	elif options.version:
+		new_version = parseVersion(options.version)
+		if new_version == False:
+			print "Incorrect format!"
+			exit()
+		version = new_version
+	else:
+		isoptions = False
+		print 'v' + versionToString(version)
+		
+	if isoptions:
+		s = versionToString(version)
+		f = open(path, 'w')
+		f.truncate()
+		f.write(s)
+		f.close()
+		print 'v' + s
+	
+else:
+	print 'Version not yet initialized!'
+	exit()
+
+

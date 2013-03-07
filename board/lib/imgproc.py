@@ -3,7 +3,7 @@ from cv2 import cv
 import numpy as np
 import cPickle
 import sys
-from Rectangle import Rectangle
+from Target import Target
 
 class Imgproc:
 
@@ -13,19 +13,18 @@ class Imgproc:
 	def __init__(self, cam):
 		if cam >= 0:
 			self.camera = cv2.VideoCapture(cam)
-		#self.GREEN_MIN = np.array([50, 100, 100], np.uint8)
-		#self.GREEN_MAX = np.array([100, 255, 255], np.uint8)
-		#self.GREEN_MIN = np.array([31,69,144], np.uint8) #70, 138, 156
-		#self.GREEN_MAX = np.array([92,198,255], np.uint8) # 100, 255, 255
-		self.GREEN_MIN = np.array([100, 100, 100], np.uint8)
-		self.GREEN_MAX = np.array([255, 255, 255], np.uint8)
-		
+		#self.COLOR_MIN = np.array([50, 100, 100], np.uint8)
+		#self.COLOR_MAX = np.array([100, 255, 255], np.uint8)
+		#self.COLOR_MIN = np.array([31,69,144], np.uint8) #70, 138, 156
+		#self.COLOR_MAX = np.array([92,198,255], np.uint8) # 100, 255, 255
+		self.COLOR_MIN = np.array([100, 100, 100], np.uint8)
+		self.COLOR_MAX = np.array([255, 255, 255], np.uint8)		
 		self.YELLOW_MIN = np.array([0, 100, 100], np.uint8)
 		self.YELLOW_MAX = np.array([30, 255, 255], np.uint8)
-		self.LOW = 1.208333333 # width / height
-		self.MED = 2.571428571 # width / height
-		self.HIGH = 4.5 # width / height
-		self.THRESHHOLD = 0.1 # width / height
+		self.LOW = 1.178571429 # width / height
+		self.MED = 2.32 # width / height
+		self.HIGH = 3.625 # width / height
+		self.THRESHHOLD = 0.575 # width / height
 		self.LOW_HEIGHT = 0.4826 + 0.3048# meters from floor to center
 		self.MED_HEIGHT = 2.25108  + 0.2667# meters from floor to center
 		self.HIGH_HEIGHT = 2.64478 + 0.1524# meters from floor to center
@@ -51,8 +50,8 @@ class Imgproc:
 											cv2.CHAIN_APPROX_SIMPLE)
 		#this is for a bug in opencv, it should be fixed in the newest
 		#version or a later version
-		tmp = cPickle.dumps(self.contours)
-		self.contours = cPickle.loads(tmp)
+		#tmp = cPickle.dumps(self.contours)
+		#self.contours = cPickle.loads(tmp)
 		
 		return self.contours
 		
@@ -65,7 +64,7 @@ class Imgproc:
 		rects = []
 		for i in range(len(contours)):
 			center_x, center_y, width, height = cv2.boundingRect(contours[i])
-			rect = Rectangle(center_x, center_y, width, height)
+			rect = Target(center_x, center_y, width, height)
 			rects.append(rect)
 
 		sorted_rects = sorted(rects, key=lambda rect:rect.x)
@@ -83,7 +82,7 @@ class Imgproc:
 		cam_img = cv2.blur(cam_img,(4,4))
 		hsv_img = cam_img#self.getHSVImage(cam_img)
 		self.hsv_img = hsv_img
-		thresh_img = self.getThreshImage(hsv_img, self.GREEN_MIN, self.GREEN_MAX)
+		thresh_img = self.getThreshImage(hsv_img, self.COLOR_MIN, self.COLOR_MAX)
 		thresh_contours = self.getContours(thresh_img.copy())
 		
 		#cv2.drawContours(cam_img, thresh_contours, -1, (0,0,255), 3)
@@ -99,14 +98,10 @@ class Imgproc:
 		img = cv2.blur(img,(3,3))
 		hsv_img = img#self.getHSVImage(img)
 		self.hsv_img = img
-		thresh_img = self.getThreshImage(hsv_img, self.GREEN_MIN, self.GREEN_MAX)
-		thresh_contours = self.getContours(thresh_img.copy())
+		thresh_img = self.getThreshImage(hsv_img, self.COLOR_MIN, self.COLOR_MAX)
+		thresh_contours = self.getContours(thresh_img)		
 		
-		self.fillContours(img, thresh_contours)
-		rects_img = cv2.inRange(img, self.YELLOW_MIN, self.YELLOW_MAX)
-		rects_contours = self.getContours(rects_img.copy())
-		
-		rects = self.getBoundingRectangles(rects_contours)
+		rects = self.getBoundingRectangles(thresh_contours)
 		sorted_rects = sorted(rects, key=lambda x:x.x)
 		return sorted_rects
 		
@@ -114,15 +109,17 @@ class Imgproc:
 		filtered = []
 		for rect in rects:
 			height = self.getTargetHeight(rect)
-			if height != 0:
-				filtered.append((rect, height))
+			if height != None:
+				rect.target_height = height
+				filtered.append(rect)
 		return filtered
 		
 	def getTargetHeight(self, rect):
-		ratio = rect.width / rect.height
+		ratio = float(rect.width) / float(rect.height)
 		#First filter out anything to small
-		if rect.width <= 5 or rect.height <= 5:
-			return 0
+		#print rect, " r: ", ratio 
+		if rect.area <= 400:
+			return None
 		if abs(ratio - self.LOW) <= self.THRESHHOLD:
 			return self.LOW_HEIGHT
 		elif abs(ratio - self.MED) <= self.THRESHHOLD:
@@ -130,10 +127,13 @@ class Imgproc:
 		elif abs(ratio - self.HIGH) <= self.THRESHHOLD:
 			return self.HIGH_HEIGHT
 		else:
-			return 0
+			return None
 
 	def labelRects(self, img, rects):
-		for i in range(len(rects)):
-			cv2.putText(img, str(i), (rects[i].center_mass_x - 29, rects[i].center_mass_y + 29), cv2.FONT_HERSHEY_DUPLEX, 3, (0,0,255), thickness=5)
+		try:
+			for i in range(len(rects)):
+				cv2.putText(img, str(i), (rects[i].center_mass_x - 29, rects[i].center_mass_y + 29), cv2.FONT_HERSHEY_DUPLEX, 3, (0,0,255), thickness=5)
+		except:
+			pass
 
 

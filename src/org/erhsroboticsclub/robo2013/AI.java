@@ -22,6 +22,7 @@ public class AI {
         this.drive = drive;
         this.launcher = launcher;
         pid = new PIDControllerX(1, 0, 10);
+        pid.capOutput(-1, 1);
         com = new Com("http://10.0.53.23");
         msg = new Messenger();
         /* Neural Network Layers ****/
@@ -94,7 +95,7 @@ public class AI {
         double[] input = {target.distance, target.height};
         nn.calcOutputs(input);
         double aot = nn.getOutputs()[0];
-        launcher.setAngle(aot);
+        //launcher.setAngle(aot);
         return true;
     }
 }

@@ -11,9 +11,10 @@ import edu.wpi.first.wpilibj.Timer;
  * @author michael
  */
 public class PIDControllerX {
-    private double Kp, Ki, Kd, setpoint;
+    public double Kp, Ki, Kd, setpoint;
     private double lastError, totalError, lastTime;
     private boolean firstrun;
+    private double min = 0, max = 0;
     
 
     public PIDControllerX(double Kp, double Ki, double Kd) {
@@ -28,7 +29,18 @@ public class PIDControllerX {
 
     public void setSetpoint(double setpoint) {
         this.setpoint = setpoint;
-    }   
+    }
+    
+    public void tune(double Kp, double Ki, double Kd) {
+        this.Kp = Kp;
+        this.Ki = Ki;
+        this.Kd = Kd;
+    }
+    
+    public void capOutput(double min, double max) {
+        this.min = min;
+        this.max = max;
+    }
     
     public double doPID(double value) {
         double error = setpoint - value;
@@ -45,7 +57,11 @@ public class PIDControllerX {
         }
         lastError = error;
         
-        lastTime = Timer.getFPGATimestamp();      
+        lastTime = Timer.getFPGATimestamp();
+        
+        if(min != max) {
+            correction = MathX.clamp(correction, min, max);
+        }
         
         return correction;
     }

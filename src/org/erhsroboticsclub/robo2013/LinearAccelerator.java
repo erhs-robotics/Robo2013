@@ -3,29 +3,37 @@ package org.erhsroboticsclub.robo2013;
 import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.AnalogChannel;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWM;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
+import org.erhsroboticsclub.robo2013.utilities.MathX;
 import org.erhsroboticsclub.robo2013.utilities.Messenger;
+import org.erhsroboticsclub.robo2013.utilities.PIDControllerX;
 
 public class LinearAccelerator {
 
     private CANJaguar primaryWheel;
     private CANJaguar secondaryWheel;
-    private CANJaguar elevatorMotor;
+    public CANJaguar elevatorMotor;
     public PWM loadArmM1, loadArmM2;
     public DigitalInput limitSwitch;
     public AnalogChannel anglePotentiometer;
     private Messenger msg = new Messenger();
-    
-    public final double AUTO_SHOOT_SPEED = .8;
+    public PIDControllerX pid;
+    public static final double AUTO_SHOOT_SPEED = -.8;
     private final double BUMP_TIME = .3;
+    public Joystick stick;
+    public double angle = 31;
 
     public LinearAccelerator() {
         loadArmM1 = new PWM(RoboMap.LOAD_ARM_MOTOR1);
         loadArmM2 = new PWM(RoboMap.LOAD_ARM_MOTOR2);
         limitSwitch = new DigitalInput(RoboMap.LIMIT_SWITCH);
         anglePotentiometer = new AnalogChannel(RoboMap.LAUNCHER_ANGLE_POT);
+        pid = new PIDControllerX(2.8, 0.01, 0);
+        pid.capOutput(-0.75, 0.75);
+        stick = new Joystick(2);
 
         try {
             primaryWheel = new CANJaguar(RoboMap.PRIMARY_LAUNCH_MOTOR);
@@ -58,7 +66,7 @@ public class LinearAccelerator {
                 break;
             }
             // stops the launch if it has taken more than 10 seconds
-            if(Timer.getFPGATimestamp() - time > 10000) {
+            if (Timer.getFPGATimestamp() - time > 10000) {
                 msg.printLn("Limit switch not found!");
                 msg.printLn("Stopping launch...");
                 break;
@@ -69,10 +77,34 @@ public class LinearAccelerator {
     }
 
     // not done
-    public void setAngle(double angle) {
+    public void doAngle() {
+        double setpoint = MathX.map(angle, 0, 35, 4.14, 4.75);
+        msg.printLn("Set: " + setpoint);
+
+
         double voltage = anglePotentiometer.getAverageVoltage();
-        while (true) {;
+        double error = setpoint - voltage;
+        //if (MathX.isWithin(voltage, setpoint, .05)) {
+        //    break;
+        //}            
+        double correction = pid.doPID(error);
+        //System.out.println("error: " + error);
+        try {
+            elevatorMotor.setX(correction);
+        } catch (CANTimeoutException ex) {
+            ex.printStackTrace();
         }
+        
+        
+    }
+    
+    public void setAngle(double angle) {
+        this.angle = MathX.clamp(angle, 0, 30);
+    }
+
+    public double getAngle() {
+        double voltage = anglePotentiometer.getAverageVoltage();
+        return MathX.map(voltage, 0, 5, 0, 35);
     }
 
     // done, untested

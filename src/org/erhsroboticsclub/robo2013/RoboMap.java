@@ -5,10 +5,10 @@ public class RoboMap {
     /* CAN ID Numbers */
     public static final int SECONDARY_LAUNCH_MOTOR = 1; // second
     public static final int PRIMARY_LAUNCH_MOTOR = 2; // forward
-    public static final int TOP_LEFT_DRIVE_MOTOR = 3;
-    public static final int BOTTOM_LEFT_DRIVE_MOTOR = 4;
-    public static final int TOP_RIGHT_DRIVE_MOTOR = 5;
-    public static final int BOTTOM_RIGHT_DRIVE_MOTOR = 6;
+    public static final int TOP_LEFT_DRIVE_MOTOR = 5;
+    public static final int BOTTOM_LEFT_DRIVE_MOTOR = 6;
+    public static final int TOP_RIGHT_DRIVE_MOTOR = 3;
+    public static final int BOTTOM_RIGHT_DRIVE_MOTOR = 4;
     public static final int ELEVATOR_MOTOR = 7;
     
     /* Digital Output */
@@ -16,7 +16,7 @@ public class RoboMap {
     public static final int LOAD_ARM_MOTOR2 = 2;
     
     /* Digital Input */
-    public static final int LIMIT_SWITCH = 1;
+    public static final int LIMIT_SWITCH = 2;
     
     /* USB Input */
     public static final int LEFT_DRIVE_STICK = 1;

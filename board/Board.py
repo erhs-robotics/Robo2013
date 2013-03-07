@@ -23,7 +23,7 @@ def getTargets():
     
     targets = imgproc.getRect(image)
     
-    #targets = imgproc.filterRects(rects)
+    targets = imgproc.filterRects(targets)
     imgproc.labelRects(image, targets)
     return targets, image
     
@@ -31,8 +31,9 @@ def encodeTargets(targets):
     json_template = '{"status": "%s", "message" : "%s", "target" : "%s"}'
     target_str = ""
     for target in targets:
-        dist = kinect.get_depth_at(target.x, target.y)
-        string = "%s,%s,%s" % (target.center_mass_x, dist, 0)
+        dist = kinect.get_depth_at(target[0].x, target[0].y)
+        print dist
+        string = "%s,%s,%s" % (target[0].center_mass_x, dist, target[1])
         target_str += string + "|"
     status = "Found " + str(len(targets)) + " Targets"
     
@@ -56,7 +57,7 @@ def writeInfo(image, json):
     
 if __name__ == '__main__':      
     while True:
-        print "Looping"
+        #print "Looping"
         rects, bgr = getTargets()
         json = encodeTargets(rects)
         writeInfo(bgr, json)  
