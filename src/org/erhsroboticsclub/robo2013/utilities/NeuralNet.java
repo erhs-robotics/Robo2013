@@ -160,10 +160,24 @@ public class NeuralNet {
 
         int[] layers = {2, 7, 7, 1};
         NeuralNet nn = new NeuralNet(layers);
-        double[][][] data = {{{0, 0}, {0}},
+ /*       double[][][] data = {{{0, 0}, {0}},
             {{0, 1}, {1}},
             {{1, 0}, {1}},
             {{1, 1}, {0}}};
+*/
+ 	double [][][] data = {{{11, MIDDLE}, {27}},
+        		{{12.5, MIDDLE}, {25.29}},
+        		{{17, MIDDLE}, {26}},
+        		{{9, HIGH}, {35}},
+        		{{10.5, HIGH}, {35}},
+        		{{11, HIGH}, {33}},
+        		{{12, HIGH}, {30}},
+        		{{18, HIGH}, {22}},
+        		{{21, HIGH}, {20.23}},
+        		{{24, HIGH}, {15.703}},
+        		{{26, HIGH}, {22.26}},
+        		{{28, HIGH}, {19.14}},
+        		{{30, HIGH}, {20.78}}};
         // Train the nn
         double mse = 0.11;
         int i = 0;
