@@ -146,7 +146,8 @@ public class Robo2013 extends IterativeRobot {
         }
     }
 
-    /* Plan C autonomous
+    /* 
+     * Plan C autonomous
      * Called once by autonomousInit
      */
     private void autonomousC() {
@@ -159,6 +160,7 @@ public class Robo2013 extends IterativeRobot {
         msg.printLn("Starting Launch");
         for (int i = 0; i < 3; i++) {
             msg.printLn("Launching Disk " + (i + 1));
+            launcher.launch();
         }
     }
 
