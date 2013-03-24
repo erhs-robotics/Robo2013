@@ -48,6 +48,10 @@ public class LinearAccelerator {
         } catch (CANTimeoutException e) {
         }
     }
+    
+    public void setWheels(double speed) {
+        this.setWheels(speed, speed);
+    }
 
     public void launch() {
         loadArmM1.setRaw(1);

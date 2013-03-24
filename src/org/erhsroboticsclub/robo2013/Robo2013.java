@@ -73,7 +73,7 @@ public class Robo2013 extends IterativeRobot {
 
         // 0) Set wheels to proper speed
         msg.printLn("Starting up launcher...");
-        launcher.setWheels(launcher.AUTO_SHOOT_SPEED, launcher.AUTO_SHOOT_SPEED);
+        launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
         // 1) Turn to face target 
         msg.printLn("Finding target...");
         do {
@@ -130,7 +130,7 @@ public class Robo2013 extends IterativeRobot {
         msg.printLn("Autonomous B:");
         // 0) Set the wheels to proper speed
         msg.printLn("Starting up launcher...");
-        launcher.setWheels(launcher.AUTO_SHOOT_SPEED, launcher.AUTO_SHOOT_SPEED);
+        launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
         // 1) Set the launch angle
         double angle = 0.5;
         msg.printLn("Setting angle to " + angle + "...");
@@ -154,7 +154,7 @@ public class Robo2013 extends IterativeRobot {
         msg.printLn("Autonomous C:");
         // 0) Set the wheels to the proper speed
         msg.printLn("Starting up launcher...");
-        launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED, LinearAccelerator.AUTO_SHOOT_SPEED);
+        launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
         // 1) move a specific distance to the target?
         // 2) Fire all frisbees
         msg.printLn("Starting Launch");
