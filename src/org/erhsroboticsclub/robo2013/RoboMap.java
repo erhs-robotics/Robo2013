@@ -1,6 +1,8 @@
 package org.erhsroboticsclub.robo2013;
 
 public class RoboMap {
+    /* Robot Constants */
+    public static final double SPEED = 1;    
     
     /* CAN ID Numbers */
     public static final int SECONDARY_LAUNCH_MOTOR = 1; // second
