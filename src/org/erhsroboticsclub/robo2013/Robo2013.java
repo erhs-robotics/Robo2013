@@ -179,7 +179,7 @@ public class Robo2013 extends IterativeRobot {
      * Called periodically during operator control
      */
     public void teleopPeriodic() {
-        launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED, LinearAccelerator.AUTO_SHOOT_SPEED);
+        launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
         /* Simple Tank Drive **************************************************/
         drive.tankDrive(stickL.getY() * SPEED, stickR.getY() * SPEED);
 
