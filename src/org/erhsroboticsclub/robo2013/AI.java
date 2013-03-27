@@ -14,7 +14,7 @@ public class AI {
     private Messenger msg;
     private Com com;
     private PIDControllerX pid;
-    private LinearAccelerator launcher;    
+    private LinearAccelerator launcher;
 
     public AI(RobotDrive drive, LinearAccelerator launcher) {
         this.drive = drive;
@@ -22,7 +22,7 @@ public class AI {
         pid = new PIDControllerX(1, 0, 10);
         pid.capOutput(-1, 1);
         com = new Com("http://10.0.53.23");
-        msg = new Messenger();        
+        msg = new Messenger();
     }
 
     private List getAllTargets() {
@@ -32,6 +32,29 @@ public class AI {
             return null;
         }
         return com.parseTargets((String) table.get("targets"));
+    }
+
+    public boolean turnToTarget(int t) {
+        pid.setSetpoint(320);
+
+        Target target = new Target(0, 0, 0);
+
+        do {
+            List list = getAllTargets();
+            if (list != null) {
+                if (t > list.size() - 1) {
+                    msg.printLn("No target '" + t + "'");
+                    return false;
+                }
+                target = (Target) list.get(t);
+                double correction = pid.doPID(target.x);
+                drive.tankDrive(correction, -correction);
+            } else {
+                return false;
+            }
+        } while (!MathX.isWithin(target.x, 320, 7));
+        pid.reset();
+        return true;
     }
 
     public Target getTopTarget() {
@@ -48,11 +71,12 @@ public class AI {
         }
         return high;
     }
-    
+
     /**
      * Predicts a launch "angle" for the top target given the distance from the
-     * robot to the top target. This function uses a cubic regression of 
-     * empirical data to predict the angle.  
+     * robot to the top target. This function uses a cubic regression of
+     * empirical data to predict the angle.
+     *
      * @param x The distance from the robot to the top target
      * @return The predicted launch "angle" using a cubic regression
      */
@@ -63,22 +87,25 @@ public class AI {
         double d = 90.161131786061;
         double x3 = MathX.pow(x, 3);
         double x2 = MathX.pow(x, 2);
-        return a*x3 + b*x2 + c*x + d;
+        return a * x3 + b * x2 + c * x + d;
     }
-    
+
     /**
      * Sets the launch angle for the top target assuming the top target is in
      * the field of view.
+     *
      * @return true if function was successful, false if otherwise
      */
-    public boolean autoAimLauncher() {        
+    public boolean autoAimLauncher() {
         Target target = getTopTarget();
-        
-        if(target == null) return false;
-        
+
+        if (target == null) {
+            return false;
+        }
+
         double aot = distToLaunchAngle(target.distance);
         launcher.setAngle(aot);
-        
+
         return true;
     }
 
@@ -92,7 +119,7 @@ public class AI {
             return false;
         }
         Target target = (Target) list.get(t);
-        
+
         double aot = distToLaunchAngle(target.distance);
         launcher.setAngle(aot);
         return true;
