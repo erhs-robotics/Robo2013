@@ -101,7 +101,7 @@ public class LinearAccelerator {
     }
     
     public void setAngle(double angle) {
-        this.angle = MathX.clamp(angle, 0, 30);
+        this.angle = MathX.clamp(angle, RoboMap.LAUNCHER_ANGLE_MIN, RoboMap.LAUNCHER_ANGLE_MAX);
     }
 
     public double getAngle() {
