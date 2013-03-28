@@ -184,33 +184,40 @@ public class Robo2013 extends IterativeRobot {
             launcher.launch();
         }
 
-        /* Set angle adjustment mode *****************************************************/
+        /* Set angle adjustment mode ******************************************/
+
         if (stickR.getRawButton(RoboMap.DYNAMIC_ANGLE_BUTTON)) {
             angleFlag = 0;// dynamic
-        } else if (stickR.getRawButton(RoboMap.FEED_ANGLE_BUTTON)) {
-            angleFlag = 1;// feeder station
-            launchAngle = RoboMap.LAUNCHER_FEED_ANGLE; 
         } else if (stickR.getRawButton(RoboMap.LEVEL_ANGLE_BUTTON)) {
             angleFlag = 1;// level (0 deg)
             launchAngle = RoboMap.LAUNCHER_LEVEL_ANGLE;
-        } else if(stickR.getRawButton(RoboMap.NEAR_ANGLE_BUTTON)) {
+        } else if (stickR.getRawButton(RoboMap.NEAR_ANGLE_BUTTON)) {
             angleFlag = 1;// infront of the pyramic angle
             launchAngle = RoboMap.LAUNCHER_NEAR_ANGLE;
-        }  else if(stickR.getRawButton(RoboMap.FAR_ANGLE_BUTTON)) {
+        } else if (stickR.getRawButton(RoboMap.FAR_ANGLE_BUTTON)) {
             angleFlag = 1;// behind the pyramid angle
             launchAngle = RoboMap.LAUNCHER_FAR_ANGLE;
         }
 
+
+
+
+
         /* Setting the launch angle *******************************************/
         switch (angleFlag) {
             case 0:
-                double angle = MathX.map(stickR.getZ(), 1, -1, RoboMap.LAUNCHER_ANGLE_MIN,
+                double angle;
+                if(stickR.getRawButton(RoboMap.FEED_ANGLE_BUTTON)) {
+                    angle = RoboMap.LAUNCHER_FEED_ANGLE;
+                } else {
+                angle = MathX.map(stickR.getZ(), 1, -1, RoboMap.LAUNCHER_ANGLE_MIN,
                         RoboMap.LAUNCHER_ANGLE_MAX);
+                }
                 launcher.setAngle(angle);
                 msg.printLn("" + angle);
                 break;
             case 1:
-                launcher.setAngle(angleFlag);              
+                launcher.setAngle(angleFlag);
             default:
                 angleFlag = 0;//should not reach here
                 break;

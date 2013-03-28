@@ -35,13 +35,12 @@ public class RoboMap {
     public static final int FIRE_BUTTON = 1; //LEFT
     public static final int TURN_TO_TARGET_BUTTON = 6;    
     
-    /* Right Stick Controls */
-    public static final int COLLECT_LAUNCHER_ANGLE_BUTTON = 1;//RIGHT
-    public static final int FEED_ANGLE_BUTTON = 6;
-    public static final int LEVEL_ANGLE_BUTTON = 7;
-    public static final int FAR_ANGLE_BUTTON = 8;
-    public static final int NEAR_ANGLE_BUTTON = 9;    
-    public static final int DYNAMIC_ANGLE_BUTTON = 10;
+    /* Right Stick Controls */    
+    public static final int FEED_ANGLE_BUTTON = 1;
+    public static final int LEVEL_ANGLE_BUTTON = 4;
+    public static final int FAR_ANGLE_BUTTON = 2;
+    public static final int NEAR_ANGLE_BUTTON = 3;    
+    public static final int DYNAMIC_ANGLE_BUTTON = 5;
 
     /* Driver Station LCD Lines */
     public static final Line ANGLE_LINE = Line.kUser1;
