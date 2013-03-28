@@ -108,8 +108,11 @@ public class LinearAccelerator {
         return angle;
     }
     
-    public double gePOTasAngle() {
+    public double getPOTasAngle() {
         double voltage = anglePotentiometer.getAverageVoltage();
-        return MathX.map(voltage, 0, 5, 0, RoboMap.LAUNCHER_ANGLE_MAX);
+        return MathX.map(voltage, RoboMap.LAUNCHER_POT_MIN,
+                                  RoboMap.LAUNCHER_POT_MAX, 
+                                  RoboMap.LAUNCHER_ANGLE_MIN, 
+                                  RoboMap.LAUNCHER_ANGLE_MAX);
     }
 }
