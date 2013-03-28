@@ -187,8 +187,10 @@ public class Robo2013 extends IterativeRobot {
         if (stickR.getRawButton(RoboMap.COLLECT_LAUNCHER_ANGLE_BUTTON)) {
             launcher.setAngle(RoboMap.LAUNCHER_FEED_ANGLE);
         } else {
-            double angle = MathX.map(stickR.getZ(), 1, -1, 0, 30);
+            double angle = MathX.map(stickR.getZ(), 1, -1, RoboMap.LAUNCHER_ANGLE_MIN, 
+                                                           RoboMap.LAUNCHER_ANGLE_MAX);
             launcher.setAngle(angle);
+            msg.printLn("" + angle);
         }
 
         launcher.adjustAngle();
