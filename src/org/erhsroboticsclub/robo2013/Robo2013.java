@@ -12,9 +12,7 @@ public class Robo2013 extends IterativeRobot {
     private CANJaguar TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR;
     private Messenger msg;
     private LinearAccelerator launcher;
-    private AI agent;
-    private final double SPEED = 1;
-    private int target = 0;
+    private AI agent;   
 
     /*
      * Called once the cRIO boots up
@@ -31,8 +29,8 @@ public class Robo2013 extends IterativeRobot {
             msg.printLn("CAN network failed!");
             msg.printLn(ex.getMessage());
         }
+        
         launcher = new LinearAccelerator();
-
         drive = new RobotDrive(TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR);
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
@@ -62,45 +60,26 @@ public class Robo2013 extends IterativeRobot {
         }
     }
 
-    /* Plan A autonomous
+    /* 
+     * Plan A autonomous
      * Called once by autonomousInit
      */
     private void autonomousA() throws Exception {
-        msg.printLn("Autonomous A:");
-        int targetNumber = 1; //should be the top
+        msg.printLn("Autonomous A:");        
         int fails = 0;
         boolean success;
 
         // 0) Set wheels to proper speed
         msg.printLn("Starting up launcher...");
-        launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
-        // 1) Turn to face target 
-        msg.printLn("Finding target...");
-        do {
-            if (!isAutonomous()) {
-                throw new Exception("Ran out of time!");
-            }
-            success = agent.turnToTarget(targetNumber);
-            if (!success) {
-                msg.printLn("turnToTarget failed!");
-                fails++;
-            }
-            if (fails > 500) {
-                msg.printLn("Giving up...");
-                break;
-            } else {
-                msg.printLn("Retrying...");
-            }
-        } while (!success);
+        launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);      
 
-        // 2) Auto aim launcher
-        msg.printLn("Aiming launcher...");
-        fails = 0;
+        // 1) Auto aim launcher
+        msg.printLn("Aiming launcher...");        
         do {
             if (!isAutonomous()) {
                 throw new Exception("Ran out of time!");
             }
-            agent.autoAimLauncher(targetNumber);
+            success = agent.autoAimLauncher();
             if (!success) {
                 msg.printLn("turnToTarget failed!");
                 fails++;
@@ -112,10 +91,12 @@ public class Robo2013 extends IterativeRobot {
                 msg.printLn("Retrying...");
             }
         } while (!success);
-        // 3) Wait for motors to come up to speed
+        
+        // 2) Wait for motors to come up to speed
         msg.printLn("Waiting for motors...");
         Timer.delay(5);
-        // 4) Fire all frisbees
+        
+        // 3) Fire all frisbees
         msg.printLn("Starting launch!");
         for (int i = 0; i < 3; i++) {
             msg.printLn("Launching disk " + (i + 1) + "...");
@@ -123,7 +104,8 @@ public class Robo2013 extends IterativeRobot {
         }
     }
 
-    /* Plan B autonomous
+    /* 
+     * Plan B autonomous
      * Called once by autonomousInit
      */
     private void autonomousB() {
@@ -164,7 +146,6 @@ public class Robo2013 extends IterativeRobot {
         }
     }
 
-
     /*
      * Called once at the start of teleop mode
      */
@@ -181,36 +162,17 @@ public class Robo2013 extends IterativeRobot {
     public void teleopPeriodic() {
         launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
         /* Simple Tank Drive **************************************************/
-        drive.tankDrive(stickL.getY() * SPEED, stickR.getY() * SPEED);
+        drive.tankDrive(stickL.getY() * RoboMap.SPEED, stickR.getY() * RoboMap.SPEED);
 
         /* Auto aim laincher **************************************************/
         if (stickR.getRawButton(RoboMap.AUTO_AIM_BUTTON)) {
-            agent.autoAimLauncher(0);
-        }
-
-        /* Auto Turn To Target ************************************************/
-        if (stickR.getRawButton(RoboMap.TURN_TO_TARGET_BUTTON)) {
-            agent.turnToTarget(target);
-        }
+            agent.autoAimLauncher();
+        }      
 
         /* Fire the frisbee ***************************************************/
         if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
             launcher.launch();
-        }
-
-        /* Tell the AI which target to aim to *********************************/
-        if (stickL.getRawButton(RoboMap.TURN_TO_TARGET_0)) {
-            target = 0;
-        }
-        if (stickL.getRawButton(RoboMap.TURN_TO_TARGET_1)) {
-            target = 1;
-        }
-        if (stickL.getRawButton(RoboMap.TURN_TO_TARGET_2)) {
-            target = 2;
-        }
-        if (stickL.getRawButton(RoboMap.TURN_TO_TARGET_3)) {
-            target = 3;
-        }
+        }        
 
         /* Setting the launch angle *******************************************/
         if (stickR.getRawButton(RoboMap.COLLECT_LAUNCHER_ANGLE_BUTTON)) {

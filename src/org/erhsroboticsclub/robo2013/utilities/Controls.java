@@ -3,7 +3,9 @@ package org.erhsroboticsclub.robo2013.utilities;
 import edu.wpi.first.wpilibj.Joystick;
 
 /**
- *
+ * Provides a convenient method to access joystick controls, including FOV Hat,
+ * for the Logitech Attack 3
+ * 
  * @author Michael, Nick
  */
 public class Controls {
