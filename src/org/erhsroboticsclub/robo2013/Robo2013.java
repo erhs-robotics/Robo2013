@@ -128,12 +128,10 @@ public class Robo2013 extends IterativeRobot {
             msg.printLn("Launching disk " + (i + 1) + "...");
             launcher.launch();
         }
-
         // 4) Lower launcher
         msg.printLn("Lowering launcher...");
         launcher.setAngle(RoboMap.LAUNCHER_LEVEL_ANGLE);
         launcher.waitForAngle(1500);
-
         // 5) Back up out of pyramid
         drive.drive(RoboMap.AUTO_MOVE_SPEED, 0);
         Timer.delay(RoboMap.AUTO_BACKUP_TIME);
@@ -174,18 +172,12 @@ public class Robo2013 extends IterativeRobot {
         /* Simple Tank Drive **************************************************/
         drive.tankDrive(stickL.getY() * RoboMap.SPEED, stickR.getY() * RoboMap.SPEED);
 
-        /* Auto aim laincher **************************************************/
-        if (stickR.getRawButton(RoboMap.AUTO_AIM_BUTTON)) {
-            agent.autoAimLauncher();
-        }
-
         /* Fire the frisbee ***************************************************/
         if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
             launcher.launch();
         }
 
         /* Set angle adjustment mode ******************************************/
-
         if (stickR.getRawButton(RoboMap.DYNAMIC_ANGLE_BUTTON)) {
             angleFlag = 0;// dynamic
         } else if (stickR.getRawButton(RoboMap.LEVEL_ANGLE_BUTTON)) {
@@ -199,19 +191,15 @@ public class Robo2013 extends IterativeRobot {
             launchAngle = RoboMap.LAUNCHER_FAR_ANGLE;
         }
 
-
-
-
-
         /* Setting the launch angle *******************************************/
         switch (angleFlag) {
             case 0:
                 double angle;
-                if(stickR.getRawButton(RoboMap.FEED_ANGLE_BUTTON)) {
+                if (stickR.getRawButton(RoboMap.FEED_ANGLE_BUTTON)) {
                     angle = RoboMap.LAUNCHER_FEED_ANGLE;
                 } else {
-                angle = MathX.map(stickR.getZ(), 1, -1, RoboMap.LAUNCHER_ANGLE_MIN,
-                        RoboMap.LAUNCHER_ANGLE_MAX);
+                    angle = MathX.map(stickR.getZ(), 1, -1, RoboMap.LAUNCHER_ANGLE_MIN,
+                            RoboMap.LAUNCHER_ANGLE_MAX);
                 }
                 launcher.setAngle(angle);
                 msg.printLn("" + angle);
