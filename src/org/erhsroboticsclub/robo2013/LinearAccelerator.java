@@ -17,7 +17,7 @@ public class LinearAccelerator {
     private CANJaguar elevatorMotor;
     private PWM loadArmM1, loadArmM2;
     private DigitalInput limitSwitch;
-    private AnalogChannel anglePotentiometer;
+    public AnalogChannel anglePotentiometer;
     private Messenger msg = new Messenger();
     private PIDControllerX pid;    
     private double angle = 31;
@@ -86,7 +86,9 @@ public class LinearAccelerator {
     }
     
     public void adjustAngle() {
-        double setpoint = MathX.map(angle, 0, 35, 4.14, 4.75);
+        double setpoint = MathX.map(angle, RoboMap.LAUNCHER_ANGLE_MIN,
+                                    RoboMap.LAUNCHER_ANGLE_MAX, RoboMap.LAUNCHER_POT_MIN, 
+                                    RoboMap.LAUNCHER_POT_MAX);
         double voltage = anglePotentiometer.getAverageVoltage();        
         pid.setSetpoint(setpoint);
         double correction = pid.doPID(voltage);
@@ -108,6 +110,6 @@ public class LinearAccelerator {
     
     public double gePOTasAngle() {
         double voltage = anglePotentiometer.getAverageVoltage();
-        return MathX.map(voltage, 0, 5, 0, 35);
+        return MathX.map(voltage, 0, 5, 0, RoboMap.LAUNCHER_ANGLE_MAX);
     }
 }

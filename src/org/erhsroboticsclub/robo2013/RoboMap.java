@@ -16,7 +16,7 @@ public class RoboMap {
     public static final int BOTTOM_RIGHT_DRIVE_MOTOR = 4;
     public static final int ELEVATOR_MOTOR = 7;
     
-    /* Digital Output */
+    /* PWM Out */
     public static final int LOAD_ARM_MOTOR1 = 1;
     public static final int LOAD_ARM_MOTOR2 = 2;
     
@@ -45,6 +45,13 @@ public class RoboMap {
     /* Driver Station LCD Lines */
     public static final Line ANGLE_LINE = Line.kUser1;
     
+    /* Linear Accelerator Angle Constants */
+    public static final double LAUNCHER_ANGLE_MIN = 0;
+    public static final double LAUNCHER_ANGLE_MAX = 35;
+    public static final double LAUNCHER_POT_MIN   = 4.14;
+    public static final double LAUNCHER_POT_MAX   = 4.75;
+    public static final double LAUNCHER_FEED_ANGLE = 14;
+    
     /* Linear Accelerator PID Constants */
     public static final double LAUNCHER_PID_P = 2.8;
     public static final double LAUNCHER_PID_I = 0.01;
@@ -54,5 +61,9 @@ public class RoboMap {
     public static final double TURN_PID_P = 1;
     public static final double TURN_PID_I = 0;
     public static final double TURN_PID_D = 0;
+    
+    /* Dead Reckoning Constants */
+    public static final double AUTO_BACKUP_TIME = .4;
+    public static final double AUTO_SHOOT_ANGLE = 23;
     
 }

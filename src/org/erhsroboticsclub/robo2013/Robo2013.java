@@ -42,7 +42,7 @@ public class Robo2013 extends IterativeRobot {
         msg.printLn("Done Loading: FRC 2013");
     }
 
-    /*
+    /**
      * Called once at the start of autonomous mode
      */
     public void autonomousInit() {
@@ -52,19 +52,27 @@ public class Robo2013 extends IterativeRobot {
         msg.printLn("Auto Started");
 
         try {
-            autonomousA();//start autonomous (Plan A)
-            //autonomousB();//start autonomous (Plan B)
+            //autonomousA();//start autonomous (Plan A)
+            autonomousB();//start autonomous (Plan B)
+            //autonomousC();//start autonomous (Plan C)
         } catch (Exception e) {
             msg.printLn("Auto mode failed!");
             msg.printLn(e.getMessage());
         }
     }
+    
+    private void autoBackup() {
+        drive.tankDrive(-1, -1);
+        Timer.delay(RoboMap.AUTO_BACKUP_TIME);
+        drive.tankDrive(0, 0);
+    }
 
-    /* 
+    /**
      * Plan A autonomous
      * Called once by autonomousInit
      */
     private void autonomousA() throws Exception {
+        autoBackup();
         msg.printLn("Autonomous A:");        
         int fails = 0;
         boolean success;
@@ -104,22 +112,22 @@ public class Robo2013 extends IterativeRobot {
         }
     }
 
-    /* 
+    /**
      * Plan B autonomous
      * Called once by autonomousInit
      */
     private void autonomousB() {
+        autoBackup();
         msg.printLn("Autonomous B:");
         // 0) Set the wheels to proper speed
         msg.printLn("Starting up launcher...");
         launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
         // 1) Set the launch angle
-        double angle = 0.5;
-        msg.printLn("Setting angle to " + angle + "...");
-        //launcher.setAngle(0.5);
+        msg.printLn("Setting angle to " + RoboMap.AUTO_SHOOT_ANGLE + "...");
+        launcher.setAngle(RoboMap.AUTO_SHOOT_ANGLE);
         // 2) Wait for motors to come up to speed
         msg.printLn("Waiting for motors...");
-        Timer.delay(7);
+        Timer.delay(5);
         // 3) Fire all frisbees
         msg.printLn("Starting launch!");
         for (int i = 0; i < 3; i++) {
@@ -128,11 +136,12 @@ public class Robo2013 extends IterativeRobot {
         }
     }
 
-    /* 
+    /**
      * Plan C autonomous
      * Called once by autonomousInit
      */
     private void autonomousC() {
+        autoBackup();
         msg.printLn("Autonomous C:");
         // 0) Set the wheels to the proper speed
         msg.printLn("Starting up launcher...");
@@ -153,7 +162,6 @@ public class Robo2013 extends IterativeRobot {
         drive.setSafetyEnabled(false);
         msg.clearConsole();
         msg.printLn("Teleop Started");
-
     }
 
     /**
@@ -176,13 +184,14 @@ public class Robo2013 extends IterativeRobot {
 
         /* Setting the launch angle *******************************************/
         if (stickR.getRawButton(RoboMap.COLLECT_LAUNCHER_ANGLE_BUTTON)) {
-            launcher.setAngle(14);
+            launcher.setAngle(RoboMap.LAUNCHER_FEED_ANGLE);
         } else {
             double angle = MathX.map(stickR.getZ(), 1, -1, 0, 30);
             launcher.setAngle(angle);
         }
 
         launcher.adjustAngle();
-        msg.printOnLn("Angle: " + launcher.getAngle(), DriverStationLCD.Line.kUser1);
+        System.out.println(launcher.anglePotentiometer.getAverageVoltage());
+        //msg.printOnLn("Angle: " + launcher.getAngle(), RoboMap.ANGLE_LINE);
     }
 }
