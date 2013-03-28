@@ -12,7 +12,8 @@ public class Robo2013 extends IterativeRobot {
     private CANJaguar TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR;
     private Messenger msg;
     private LinearAccelerator launcher;
-    private AI agent;   
+    private AI agent;
+    private boolean isAtFeedAngle = false;
 
     /*
      * Called once the cRIO boots up
@@ -181,10 +182,18 @@ public class Robo2013 extends IterativeRobot {
         /* Fire the frisbee ***************************************************/
         if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
             launcher.launch();
-        }        
+        }
+        
+        /* Set feed angle *****************************************************/
+        if(stickR.getRawButton(4)) {
+            isAtFeedAngle = true;
+        } else if(stickR.getRawButton(5)) {
+            isAtFeedAngle = false;
+        }
+    
 
         /* Setting the launch angle *******************************************/
-        if (stickR.getRawButton(RoboMap.COLLECT_LAUNCHER_ANGLE_BUTTON)) {
+        if (isAtFeedAngle) {
             launcher.setAngle(RoboMap.LAUNCHER_FEED_ANGLE);
         } else {
             double angle = MathX.map(stickR.getZ(), 1, -1, RoboMap.LAUNCHER_ANGLE_MIN, 
