@@ -62,20 +62,12 @@ public class Robo2013 extends IterativeRobot {
             msg.printLn(e.getMessage());
         }
     }
-    
-    private void autoBackup() {
-        return;/*
-        drive.tankDrive(-1, -1);
-        Timer.delay(RoboMap.AUTO_BACKUP_TIME);
-        drive.tankDrive(0, 0);*/
-    }
 
     /**
      * Plan A autonomous
      * Called once by autonomousInit
      */
-    private void autonomousA() throws Exception {
-        autoBackup();
+    private void autonomousA() throws Exception {        
         msg.printLn("Autonomous A:");        
         int fails = 0;
         boolean success;
@@ -120,7 +112,6 @@ public class Robo2013 extends IterativeRobot {
      * Called once by autonomousInit
      */
     private void autonomousB() {
-        autoBackup();
         msg.printLn("Autonomous B:");
         // 0) Set the wheels to proper speed
         msg.printLn("Starting up launcher...");
@@ -145,7 +136,6 @@ public class Robo2013 extends IterativeRobot {
      * Called once by autonomousInit
      */
     private void autonomousC() {
-        autoBackup();
         msg.printLn("Autonomous C:");
         // 0) Set the wheels to the proper speed
         msg.printLn("Starting up launcher...");
