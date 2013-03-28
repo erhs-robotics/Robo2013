@@ -51,6 +51,7 @@ public class RoboMap {
     public static final double LAUNCHER_POT_MIN   = 0.144214;
     public static final double LAUNCHER_POT_MAX   = 0.6279;
     public static final double LAUNCHER_FEED_ANGLE = 14;
+    public static final double LAUNCHER_LEVEL_ANGLE = 0;
     
     /* Linear Accelerator PID Constants */
     public static final double LAUNCHER_PID_P = 2.8;

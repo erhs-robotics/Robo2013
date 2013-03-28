@@ -13,7 +13,8 @@ public class Robo2013 extends IterativeRobot {
     private Messenger msg;
     private LinearAccelerator launcher;
     private AI agent;
-    private boolean isAtFeedAngle = false;
+    private int angleFlag = 0; // 0 - dynamic, 1 - feeder angle, 2 - level (0 deg)
+    
 
     /*
      * Called once the cRIO boots up
@@ -184,23 +185,33 @@ public class Robo2013 extends IterativeRobot {
             launcher.launch();
         }
         
-        /* Set feed angle *****************************************************/
-        if(stickR.getRawButton(4)) {
-            isAtFeedAngle = true;
+        /* Set angle adjustment mode *****************************************************/
+        if(stickR.getRawButton(3)) {
+            angleFlag = 0;// dynamic
+        } else if(stickR.getRawButton(4)) {
+            angleFlag = 1;// feeder station
         } else if(stickR.getRawButton(5)) {
-            isAtFeedAngle = false;
-        }
-    
+            angleFlag = 2;// level (0 deg)
+        }    
 
         /* Setting the launch angle *******************************************/
-        if (isAtFeedAngle) {
-            launcher.setAngle(RoboMap.LAUNCHER_FEED_ANGLE);
-        } else {
-            double angle = MathX.map(stickR.getZ(), 1, -1, RoboMap.LAUNCHER_ANGLE_MIN, 
+        switch(angleFlag) {
+            case 0:
+                double angle = MathX.map(stickR.getZ(), 1, -1, RoboMap.LAUNCHER_ANGLE_MIN, 
                                                            RoboMap.LAUNCHER_ANGLE_MAX);
-            launcher.setAngle(angle);
-            msg.printLn("" + angle);
-        }
+                launcher.setAngle(angle);
+                msg.printLn("" + angle);
+            break;
+            case 1:
+                launcher.setAngle(RoboMap.LAUNCHER_FEED_ANGLE);
+            break;
+            case 2:
+                launcher.setAngle(RoboMap.LAUNCHER_LEVEL_ANGLE);
+            break;
+            default:
+                angleFlag = 0;//should not reach here
+            break;                
+        }        
 
         launcher.adjustAngle();
         System.out.println(launcher.anglePotentiometer.getAverageVoltage());
