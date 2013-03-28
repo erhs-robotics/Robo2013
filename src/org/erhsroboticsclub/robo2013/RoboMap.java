@@ -51,7 +51,7 @@ public class RoboMap {
     public static final double LAUNCHER_PID_D = 0;
     
     /* Turn To Target PID Constants */
-    public static final double TURN_PID_P = 0;
+    public static final double TURN_PID_P = 1;
     public static final double TURN_PID_I = 0;
     public static final double TURN_PID_D = 0;
     

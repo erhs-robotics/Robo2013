@@ -13,14 +13,14 @@ public class AI {
     private RobotDrive drive;
     private Messenger msg;
     private Com com;
-    private PIDControllerX pid;
+    private PIDControllerX turnPID;
     private LinearAccelerator launcher;
 
     public AI(RobotDrive drive, LinearAccelerator launcher) {
         this.drive = drive;
         this.launcher = launcher;
-        pid = new PIDControllerX(1, 0, 10);
-        pid.capOutput(-1, 1);
+        turnPID = new PIDControllerX(RoboMap.TURN_PID_P, RoboMap.TURN_PID_I, RoboMap.TURN_PID_D);
+        turnPID.capOutput(-1, 1);
         com = new Com("http://10.0.53.23");
         msg = new Messenger();
     }
@@ -35,7 +35,7 @@ public class AI {
     }
 
     public boolean turnToTarget(int t) {
-        pid.setSetpoint(320);
+        turnPID.setSetpoint(320);
 
         Target target = new Target(0, 0, 0);
 
@@ -47,13 +47,13 @@ public class AI {
                     return false;
                 }
                 target = (Target) list.get(t);
-                double correction = pid.doPID(target.x);
+                double correction = turnPID.doPID(target.x);
                 drive.tankDrive(correction, -correction);
             } else {
                 return false;
             }
         } while (!MathX.isWithin(target.x, 320, 7));
-        pid.reset();
+        turnPID.reset();
         return true;
     }
 
