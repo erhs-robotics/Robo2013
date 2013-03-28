@@ -128,6 +128,7 @@ public class Robo2013 extends IterativeRobot {
         // 1) Set the launch angle
         msg.printLn("Setting angle to " + RoboMap.AUTO_SHOOT_ANGLE + "...");
         launcher.setAngle(RoboMap.AUTO_SHOOT_ANGLE);
+        launcher.waitForAngle(2000);
         // 2) Wait for motors to come up to speed
         msg.printLn("Waiting for motors...");
         Timer.delay(5);
