@@ -33,14 +33,15 @@ public class RoboMap {
     /* Left Stick Controls */
     public static final int AUTO_AIM_BUTTON = 1;
     public static final int FIRE_BUTTON = 1; //LEFT
-    public static final int TURN_TO_TARGET_BUTTON = 6;
-    public static final int TURN_TO_TARGET_0 = 4; //LEFT
-    public static final int TURN_TO_TARGET_1 = 3; //LEFT
-    public static final int TURN_TO_TARGET_2 = 5; //LEFT
-    public static final int TURN_TO_TARGET_3 = 2; //LEFT
+    public static final int TURN_TO_TARGET_BUTTON = 6;    
     
     /* Right Stick Controls */
     public static final int COLLECT_LAUNCHER_ANGLE_BUTTON = 1;//RIGHT
+    public static final int FEED_ANGLE_BUTTON = 0;
+    public static final int FEED_ANGLE_BUTTON = 0;
+    public static final int FEED_ANGLE_BUTTON = 0;
+    public static final int FEED_ANGLE_BUTTON = 0;
+    public static final int FEED_ANGLE_BUTTON = 0;
 
     /* Driver Station LCD Lines */
     public static final Line ANGLE_LINE = Line.kUser1;
@@ -49,9 +50,11 @@ public class RoboMap {
     public static final double LAUNCHER_ANGLE_MIN = 0;
     public static final double LAUNCHER_ANGLE_MAX = 35;
     public static final double LAUNCHER_POT_MIN   = 0.144214;
-    public static final double LAUNCHER_POT_MAX   = 0.6279;
+    public static final double LAUNCHER_POT_MAX   = 0.6279;   
     public static final double LAUNCHER_FEED_ANGLE = 14;
     public static final double LAUNCHER_LEVEL_ANGLE = 0;
+    public static final double LAUNCHER_FAR_ANGLE = 27;// Behind the pyramid
+    public static final double LAUNCHER_NEAR_ANGLE = 10;// Infront of the pyramid
     
     /* Linear Accelerator PID Constants */
     public static final double LAUNCHER_PID_P = 2.8;
@@ -64,7 +67,8 @@ public class RoboMap {
     public static final double TURN_PID_D = 0;
     
     /* Dead Reckoning Constants */
-    public static final double AUTO_BACKUP_TIME = .4;
+    public static final double AUTO_BACKUP_TIME = .5;
+    public static final double AUTO_MOVE_SPEED = -0.5;
     public static final double AUTO_SHOOT_ANGLE = 23;
     
 }

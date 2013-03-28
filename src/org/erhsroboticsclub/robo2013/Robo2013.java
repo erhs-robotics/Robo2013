@@ -129,6 +129,16 @@ public class Robo2013 extends IterativeRobot {
             msg.printLn("Launching disk " + (i + 1) + "...");
             launcher.launch();
         }
+        
+        // 4) Lower launcher
+        msg.printLn("Lowering launcher...");
+        launcher.setAngle(RoboMap.LAUNCHER_LEVEL_ANGLE);
+        launcher.waitForAngle(1500);
+        
+        // 5) Back up out of pyramid
+        drive.drive(RoboMap.AUTO_MOVE_SPEED, 0);
+        Timer.delay(RoboMap.AUTO_BACKUP_TIME);
+        drive.drive(0, 0);
     }
 
     /**
