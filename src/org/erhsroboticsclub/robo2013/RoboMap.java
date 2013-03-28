@@ -1,6 +1,9 @@
 package org.erhsroboticsclub.robo2013;
 
+import edu.wpi.first.wpilibj.DriverStationLCD.Line;
+
 public class RoboMap {
+    
     /* Robot Constants */
     public static final double SPEED = 1;    
     
@@ -27,13 +30,29 @@ public class RoboMap {
     /* Analog Ports */
     public static final int LAUNCHER_ANGLE_POT = 1;
     
-    /* Controls */
+    /* Left Stick Controls */
     public static final int AUTO_AIM_BUTTON = 1;
     public static final int FIRE_BUTTON = 1; //LEFT
-    public static final int COLLECT_LAUNCHER_ANGLE_BUTTON = 1;//RIGHT
     public static final int TURN_TO_TARGET_BUTTON = 6;
     public static final int TURN_TO_TARGET_0 = 4; //LEFT
     public static final int TURN_TO_TARGET_1 = 3; //LEFT
     public static final int TURN_TO_TARGET_2 = 5; //LEFT
     public static final int TURN_TO_TARGET_3 = 2; //LEFT
+    
+    /* Right Stick Controls */
+    public static final int COLLECT_LAUNCHER_ANGLE_BUTTON = 1;//RIGHT
+
+    /* Driver Station LCD Lines */
+    public static final Line ANGLE_LINE = Line.kUser1;
+    
+    /* Linear Accelerator PID Constants */
+    public static final double LAUNCHER_PID_P = 2.8;
+    public static final double LAUNCHER_PID_I = 0.01;
+    public static final double LAUNCHER_PID_D = 0;
+    
+    /* Turn To Target PID Constants */
+    public static final double TURN_PID_P = 0;
+    public static final double TURN_PID_I = 0;
+    public static final double TURN_PID_D = 0;
+    
 }

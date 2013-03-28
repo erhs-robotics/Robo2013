@@ -109,6 +109,12 @@ public class AI {
         return true;
     }
 
+    /**
+     * Sets the launch angle for a specific target based on the set of targets
+     * in the field of view.
+     * @param t number of the target to aim at
+     * @return true if function was successful, false if otherwise
+     */
     public boolean autoAimLauncher(int t) {
         List list = getAllTargets();
         if (list == null) {
@@ -124,4 +130,5 @@ public class AI {
         launcher.setAngle(aot);
         return true;
     }
+
 }

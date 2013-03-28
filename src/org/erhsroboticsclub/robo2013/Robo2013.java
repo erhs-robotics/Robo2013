@@ -60,7 +60,8 @@ public class Robo2013 extends IterativeRobot {
         }
     }
 
-    /* Plan A autonomous
+    /* 
+     * Plan A autonomous
      * Called once by autonomousInit
      */
     private void autonomousA() throws Exception {
@@ -103,7 +104,8 @@ public class Robo2013 extends IterativeRobot {
         }
     }
 
-    /* Plan B autonomous
+    /* 
+     * Plan B autonomous
      * Called once by autonomousInit
      */
     private void autonomousB() {
