@@ -62,9 +62,10 @@ public class Robo2013 extends IterativeRobot {
     }
     
     private void autoBackup() {
+        return;/*
         drive.tankDrive(-1, -1);
         Timer.delay(RoboMap.AUTO_BACKUP_TIME);
-        drive.tankDrive(0, 0);
+        drive.tankDrive(0, 0);*/
     }
 
     /**
