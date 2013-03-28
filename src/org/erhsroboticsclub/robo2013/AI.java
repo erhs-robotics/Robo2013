@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.networktables2.util.List;
 import java.util.Hashtable;
 import org.erhsroboticsclub.robo2013.utilities.MathX;
 import org.erhsroboticsclub.robo2013.utilities.Messenger;
-import org.erhsroboticsclub.robo2013.utilities.NeuralNet;
 import org.erhsroboticsclub.robo2013.utilities.PIDControllerX;
 import org.erhsroboticsclub.robo2013.utilities.Target;
 
@@ -14,24 +13,16 @@ public class AI {
     private RobotDrive drive;
     private Messenger msg;
     private Com com;
-    private PIDControllerX pid;
+    private PIDControllerX turnPID;
     private LinearAccelerator launcher;
-    private NeuralNet nn;
 
     public AI(RobotDrive drive, LinearAccelerator launcher) {
         this.drive = drive;
         this.launcher = launcher;
-        pid = new PIDControllerX(1, 0, 10);
-        pid.capOutput(-1, 1);
+        turnPID = new PIDControllerX(RoboMap.TURN_PID_P, RoboMap.TURN_PID_I, RoboMap.TURN_PID_D);
+        turnPID.capOutput(-1, 1);
         com = new Com("http://10.0.53.23");
         msg = new Messenger();
-        /* Neural Network Layers ****/
-        // 0) Input Layer - (distance to target), (height of target)
-        // 1) Hidden Layer - 7 nodes
-        // 2) Hidden Layer - 7 nodes
-        // 3) Output Layer - (angle of attack in percent)
-        int[] layers = {2, 7, 7, 1};
-        nn = new NeuralNet(layers);
     }
 
     private List getAllTargets() {
@@ -41,6 +32,29 @@ public class AI {
             return null;
         }
         return com.parseTargets((String) table.get("targets"));
+    }
+
+    public boolean turnToTarget(int t) {
+        turnPID.setSetpoint(320);
+
+        Target target = new Target(0, 0, 0);
+
+        do {
+            List list = getAllTargets();
+            if (list != null) {
+                if (t > list.size() - 1) {
+                    msg.printLn("No target '" + t + "'");
+                    return false;
+                }
+                target = (Target) list.get(t);
+                double correction = turnPID.doPID(target.x);
+                drive.tankDrive(correction, -correction);
+            } else {
+                return false;
+            }
+        } while (!MathX.isWithin(target.x, 320, 7));
+        turnPID.reset();
+        return true;
     }
 
     public Target getTopTarget() {
@@ -58,29 +72,49 @@ public class AI {
         return high;
     }
 
-    public boolean turnToTarget(int t) {
-        pid.setSetpoint(320);
+    /**
+     * Predicts a launch "angle" for the top target given the distance from the
+     * robot to the top target. This function uses a cubic regression of
+     * empirical data to predict the angle.
+     *
+     * @param x The distance from the robot to the top target
+     * @return The predicted launch "angle" using a cubic regression
+     */
+    public double distToLaunchAngle(double x) {
+        double a = -.02221847131638;
+        double b = 1.4830979608858;
+        double c = -19.368452007211;
+        double d = 90.161131786061;
+        double x3 = MathX.pow(x, 3);
+        double x2 = MathX.pow(x, 2);
+        return a * x3 + b * x2 + c * x + d;
+    }
 
-        Target target = new Target(0, 0, 0);
+    /**
+     * Sets the launch angle for the top target assuming the top target is in
+     * the field of view.
+     *
+     * @return true if function was successful, false if otherwise
+     */
+    public boolean autoAimLauncher() {
+        Target target = getTopTarget();
 
-        do {
-            List list = getAllTargets();
-            if (list != null) {
-                if (t > list.size() - 1) {
-                    msg.printLn("No target '" + t + "'");
-                    return false;
-                }
-                target = (Target) list.get(t);
-                double correction = pid.doPID(target.x);
-                drive.tankDrive(correction, -correction);
-            } else {
-                return false;
-            }
-        } while (!MathX.isWithin(target.x, 320, 7));
-        pid.reset();
+        if (target == null) {
+            return false;
+        }
+
+        double aot = distToLaunchAngle(target.distance);
+        launcher.setAngle(aot);
+
         return true;
     }
 
+    /**
+     * Sets the launch angle for a specific target based on the set of targets
+     * in the field of view.
+     * @param t number of the target to aim at
+     * @return true if function was successful, false if otherwise
+     */
     public boolean autoAimLauncher(int t) {
         List list = getAllTargets();
         if (list == null) {
@@ -92,10 +126,9 @@ public class AI {
         }
         Target target = (Target) list.get(t);
 
-        double[] input = {target.distance, target.height};
-        nn.calcOutputs(input);
-        double aot = nn.getOutputs()[0];
-        //launcher.setAngle(aot);
+        double aot = distToLaunchAngle(target.distance);
+        launcher.setAngle(aot);
         return true;
     }
+
 }

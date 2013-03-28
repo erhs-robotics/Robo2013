@@ -29,7 +29,8 @@ public class LinearAccelerator {
         loadArmM2 = new PWM(RoboMap.LOAD_ARM_MOTOR2);
         limitSwitch = new DigitalInput(RoboMap.LIMIT_SWITCH);
         anglePotentiometer = new AnalogChannel(RoboMap.LAUNCHER_ANGLE_POT);
-        pid = new PIDControllerX(2.8, 0.01, 0);
+        pid = new PIDControllerX(RoboMap.LAUNCHER_PID_P, RoboMap.LAUNCHER_PID_I, 
+                                 RoboMap.LAUNCHER_PID_D);
         pid.capOutput(-0.75, 0.75);
         
         try {
