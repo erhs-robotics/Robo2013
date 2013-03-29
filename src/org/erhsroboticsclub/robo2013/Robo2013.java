@@ -77,7 +77,7 @@ public class Robo2013 extends SimpleRobot {
         Watchdog.getInstance().kill();
         msg.clearConsole();
         msg.printLn("Teleop Started");
-        while (true) {
+        while (isEnabled() && isOperatorControl()) {
             double start = System.currentTimeMillis();
             launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
             /* Simple Tank Drive **************************************************/
