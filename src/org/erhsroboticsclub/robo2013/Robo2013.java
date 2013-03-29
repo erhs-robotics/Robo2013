@@ -167,7 +167,7 @@ public class Robo2013 extends IterativeRobot {
      * Called periodically during operator control
      */
     public void teleopPeriodic() {
-        launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+        //launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
         /* Simple Tank Drive **************************************************/
         double moveFactor = MathX.abs(stickL.getY()) + MathX.abs(stickR.getY());
         drive.tankDrive(stickL.getY() * RoboMap.SPEED, stickR.getY() * RoboMap.SPEED);
@@ -209,10 +209,13 @@ public class Robo2013 extends IterativeRobot {
                 break;
         }
         
-        launcher.setAngle(launchAngle);
-        if(moveFactor <= 0.1) launcher.adjustAngle();
+       // launcher.setAngle(launchAngle);
+        //if(moveFactor <= 0.1) launcher.adjustAngle();
         
-        msg.printOnLn("Angle: " + launcher.getAngle(), RoboMap.ANGLE_LINE);
+        msg.printOnLn("Ave volt: " + launcher.angleAccel.getAverageVoltage(), DriverStationLCD.Line.kUser1);
+        msg.printOnLn("volt: " + launcher.angleAccel.getVoltage(), DriverStationLCD.Line.kUser2);
+        msg.printOnLn("val: " + launcher.angleAccel.getValue(), DriverStationLCD.Line.kUser3);
+        
     }
 
 }
