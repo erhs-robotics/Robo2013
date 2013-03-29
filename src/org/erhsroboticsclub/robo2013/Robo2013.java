@@ -170,6 +170,7 @@ public class Robo2013 extends IterativeRobot {
     public void teleopPeriodic() {
         launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
         /* Simple Tank Drive **************************************************/
+        double moveFactor = MathX.abs(stickL.getY()) + MathX.abs(stickR.getY());
         drive.tankDrive(stickL.getY() * RoboMap.SPEED, stickR.getY() * RoboMap.SPEED);
 
         /* Fire the frisbee ***************************************************/
@@ -193,8 +194,7 @@ public class Robo2013 extends IterativeRobot {
 
         /* Setting the launch angle *******************************************/
         switch (angleFlag) {
-            case 0:
-                
+            case 0:                
                 if (stickR.getRawButton(RoboMap.FEED_ANGLE_BUTTON)) {
                     launchAngle = RoboMap.LAUNCHER_FEED_ANGLE;
                 } else {
@@ -211,7 +211,7 @@ public class Robo2013 extends IterativeRobot {
         }
         
         launcher.setAngle(launchAngle);
-        launcher.adjustAngle();
+        if(moveFactor <= 0.1) launcher.adjustAngle();
         
         msg.printOnLn("Angle: " + launcher.getAngle(), RoboMap.ANGLE_LINE);
     }
