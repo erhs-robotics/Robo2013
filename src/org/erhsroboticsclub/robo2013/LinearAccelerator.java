@@ -17,7 +17,7 @@ public class LinearAccelerator {
     private CANJaguar elevatorMotor;
     private PWM loadArmM1, loadArmM2;
     private DigitalInput limitSwitch;
-    public AnalogChannel anglePotentiometer;
+    public AnalogChannel angleAccel;
     private Messenger msg = new Messenger();
     private PIDControllerX pid;    
     private double angle = 31;
@@ -28,10 +28,10 @@ public class LinearAccelerator {
         loadArmM1 = new PWM(RoboMap.LOAD_ARM_MOTOR1);
         loadArmM2 = new PWM(RoboMap.LOAD_ARM_MOTOR2);
         limitSwitch = new DigitalInput(RoboMap.LIMIT_SWITCH);
-        anglePotentiometer = new AnalogChannel(RoboMap.LAUNCHER_ANGLE_POT);
+        angleAccel = new AnalogChannel(RoboMap.LAUNCHER_ACCEL);
         pid = new PIDControllerX(RoboMap.LAUNCHER_PID_P, RoboMap.LAUNCHER_PID_I, 
                                  RoboMap.LAUNCHER_PID_D);
-        pid.capOutput(-0.75, 0.75);
+        pid.capOutput(-1, 1);
         
         try {
             primaryWheel = new CANJaguar(RoboMap.PRIMARY_LAUNCH_MOTOR);
@@ -86,12 +86,9 @@ public class LinearAccelerator {
     }
     
     public void adjustAngle() {
-        double setpoint = MathX.map(angle, RoboMap.LAUNCHER_ANGLE_MIN,
-                                    RoboMap.LAUNCHER_ANGLE_MAX, RoboMap.LAUNCHER_POT_MIN, 
-                                    RoboMap.LAUNCHER_POT_MAX);
-        double voltage = anglePotentiometer.getAverageVoltage();        
-        pid.setSetpoint(setpoint);
-        double correction = pid.doPID(voltage);
+        double currentAngle = readAngle();
+        pid.setSetpoint(angle);
+        double correction = pid.doPID(currentAngle);
         
         try {
             elevatorMotor.setX(-correction);
@@ -108,11 +105,9 @@ public class LinearAccelerator {
         return angle;
     }
     
-    public double getPOTasAngle() {
-        double voltage = anglePotentiometer.getAverageVoltage();
-        return MathX.map(voltage, RoboMap.LAUNCHER_POT_MIN,
-                                  RoboMap.LAUNCHER_POT_MAX, 
-                                  RoboMap.LAUNCHER_ANGLE_MIN, 
-                                  RoboMap.LAUNCHER_ANGLE_MAX);
+    public double readAngle() {
+        double voltage = angleAccel.getAverageVoltage();
+        double raw = MathX.map(voltage, RoboMap.ACCEL_MIN, RoboMap.ACCEL_MAX, 0, 1);
+        return MathX.asin(raw);
     }
 }
