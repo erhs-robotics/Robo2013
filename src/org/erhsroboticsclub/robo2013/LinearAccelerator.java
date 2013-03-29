@@ -85,7 +85,7 @@ public class LinearAccelerator {
                 break;
             }
             // stops the launch if it has taken more than 10 seconds
-            if (System.currentTimeMillis() - time > 10000) {
+            if (System.currentTimeMillis() - time > 5000) {
                 msg.printLn("Limit switch not found!");
                 msg.printLn("Stopping launch...");
                 break;
