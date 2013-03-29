@@ -56,8 +56,8 @@ public class RoboMap {
     public static final double LAUNCHER_NEAR_ANGLE = 10;// Infront of the pyramid
     
     /* Linear Accelerator PID Constants */
-    public static final double LAUNCHER_PID_P = 15.0;
-    public static final double LAUNCHER_PID_I = 0.01;
+    public static final double LAUNCHER_PID_P = 12.5;
+    public static final double LAUNCHER_PID_I = 0;
     public static final double LAUNCHER_PID_D = 0;
     
     public static final double LAUNCH_PID_MIN = -1;

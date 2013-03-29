@@ -195,13 +195,12 @@ public class Robo2013 extends IterativeRobot {
             case 0:
                 double angle;
                 if (stickR.getRawButton(RoboMap.FEED_ANGLE_BUTTON)) {
-                    angle = RoboMap.LAUNCHER_FEED_ANGLE;
+                    launchAngle = RoboMap.LAUNCHER_FEED_ANGLE;
                 } else {
-                    angle = MathX.map(stickR.getZ(), 1, -1, RoboMap.LAUNCHER_ANGLE_MIN,
+                    launchAngle = MathX.map(stickR.getZ(), 1, -1, RoboMap.LAUNCHER_ANGLE_MIN,
                             RoboMap.LAUNCHER_ANGLE_MAX);
-                }
-                launcher.setAngle(angle);
-                msg.printLn("" + angle);
+                }                
+                
                 break;
             case 1:
                 launcher.setAngle(angleFlag);
@@ -209,10 +208,11 @@ public class Robo2013 extends IterativeRobot {
                 angleFlag = 0;//should not reach here
                 break;
         }
-
+        
+        launcher.setAngle(launchAngle);
         launcher.adjustAngle();
-        System.out.println(launcher.anglePotentiometer.getAverageVoltage());
-        //msg.printOnLn("Angle: " + launcher.getAngle(), RoboMap.ANGLE_LINE);
+        
+        msg.printOnLn("Angle: " + launcher.getAngle(), RoboMap.ANGLE_LINE);
     }
 
 }
