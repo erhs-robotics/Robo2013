@@ -21,14 +21,14 @@ def getTargets():
     
     targets = imgproc.filterRects(targets)
     imgproc.labelRects(image, targets)
+    print targets
     return targets, image
     
 def encodeTargets(targets):
     json_template = '{"status": "%s", "message" : "%s", "target" : "%s"}'
     target_str = ""
     for target in targets:
-        dist = 0
-        print dist
+        dist = 0        
         string = "%s,%s,%s" % (target.center_mass_x, dist, target.target_height)
         target_str += string + "|"
     status = "Found " + str(len(targets)) + " Targets"

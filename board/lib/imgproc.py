@@ -98,13 +98,29 @@ class Imgproc:
 		return (rects, rects_img)		
 		
 	def getRect(self, img):
-		img = cv2.blur(img,(3,3))
+		img = cv2.blur(img,(4,4))
 		hsv_img = img#self.getHSVImage(img)
 		self.hsv_img = img
 		thresh_img = self.getThreshImage(hsv_img, self.COLOR_MIN, self.COLOR_MAX)
 		thresh_contours = self.getContours(thresh_img)		
 		
 		rects = self.getBoundingRectangles(thresh_contours)
+		
+		
+		#remove duplicates
+		duplicates = []
+		for i in range(len(rects)):
+			if not rects[i] in duplicates:
+				for j in range(len(rects)):
+					if i != j and rects[i].contains(rects[j]):					
+						if not rects[j] in duplicates:
+							duplicates.append(rects[j])
+		
+		for dup in duplicates:
+			rects.remove(dup)
+					
+					
+		
 		sorted_rects = sorted(rects, key=lambda x:x.x)
 		return sorted_rects
 		
