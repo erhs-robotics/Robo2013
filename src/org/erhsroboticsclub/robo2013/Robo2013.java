@@ -49,30 +49,14 @@ public class Robo2013 extends IterativeRobot {
     /**
      * Called once at the start of autonomous mode
      */
-    public void autonomousInit() {
-        autoStarted = false;
-        drive.setSafetyEnabled(false);
-        Watchdog.getInstance().kill();
+    public void autonomousInit() {        
         msg.clearConsole();
-        msg.printLn("Auto Started");
-        launcher.setAngle(RoboMap.AUTO_SHOOT_ANGLE);
+        msg.printLn("Auto Started - doing nothing");        
     }    
 
     
     public void autonomousPeriodic() {
-        if (!autoStarted) {
-            try {
-                drive.setSafetyEnabled(false);
-                Watchdog.getInstance().kill();
-                //autonomousA();//start autonomous (Plan A)
-                autonomousB();//start autonomous (Plan B)
-                //autonomousC();//start autonomous (Plan C)
-            } catch (Exception e) {
-                msg.printLn("Auto mode failed!");
-                msg.printLn(e.getMessage());
-            }
-            autoStarted = true;
-        }
+        //do nothing
     }
 
     /**
