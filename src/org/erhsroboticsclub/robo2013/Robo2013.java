@@ -15,12 +15,13 @@ public class Robo2013 extends IterativeRobot {
     private AI agent;
     private int angleFlag = 0; // 0 - dynamic, 1 - feeder angle, 2 - level (0 deg)
     private double launchAngle = RoboMap.LAUNCHER_LEVEL_ANGLE;
-    private boolean autoStarted = false;
+    private boolean autoStarted = false;    
 
     /**
      * Called once the cRIO boots up
      */
     public void robotInit() {
+        
         msg = new Messenger();
         msg.printLn("Loading FRC 2013");
         try {
@@ -54,8 +55,10 @@ public class Robo2013 extends IterativeRobot {
         Watchdog.getInstance().kill();
         msg.clearConsole();
         msg.printLn("Auto Started");
+        launcher.setAngle(RoboMap.AUTO_SHOOT_ANGLE);
     }    
 
+    
     public void autonomousPeriodic() {
         if (!autoStarted) {
             try {
@@ -114,7 +117,7 @@ public class Robo2013 extends IterativeRobot {
             launcher.launch();
         }
     }
-
+    
     /**
      * Plan B autonomous Called once by autonomousInit
      */
@@ -126,21 +129,20 @@ public class Robo2013 extends IterativeRobot {
         // 1) Set the launch angle
         msg.printLn("Setting angle to " + RoboMap.AUTO_SHOOT_ANGLE + "...");
         launcher.setAngle(RoboMap.AUTO_SHOOT_ANGLE);
-        launcher.waitForAngle(2000);
-        // 2) Wait for motors to come up to speed
-        msg.printLn("Waiting for motors...");
-        Timer.delay(5);
-        // 3) Fire all frisbees
+        launcher.waitForAngle(3000);
+        
+        // 2) Fire all frisbees
         msg.printLn("Starting launch!");
         for (int i = 0; i < 3; i++) {
-            msg.printLn("Launching disk " + (i + 1) + "...");
+            launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+            msg.printLn("Launching disk " + (i + 1) + "...");            
             launcher.launch();
         }
-        // 4) Lower launcher
+        // 3) Lower launcher
         msg.printLn("Lowering launcher...");
         launcher.setAngle(RoboMap.LAUNCHER_LEVEL_ANGLE);
         launcher.waitForAngle(1500);
-        // 5) Back up out of pyramid
+        // 4) Back up out of pyramid
         drive.drive(RoboMap.AUTO_MOVE_SPEED, 0);
         Timer.delay(RoboMap.AUTO_BACKUP_TIME);
         drive.drive(0, 0);
