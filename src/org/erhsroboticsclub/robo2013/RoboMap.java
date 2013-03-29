@@ -6,6 +6,7 @@ public class RoboMap {
     
     /* Robot Constants */
     public static final double SPEED = 1;    
+    public static final double UPDATE_FREQ = 5;
     
     /* CAN ID Numbers */
     public static final int SECONDARY_LAUNCH_MOTOR = 1; // second
@@ -71,6 +72,6 @@ public class RoboMap {
     /* Dead Reckoning Constants */
     public static final double AUTO_BACKUP_TIME = 1;
     public static final double AUTO_MOVE_SPEED = 0.5;
-    public static final double AUTO_SHOOT_ANGLE = 20;
+    public static final double AUTO_SHOOT_ANGLE = 30;
     
 }

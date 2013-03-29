@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import org.erhsroboticsclub.robo2013.utilities.MathX;
 import org.erhsroboticsclub.robo2013.utilities.Messenger;
 
-public class Robo2013 extends IterativeRobot {
+public class Robo2013 extends SimpleRobot {
 
     private RobotDrive drive;
     private Joystick stickL, stickR;
@@ -14,14 +14,13 @@ public class Robo2013 extends IterativeRobot {
     private LinearAccelerator launcher;
     private AI agent;
     private int angleFlag = 0; // 0 - dynamic, 1 - feeder angle, 2 - level (0 deg)
-    private double launchAngle = RoboMap.LAUNCHER_LEVEL_ANGLE;
-    private boolean autoStarted = false;    
+    private double launchAngle = RoboMap.LAUNCHER_LEVEL_ANGLE;    
 
     /**
      * Called once the cRIO boots up
      */
     public void robotInit() {
-        
+
         msg = new Messenger();
         msg.printLn("Loading FRC 2013");
         try {
@@ -47,31 +46,88 @@ public class Robo2013 extends IterativeRobot {
     }
 
     /**
-     * Called once at the start of autonomous mode
+     * This function is called once each time the robot enters autonomous mode.
      */
-    public void autonomousInit() {
-        autoStarted = false;
+    public void autonomous() {        
         drive.setSafetyEnabled(false);
         Watchdog.getInstance().kill();
         msg.clearConsole();
         msg.printLn("Auto Started");
         launcher.setAngle(RoboMap.AUTO_SHOOT_ANGLE);
-    }    
 
-    
-    public void autonomousPeriodic() {
-        if (!autoStarted) {
-            try {
-                drive.setSafetyEnabled(false);
-                Watchdog.getInstance().kill();
-                //autonomousA();//start autonomous (Plan A)
-                autonomousB();//start autonomous (Plan B)
-                //autonomousC();//start autonomous (Plan C)
-            } catch (Exception e) {
-                msg.printLn("Auto mode failed!");
-                msg.printLn(e.getMessage());
+        try {
+            drive.setSafetyEnabled(false);
+            Watchdog.getInstance().kill();
+            //autonomousA();//start autonomous (Plan A)
+            autonomousB();//start autonomous (Plan B)
+            //autonomousC();//start autonomous (Plan C)
+        } catch (Exception e) {
+            msg.printLn("Auto mode failed!");
+            msg.printLn(e.getMessage());
+        }
+
+    }
+
+    /**
+     * This function is called once each time the robot enters operator control.
+     */
+    public void operatorControl() {
+        drive.setSafetyEnabled(false);
+        Watchdog.getInstance().kill();
+        msg.clearConsole();
+        msg.printLn("Teleop Started");
+        while (true) {
+            double start = System.currentTimeMillis();
+            launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+            /* Simple Tank Drive **************************************************/
+            drive.tankDrive(stickL.getY() * RoboMap.SPEED, stickR.getY() * RoboMap.SPEED);
+
+            /* Fire the frisbee ***************************************************/
+            if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
+                launcher.launch();
             }
-            autoStarted = true;
+
+            /* Set angle adjustment mode ******************************************/
+            if (stickR.getRawButton(RoboMap.DYNAMIC_ANGLE_BUTTON)) {
+                angleFlag = 0;// dynamic
+            } else if (stickR.getRawButton(RoboMap.LEVEL_ANGLE_BUTTON)) {
+                angleFlag = 1;// level (0 deg)
+                launchAngle = RoboMap.LAUNCHER_LEVEL_ANGLE;
+            } else if (stickR.getRawButton(RoboMap.NEAR_ANGLE_BUTTON)) {
+                angleFlag = 1;// infront of the pyramic angle
+                launchAngle = RoboMap.LAUNCHER_NEAR_ANGLE;
+            } else if (stickR.getRawButton(RoboMap.FAR_ANGLE_BUTTON)) {
+                angleFlag = 1;// behind the pyramid angle
+                launchAngle = RoboMap.LAUNCHER_FAR_ANGLE;
+            }
+
+            /* Setting the launch angle *******************************************/
+            switch (angleFlag) {
+                case 0:
+                    if (stickR.getRawButton(RoboMap.FEED_ANGLE_BUTTON)) {
+                        launchAngle = RoboMap.LAUNCHER_FEED_ANGLE;
+                    } else {
+                        launchAngle = MathX.map(stickR.getZ(), 1, -1, RoboMap.LAUNCHER_ANGLE_MIN,
+                                RoboMap.LAUNCHER_ANGLE_MAX);
+                    }
+
+                    break;
+                case 1:
+                    launcher.setAngle(angleFlag);
+                default:
+                    angleFlag = 0;//should not reach here
+                    break;
+            }
+
+            launcher.setAngle(launchAngle);
+            launcher.adjustAngle();
+
+            msg.printOnLn("Angle: " + launcher.getAngle(), RoboMap.ANGLE_LINE);
+            
+            
+            while(System.currentTimeMillis() - start < RoboMap.UPDATE_FREQ) {
+                //Do nothing
+            }
         }
     }
 
@@ -117,7 +173,7 @@ public class Robo2013 extends IterativeRobot {
             launcher.launch();
         }
     }
-    
+
     /**
      * Plan B autonomous Called once by autonomousInit
      */
@@ -129,13 +185,13 @@ public class Robo2013 extends IterativeRobot {
         // 1) Set the launch angle
         msg.printLn("Setting angle to " + RoboMap.AUTO_SHOOT_ANGLE + "...");
         launcher.setAngle(RoboMap.AUTO_SHOOT_ANGLE);
-        launcher.waitForAngle(3000);
+        launcher.waitForAngle(5000);       
         
         // 2) Fire all frisbees
         msg.printLn("Starting launch!");
         for (int i = 0; i < 3; i++) {
             launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
-            msg.printLn("Launching disk " + (i + 1) + "...");            
+            msg.printLn("Launching disk " + (i + 1) + "...");
             launcher.launch();
         }
         // 3) Lower launcher
@@ -163,65 +219,5 @@ public class Robo2013 extends IterativeRobot {
             msg.printLn("Launching Disk " + (i + 1));
             launcher.launch();
         }
-    }
-
-    /**
-     * Called once at the start of teleop mode
-     */
-    public void teleopInit() {
-        drive.setSafetyEnabled(false);
-        msg.clearConsole();
-        msg.printLn("Teleop Started");
-    }
-
-    /**
-     * Called periodically during operator control
-     */
-    public void teleopPeriodic() {
-        launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
-        /* Simple Tank Drive **************************************************/
-        drive.tankDrive(stickL.getY() * RoboMap.SPEED, stickR.getY() * RoboMap.SPEED);
-
-        /* Fire the frisbee ***************************************************/
-        if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
-            launcher.launch();
-        }
-
-        /* Set angle adjustment mode ******************************************/
-        if (stickR.getRawButton(RoboMap.DYNAMIC_ANGLE_BUTTON)) {
-            angleFlag = 0;// dynamic
-        } else if (stickR.getRawButton(RoboMap.LEVEL_ANGLE_BUTTON)) {
-            angleFlag = 1;// level (0 deg)
-            launchAngle = RoboMap.LAUNCHER_LEVEL_ANGLE;
-        } else if (stickR.getRawButton(RoboMap.NEAR_ANGLE_BUTTON)) {
-            angleFlag = 1;// infront of the pyramic angle
-            launchAngle = RoboMap.LAUNCHER_NEAR_ANGLE;
-        } else if (stickR.getRawButton(RoboMap.FAR_ANGLE_BUTTON)) {
-            angleFlag = 1;// behind the pyramid angle
-            launchAngle = RoboMap.LAUNCHER_FAR_ANGLE;
-        }
-
-        /* Setting the launch angle *******************************************/
-        switch (angleFlag) {
-            case 0:                
-                if (stickR.getRawButton(RoboMap.FEED_ANGLE_BUTTON)) {
-                    launchAngle = RoboMap.LAUNCHER_FEED_ANGLE;
-                } else {
-                    launchAngle = MathX.map(stickR.getZ(), 1, -1, RoboMap.LAUNCHER_ANGLE_MIN,
-                            RoboMap.LAUNCHER_ANGLE_MAX);
-                }
-
-                break;
-            case 1:
-                launcher.setAngle(angleFlag);
-            default:
-                angleFlag = 0;//should not reach here
-                break;
-        }
-
-        launcher.setAngle(launchAngle);
-        launcher.adjustAngle();
-
-        msg.printOnLn("Angle: " + launcher.getAngle(), RoboMap.ANGLE_LINE);
-    }
+    }    
 }
