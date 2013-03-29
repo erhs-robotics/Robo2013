@@ -130,6 +130,10 @@ public class LinearAccelerator {
         return angle;
     }    
 
+    /**
+     * Converts the accelerometer voltage to degrees
+     * @return The voltage in degrees
+     */
     public double readAngle() {
         double voltage = angleAccel.getAverageVoltage();
         double raw = MathX.map(voltage, RoboMap.ACCEL_MIN, RoboMap.ACCEL_MAX, 0, 1);
