@@ -37,6 +37,9 @@ public class LinearAccelerator {
             primaryWheel = new CANJaguar(RoboMap.PRIMARY_LAUNCH_MOTOR);
             secondaryWheel = new CANJaguar(RoboMap.SECONDARY_LAUNCH_MOTOR);
             elevatorMotor = new CANJaguar(RoboMap.ELEVATOR_MOTOR);
+            primaryWheel.setExpiration(Double.MAX_VALUE);
+            secondaryWheel.setExpiration(Double.MAX_VALUE);
+            elevatorMotor.setExpiration(Double.MAX_VALUE);
             primaryWheel.setSafetyEnabled(false);
             secondaryWheel.setSafetyEnabled(false);
             elevatorMotor.setSafetyEnabled(false);

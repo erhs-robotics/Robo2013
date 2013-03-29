@@ -27,11 +27,12 @@ public class Robo2013 extends SimpleRobot {
             TOP_LEFT_JAGUAR = new CANJaguar(RoboMap.TOP_LEFT_DRIVE_MOTOR);
             BOTTOM_LEFT_JAGUAR = new CANJaguar(RoboMap.BOTTOM_LEFT_DRIVE_MOTOR);
             TOP_RIGHT_JAGUAR = new CANJaguar(RoboMap.TOP_RIGHT_DRIVE_MOTOR);
-            BOTTOM_RIGHT_JAGUAR = new CANJaguar(RoboMap.BOTTOM_RIGHT_DRIVE_MOTOR);
+            BOTTOM_RIGHT_JAGUAR = new CANJaguar(RoboMap.BOTTOM_RIGHT_DRIVE_MOTOR);            
+            
         } catch (CANTimeoutException ex) {
             msg.printLn("CAN network failed!");
             msg.printLn(ex.getMessage());
-        }
+        }        
 
         launcher = new LinearAccelerator();
         drive = new RobotDrive(TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR);
@@ -189,8 +190,7 @@ public class Robo2013 extends SimpleRobot {
         
         // 2) Fire all frisbees
         msg.printLn("Starting launch!");
-        for (int i = 0; i < 3; i++) {
-            launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+        for (int i = 0; i < 3; i++) {            
             msg.printLn("Launching disk " + (i + 1) + "...");
             launcher.launch();
         }
