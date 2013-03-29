@@ -31,7 +31,8 @@ public class LinearAccelerator {
         angleAccel = new AnalogChannel(RoboMap.LAUNCHER_ACCEL);
         pid = new PIDControllerX(RoboMap.LAUNCHER_PID_P, RoboMap.LAUNCHER_PID_I, 
                                  RoboMap.LAUNCHER_PID_D);
-        pid.capOutput(-1, 1);
+
+        pid.capOutput(RoboMap.LAUNCH_PID_MIN, RoboMap.LAUNCH_PID_MAX);
         
         try {
             primaryWheel = new CANJaguar(RoboMap.PRIMARY_LAUNCH_MOTOR);
@@ -41,7 +42,12 @@ public class LinearAccelerator {
             e.printStackTrace();
         }
     }
-
+    
+    /**
+     * Sets the speed of both launch wheels separately
+     * @param primary The speed of the first launch wheel
+     * @param secondary The speed of the second launch wheel
+     */
     public void setWheels(double primary, double secondary) {
         try {
             primaryWheel.setX(primary);
@@ -50,10 +56,17 @@ public class LinearAccelerator {
         }
     }
     
+    /**
+     * Sets both launch wheels to the same speed
+     * @param speed The speed for both launch wheels
+     */
     public void setWheels(double speed) {
         this.setWheels(speed, speed);
     }
 
+    /**
+     * Launches a Frisby
+     */
     public void launch() {
         loadArmM1.setRaw(1);
         loadArmM2.setRaw(1);
@@ -78,6 +91,10 @@ public class LinearAccelerator {
         loadArmM2.setRaw(127);
     }
     
+    /**
+     * Runs the PID loop for the specified amount of time
+     * @param sleep The amount of time in milliseconds to run the PID 
+     */
     public void waitForAngle(double sleep) {
         double start = Timer.getFPGATimestamp();
         while(Timer.getFPGATimestamp() - start < sleep) {
@@ -85,6 +102,9 @@ public class LinearAccelerator {
         }
     }
     
+    /**
+     * Runs one iteration of the PID controller
+     */
     public void adjustAngle() {
         double currentAngle = readAngle();
         pid.setSetpoint(angle);
@@ -97,17 +117,23 @@ public class LinearAccelerator {
         }
     }
     
+    /**
+     * Sets the target angle. DOES NOT ACTUAL MOVE ANYTHING. The angle is
+     * clamped between the min and max values
+     * @param angle The new target angle
+     */
     public void setAngle(double angle) {
         this.angle = MathX.clamp(angle, RoboMap.LAUNCHER_ANGLE_MIN, RoboMap.LAUNCHER_ANGLE_MAX);
     }
-
+   
     public double getAngle() {
         return angle;
-    }
-    
+    }    
+
     public double readAngle() {
         double voltage = angleAccel.getAverageVoltage();
         double raw = MathX.map(voltage, RoboMap.ACCEL_MIN, RoboMap.ACCEL_MAX, 0, 1);
         return MathX.asin(raw);
     }
+
 }
