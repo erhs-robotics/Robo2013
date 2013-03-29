@@ -78,7 +78,7 @@ public class LinearAccelerator {
         try {
             double start  = System.currentTimeMillis();
             while(System.currentTimeMillis() - start < 500) {
-                //setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+                setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
                 adjustAngle();
             }
             
@@ -110,7 +110,8 @@ public class LinearAccelerator {
     public void waitForAngle(double sleep) {
         double start = System.currentTimeMillis();
         while(System.currentTimeMillis() - start < sleep) {            
-            adjustAngle();            
+            adjustAngle();
+            setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
         }
         msg.printLn("DONE!");
         
