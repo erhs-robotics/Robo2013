@@ -31,7 +31,7 @@ public class LinearAccelerator {
         anglePotentiometer = new AnalogChannel(RoboMap.LAUNCHER_ANGLE_POT);
         pid = new PIDControllerX(RoboMap.LAUNCHER_PID_P, RoboMap.LAUNCHER_PID_I, 
                                  RoboMap.LAUNCHER_PID_D);
-        pid.capOutput(-0.75, 0.75);
+        pid.capOutput(RoboMap.LAUNCH_PID_MIN, RoboMap.LAUNCH_PID_MAX);
         
         try {
             primaryWheel = new CANJaguar(RoboMap.PRIMARY_LAUNCH_MOTOR);
@@ -115,4 +115,5 @@ public class LinearAccelerator {
                                   RoboMap.LAUNCHER_ANGLE_MIN, 
                                   RoboMap.LAUNCHER_ANGLE_MAX);
     }
+
 }
