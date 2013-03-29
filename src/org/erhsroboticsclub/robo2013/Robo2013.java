@@ -202,22 +202,5 @@ public class Robo2013 extends SimpleRobot {
         drive.drive(RoboMap.AUTO_MOVE_SPEED, 0);
         Timer.delay(RoboMap.AUTO_BACKUP_TIME);
         drive.drive(0, 0);
-    }
-
-    /**
-     * Plan C autonomous Called once by autonomousInit
-     */
-    private void autonomousC() {
-        msg.printLn("Autonomous C:");
-        // 0) Set the wheels to the proper speed
-        msg.printLn("Starting up launcher...");
-        launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
-        // 1) move a specific distance to the target?
-        // 2) Fire all frisbees
-        msg.printLn("Starting Launch");
-        for (int i = 0; i < 3; i++) {
-            msg.printLn("Launching Disk " + (i + 1));
-            launcher.launch();
-        }
     }    
 }
