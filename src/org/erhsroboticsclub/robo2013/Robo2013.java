@@ -194,13 +194,5 @@ public class Robo2013 extends SimpleRobot {
             msg.printLn("Launching disk " + (i + 1) + "...");
             launcher.launch();
         }
-        // 3) Lower launcher
-        msg.printLn("Lowering launcher...");
-        launcher.setAngle(RoboMap.LAUNCHER_LEVEL_ANGLE);
-        launcher.waitForAngle(1500);
-        // 4) Back up out of pyramid
-        drive.drive(RoboMap.AUTO_MOVE_SPEED, 0);
-        Timer.delay(RoboMap.AUTO_BACKUP_TIME);
-        drive.drive(0, 0);
     }    
 }
