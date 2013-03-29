@@ -16,8 +16,7 @@ public class Robo2013 extends IterativeRobot {
     private int angleFlag = 0; // 0 - dynamic, 1 - feeder angle, 2 - level (0 deg)
     private double launchAngle = RoboMap.LAUNCHER_LEVEL_ANGLE;
 
-
-    /*
+    /**
      * Called once the cRIO boots up
      */
     public void robotInit() {
@@ -155,7 +154,7 @@ public class Robo2013 extends IterativeRobot {
         }
     }
 
-    /*
+    /**
      * Called once at the start of teleop mode
      */
     public void teleopInit() {
@@ -215,4 +214,5 @@ public class Robo2013 extends IterativeRobot {
         
         msg.printOnLn("Angle: " + launcher.getAngle(), RoboMap.ANGLE_LINE);
     }
+
 }
