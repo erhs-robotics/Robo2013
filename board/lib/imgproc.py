@@ -112,7 +112,7 @@ class Imgproc:
 		filtered = []
 		for rect in rects:
 			height = self.getTargetHeight(rect)
-			if height != None:
+			if True:#height != None:
 				rect.target_height = height
 				filtered.append(rect)
 		return filtered

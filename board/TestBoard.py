@@ -53,7 +53,7 @@ def writeInfo(image, json):
     
 if __name__ == '__main__':      
     while True:
-        #print "Looping"
+        print "Looping"
         rects, bgr = getTargets()
         json = encodeTargets(rects)
         writeInfo(bgr, json)  
