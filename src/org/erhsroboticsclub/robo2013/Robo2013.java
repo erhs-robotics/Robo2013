@@ -194,7 +194,7 @@ public class Robo2013 extends IterativeRobot {
         /* Setting the launch angle *******************************************/
         switch (angleFlag) {
             case 0:
-                double angle;
+                
                 if (stickR.getRawButton(RoboMap.FEED_ANGLE_BUTTON)) {
                     launchAngle = RoboMap.LAUNCHER_FEED_ANGLE;
                 } else {
