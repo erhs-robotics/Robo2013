@@ -15,6 +15,7 @@ public class Robo2013 extends IterativeRobot {
     private AI agent;
     private int angleFlag = 0; // 0 - dynamic, 1 - feeder angle, 2 - level (0 deg)
     private double launchAngle = RoboMap.LAUNCHER_LEVEL_ANGLE;
+    private boolean autoStarted = false;
 
     /**
      * Called once the cRIO boots up
@@ -48,18 +49,26 @@ public class Robo2013 extends IterativeRobot {
      * Called once at the start of autonomous mode
      */
     public void autonomousInit() {
+        autoStarted = false;
         drive.setSafetyEnabled(false);
         Watchdog.getInstance().kill();
         msg.clearConsole();
         msg.printLn("Auto Started");
+    }    
 
-        try {
-            //autonomousA();//start autonomous (Plan A)
-            autonomousB();//start autonomous (Plan B)
-            //autonomousC();//start autonomous (Plan C)
-        } catch (Exception e) {
-            msg.printLn("Auto mode failed!");
-            msg.printLn(e.getMessage());
+    public void autonomousPeriodic() {
+        if (!autoStarted) {
+            try {
+                drive.setSafetyEnabled(false);
+                Watchdog.getInstance().kill();
+                //autonomousA();//start autonomous (Plan A)
+                autonomousB();//start autonomous (Plan B)
+                //autonomousC();//start autonomous (Plan C)
+            } catch (Exception e) {
+                msg.printLn("Auto mode failed!");
+                msg.printLn(e.getMessage());
+            }
+            autoStarted = true;
         }
     }
 
@@ -199,8 +208,8 @@ public class Robo2013 extends IterativeRobot {
                 } else {
                     launchAngle = MathX.map(stickR.getZ(), 1, -1, RoboMap.LAUNCHER_ANGLE_MIN,
                             RoboMap.LAUNCHER_ANGLE_MAX);
-                }                
-                
+                }
+
                 break;
             case 1:
                 launcher.setAngle(angleFlag);
@@ -208,11 +217,10 @@ public class Robo2013 extends IterativeRobot {
                 angleFlag = 0;//should not reach here
                 break;
         }
-        
+
         launcher.setAngle(launchAngle);
         launcher.adjustAngle();
-        
+
         msg.printOnLn("Angle: " + launcher.getAngle(), RoboMap.ANGLE_LINE);
     }
-
 }

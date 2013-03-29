@@ -95,8 +95,8 @@ public class LinearAccelerator {
      * @param sleep The amount of time in milliseconds to run the PID 
      */
     public void waitForAngle(double sleep) {
-        double start = Timer.getFPGATimestamp();
-        while(Timer.getFPGATimestamp() - start < sleep) {
+        double start = System.currentTimeMillis();
+        while(System.currentTimeMillis() - start < sleep) {            
             adjustAngle();            
         }
     }
