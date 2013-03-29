@@ -5,21 +5,17 @@ sys.path.append('lib')
 import cv2 
 from cv2 import cv
 import numpy as np
-import freenect
 from imgproc import *
-from Kinect import Kinect
 import Lock
 
 imgproc = Imgproc(-1)
-kinect = Kinect()
 
 params = [cv.CV_IMWRITE_PNG_COMPRESSION, 8]
 SCALE_FACTOR = 3
 msg = ""
             
 def getTargets():
-    image = kinect.get_IR_image()
-    depth = kinect.get_depth()   
+    image = cam_img = cv2.imread(sys.argv[1], cv2.CV_LOAD_IMAGE_COLOR)    
     
     targets = imgproc.getRect(image)
     
@@ -31,7 +27,7 @@ def encodeTargets(targets):
     json_template = '{"status": "%s", "message" : "%s", "target" : "%s"}'
     target_str = ""
     for target in targets:
-        dist = kinect.get_depth_at(target[0].x, target[0].y)
+        dist = 0
         print dist
         string = "%s,%s,%s" % (target.center_mass_x, dist, target.target_height)
         target_str += string + "|"

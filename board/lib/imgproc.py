@@ -17,8 +17,11 @@ class Imgproc:
 		#self.COLOR_MAX = np.array([100, 255, 255], np.uint8)
 		#self.COLOR_MIN = np.array([31,69,144], np.uint8) #70, 138, 156
 		#self.COLOR_MAX = np.array([92,198,255], np.uint8) # 100, 255, 255
-		self.COLOR_MIN = np.array([100, 100, 100], np.uint8)
-		self.COLOR_MAX = np.array([255, 255, 255], np.uint8)		
+		#self.COLOR_MIN = np.array([100, 100, 100], np.uint8)
+		#self.COLOR_MAX = np.array([255, 255, 255], np.uint8)
+		self.COLOR_MIN = np.array([157, 144, 0], np.uint8)
+		self.COLOR_MAX = np.array([255, 255, 67], np.uint8)
+				
 		self.YELLOW_MIN = np.array([0, 100, 100], np.uint8)
 		self.YELLOW_MAX = np.array([30, 255, 255], np.uint8)
 		self.LOW = 1.178571429 # width / height
