@@ -220,10 +220,11 @@ public class Robo2013 extends IterativeRobot {
                 break;
         }
         
-        // launcher.setAngle(launchAngle);
-        //if(moveFactor <= 0.1) launcher.adjustAngle();        
-        msg.printOnLn("Ave volt: " + launcher.angleAccel.getAverageVoltage(), DriverStationLCD.Line.kUser1);
-        msg.printOnLn("volt: " + launcher.angleAccel.getVoltage(), DriverStationLCD.Line.kUser2);
-        msg.printOnLn("val: " + launcher.angleAccel.getValue(), DriverStationLCD.Line.kUser3);
+        launcher.setAngle(launchAngle);
+        if(moveFactor < 0.1) launcher.adjustAngle();
+        double actualAngle = launcher.readAngle();
+        msg.printOnLn("angle: " + actualAngle, DriverStationLCD.Line.kUser1);
+        msg.printOnLn("setp: " + launchAngle, DriverStationLCD.Line.kUser2);
+        msg.printOnLn("error: " + (launchAngle - actualAngle), DriverStationLCD.Line.kUser3);
     }
 }

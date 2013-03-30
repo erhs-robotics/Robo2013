@@ -47,18 +47,18 @@ public class RoboMap {
     
     /* Linear Accelerator Angle Constants */
     public static final double LAUNCHER_ANGLE_MIN = 0;
-    public static final double LAUNCHER_ANGLE_MAX = 35;      
+    public static final double LAUNCHER_ANGLE_MAX = 25;      
     public static final double LAUNCHER_FEED_ANGLE = 14;
     public static final double LAUNCHER_LEVEL_ANGLE = 0;
     public static final double LAUNCHER_FAR_ANGLE = 27;// Behind the pyramid
     public static final double LAUNCHER_NEAR_ANGLE = 10;// Infront of the pyramid
-    public static final double ACCEL_MIN = 0;
-    public static final double ACCEL_MAX = 5;
+    public static final double ACCEL_MIN = 2.506207535;
+    public static final double ACCEL_MAX = 3.514814715;
     
     /* Linear Accelerator PID Constants */
-    public static final double LAUNCHER_PID_P = 12.5;
+    public static final double LAUNCHER_PID_P = 0.1;
     public static final double LAUNCHER_PID_I = 0;
-    public static final double LAUNCHER_PID_D = 0;
+        public static final double LAUNCHER_PID_D = 0.000000006;
     
     public static final double LAUNCH_PID_MIN = -1;
     public static final double LAUNCH_PID_MAX = 1;
