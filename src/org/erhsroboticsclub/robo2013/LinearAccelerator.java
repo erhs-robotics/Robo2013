@@ -37,9 +37,10 @@ public class LinearAccelerator {
             primaryWheel = new CANJaguar(RoboMap.PRIMARY_LAUNCH_MOTOR);
             secondaryWheel = new CANJaguar(RoboMap.SECONDARY_LAUNCH_MOTOR);
             elevatorMotor = new CANJaguar(RoboMap.ELEVATOR_MOTOR);
-            primaryWheel.setExpiration(RoboMap.AUTO_SHOOTER_TIMEOUT);
-            secondaryWheel.setExpiratio(RoboMap.AUTO_SHOOTER_TIMEOUT);
-            elevatorMotor.setExpiration(RoboMap.AUTO_SHOOTER_TIMEOUT);
+            //timeouts not needed for CAN, according to CD in 2012
+            //primaryWheel.setExpiration(RoboMap.AUTO_SHOOT_TIMEOUT); 
+            //secondaryWheel.setExpiration(RoboMap.AUTO_SHOOT_TIMEOUT);
+            //elevatorMotor.setExpiration(RoboMap.AUTO_SHOOT_TIMEOUT);
             primaryWheel.setSafetyEnabled(false);
             secondaryWheel.setSafetyEnabled(false);
             elevatorMotor.setSafetyEnabled(false);
