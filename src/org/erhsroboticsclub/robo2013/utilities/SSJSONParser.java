@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.erhsroboticsclub.robo2013.utilities;
 
 import edu.wpi.first.wpilibj.networktables2.util.List;
@@ -37,7 +33,6 @@ public class SSJSONParser {
 
                 tokens.add(msg);
             }
-
         }
         return tokens;
     }   
@@ -75,8 +70,7 @@ public class SSJSONParser {
             }
 
         }
-
-
+        
         return table;
     }
     
@@ -94,6 +88,5 @@ public class SSJSONParser {
         }
         list.add(str.substring(last, str.length()));
         return list;
-    }
-    
+    }    
 }

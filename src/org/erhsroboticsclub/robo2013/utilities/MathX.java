@@ -104,4 +104,5 @@ public class MathX {
     public static double sigmoid(double n) {
         return 1 / (1 + MathX.pow(Math.E, -n));
     }
+
 }

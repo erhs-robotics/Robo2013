@@ -1,11 +1,8 @@
 package org.erhsroboticsclub.robo2013;
 
-import com.sun.squawk.io.j2me.socket.Protocol;
 import edu.wpi.first.wpilibj.networktables2.util.List;
 import java.io.*;
-import java.*;
 import java.util.Hashtable;
-import javax.microedition.io.Connection;
 import javax.microedition.io.Connector;
 import org.erhsroboticsclub.robo2013.utilities.SSJSONParser;
 import org.erhsroboticsclub.robo2013.utilities.Target;
@@ -45,7 +42,7 @@ public class Com {
 
     public List parseTargets(String targets) {
         List parsedTargets = new List();
-        
+
         //split at '|'
         List targetInfo = SSJSONParser.splitString(targets, "|");
         for (int i = 0; i < targetInfo.size(); i++) {
