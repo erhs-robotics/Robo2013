@@ -51,17 +51,19 @@ public class Robo2013 extends SimpleRobot {
      */
     public void autonomous() {        
         drive.setSafetyEnabled(false);
+        msg.printLn("setSafetyEnabled call 0: " + drive.isSafetyEnabled());
         Watchdog.getInstance().setExpiration(Double.MAX_VALUE);
         Watchdog.getInstance().kill();
+        msg.printLn("Watchdog alive call 0: " + Watchdog.getInstance().isAlive());
         msg.clearConsole();
         msg.printLn("Auto Started");
         launcher.setAngle(RoboMap.AUTO_SHOOT_ANGLE);
 
         try {
             drive.setSafetyEnabled(false);
-            msg.printLn("setSafetyEnabled: " + drive.isSafetyEnabled());
+            msg.printLn("setSafetyEnabled call 1: " + drive.isSafetyEnabled());
             Watchdog.getInstance().kill();
-            msg.printLn("Watchdog alive: " + Watchdog.getInstance().isAlive());
+            msg.printLn("Watchdog alive call 1: " + Watchdog.getInstance().isAlive());
             //autonomousA();//start autonomous (Plan A)
             autonomousB();//start autonomous (Plan B)
             //autonomousC();//start autonomous (Plan C)
