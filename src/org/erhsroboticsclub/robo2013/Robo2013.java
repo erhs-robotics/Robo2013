@@ -105,6 +105,13 @@ public class Robo2013 extends SimpleRobot {
                 dynamicMode = false;
                 launchAngle = RoboMap.LAUNCHER_FAR_ANGLE;
             }
+            
+            //bumps
+            if (stickL.getRawButton(3)) {
+                launcher.bumpUp();
+            } else if(stickL.getRawButton(2)) {
+                launcher.bumpDown();
+            }
 
             /* Setting the launch angle *******************************************/
             if (dynamicMode) {
@@ -118,7 +125,7 @@ public class Robo2013 extends SimpleRobot {
 
             launcher.setAngle(launchAngle);
             if (moveValue < 0.1) {
-                launcher.adjustAngle();
+                //launcher.adjustAngle();
             }
             double actualAngle = launcher.readAngle();
 

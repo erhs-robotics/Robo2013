@@ -73,8 +73,8 @@ public class LinearAccelerator {
     
     public void bumpUp() {
         try {
-            this.elevatorMotor.setX(0.4);
-            Thread.sleep(300);
+            this.elevatorMotor.setX(-0.4);
+            Thread.sleep(25);
             this.elevatorMotor.setX(0);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -83,8 +83,8 @@ public class LinearAccelerator {
     
     public void bumpDown() {
         try {
-            this.elevatorMotor.setX(-0.4);
-            Thread.sleep(300);
+            this.elevatorMotor.setX(0.4);
+            Thread.sleep(25);
             this.elevatorMotor.setX(0);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -125,6 +125,8 @@ public class LinearAccelerator {
         loadArmM1.setRaw(127);
         loadArmM2.setRaw(127);
     }
+    
+    
     
     /**
      * Runs the PID loop for the specified amount of time
