@@ -157,7 +157,7 @@ public class LinearAccelerator {
     public double readAngle() {
         double voltage = angleAccel.getAverageVoltage();
         double raw = MathX.map(voltage, RoboMap.ACCEL_MIN, RoboMap.ACCEL_MAX, 0, 1);        
-        return MathX.asin(raw);
+        return MathX.asin(raw) - RoboMap.ANGLE_OFFSET;
     }
 
 }

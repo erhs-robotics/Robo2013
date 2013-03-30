@@ -55,6 +55,7 @@ public class RoboMap {
     public static final double LAUNCHER_NEAR_ANGLE = 10;// Infront of the pyramid
     public static final double ACCEL_MIN = 2.506207535;
     public static final double ACCEL_MAX = 3.514814715;
+    public static final double ANGLE_OFFSET = 20.5;
     
     /* Linear Accelerator PID Constants */
     public static final double LAUNCHER_PID_P = 0.1;
