@@ -48,7 +48,7 @@ public class RoboMap {
     
     /* Linear Accelerator Angle Constants */
     public static final double LAUNCHER_ANGLE_MIN = 0;
-    public static final double LAUNCHER_ANGLE_MAX = 25;      
+    public static final double LAUNCHER_ANGLE_MAX = 23;      
     public static final double LAUNCHER_FEED_ANGLE = 14;
     public static final double LAUNCHER_LEVEL_ANGLE = 0;
     public static final double LAUNCHER_FAR_ANGLE = 20;// Behind the pyramid

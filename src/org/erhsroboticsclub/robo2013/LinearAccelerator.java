@@ -22,7 +22,7 @@ public class LinearAccelerator {
     private PIDControllerX pid;    
     private double angle = 31;
     
-    public static final double AUTO_SHOOT_SPEED = -.5;    
+    public static final double AUTO_SHOOT_SPEED = 0;    
 
     public LinearAccelerator() {
         loadArmM1 = new PWM(RoboMap.LOAD_ARM_MOTOR1);
@@ -69,6 +69,26 @@ public class LinearAccelerator {
      */
     public void setWheels(double speed) {
         this.setWheels(speed, speed);
+    }
+    
+    public void bumpUp() {
+        try {
+            this.elevatorMotor.setX(0.4);
+            Thread.sleep(300);
+            this.elevatorMotor.setX(0);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public void bumpDown() {
+        try {
+            this.elevatorMotor.setX(-0.4);
+            Thread.sleep(300);
+            this.elevatorMotor.setX(0);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
