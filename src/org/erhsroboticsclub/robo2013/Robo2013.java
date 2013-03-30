@@ -51,19 +51,19 @@ public class Robo2013 extends SimpleRobot {
      */
     public void autonomous() {        
         drive.setSafetyEnabled(false);
-        msg.printLn("setSafetyEnabled call 0: " + drive.isSafetyEnabled());
+        msg.printLn("setSafetyEnabled call 0 autonomous(): " + drive.isSafetyEnabled()); //debug
         Watchdog.getInstance().setExpiration(Double.MAX_VALUE);
         Watchdog.getInstance().kill();
-        msg.printLn("Watchdog alive call 0: " + Watchdog.getInstance().isAlive());
+        msg.printLn("Watchdog alive call 0 autonomous(): " + Watchdog.getInstance().isAlive()); //debug
         msg.clearConsole();
         msg.printLn("Auto Started");
         launcher.setAngle(RoboMap.AUTO_SHOOT_ANGLE);
 
         try {
             drive.setSafetyEnabled(false);
-            msg.printLn("setSafetyEnabled call 1: " + drive.isSafetyEnabled());
+            msg.printLn("setSafetyEnabled call 1 autonomous(): " + drive.isSafetyEnabled()); //debug
             Watchdog.getInstance().kill();
-            msg.printLn("Watchdog alive call 1: " + Watchdog.getInstance().isAlive());
+            msg.printLn("Watchdog alive call 1 autonomous(): " + Watchdog.getInstance().isAlive()); //debug
             //autonomousA();//start autonomous (Plan A)
             autonomousB();//start autonomous (Plan B)
             //autonomousC();//start autonomous (Plan C)
@@ -81,6 +81,10 @@ public class Robo2013 extends SimpleRobot {
         drive.setSafetyEnabled(false);
         Watchdog.getInstance().kill();
         msg.clearConsole();
+        //debug
+        msg.printLn("setSafetyEnabled call 0 operatorControl(): " + drive.isSafetyEnabled());
+        msg.printLn("Watchdog alive call 0 autonomous(): " + Watchdog.getInstance().isAlive());
+         //end debug
         msg.printLn("Teleop Started");
         while (isEnabled() && isOperatorControl()) {
             double start = System.currentTimeMillis();
