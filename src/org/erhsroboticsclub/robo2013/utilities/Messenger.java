@@ -64,8 +64,9 @@ public class Messenger {
      */
     public final void clearConsole() {
         for (int i = 0; i < 6; i++) {
-            driverLCD.println(LINE[i], 1, EMPTY_SPACE);
-        }        
+            msg[i] = EMPTY_SPACE;
+        }
+        printLn(EMPTY_SPACE);
     }
 
     /**
