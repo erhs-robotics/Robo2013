@@ -62,7 +62,7 @@ public class Messenger {
     /**
      * Clears the DriverStation LCD
      */
-    public final void clearConsole() {
+    public void clearConsole() {
         for (int i = 0; i < 6; i++) {
             driverLCD.println(LINE[i], 1, EMPTY_SPACE);
         }

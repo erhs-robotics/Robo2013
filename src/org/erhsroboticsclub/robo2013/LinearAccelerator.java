@@ -26,7 +26,7 @@ public class LinearAccelerator {
 
     public LinearAccelerator() {
         loadArmM1 = new PWM(RoboMap.LOAD_ARM_MOTOR1);
-        loadArmM2 = new PWM(RoboMap.LOAD_ARM_MOTOR2);
+        loadArmM2 = new PWM(RoboMap.LOAD_ARM_MOTOR2);        
         limitSwitch = new DigitalInput(RoboMap.LIMIT_SWITCH);
         anglePotentiometer = new AnalogChannel(RoboMap.LAUNCHER_ANGLE_POT);
         pid = new PIDControllerX(RoboMap.LAUNCHER_PID_P, RoboMap.LAUNCHER_PID_I, 
@@ -37,6 +37,13 @@ public class LinearAccelerator {
             primaryWheel = new CANJaguar(RoboMap.PRIMARY_LAUNCH_MOTOR);
             secondaryWheel = new CANJaguar(RoboMap.SECONDARY_LAUNCH_MOTOR);
             elevatorMotor = new CANJaguar(RoboMap.ELEVATOR_MOTOR);
+            //timeouts not needed for CAN, according to CD in 2012
+            //primaryWheel.setExpiration(RoboMap.AUTO_SHOOT_TIMEOUT); 
+            //secondaryWheel.setExpiration(RoboMap.AUTO_SHOOT_TIMEOUT);
+            //elevatorMotor.setExpiration(RoboMap.AUTO_SHOOT_TIMEOUT);
+            primaryWheel.setSafetyEnabled(false);
+            secondaryWheel.setSafetyEnabled(false);
+            elevatorMotor.setSafetyEnabled(false);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -90,7 +97,7 @@ public class LinearAccelerator {
                 msg.printLn("Stopping launch...");
                 break;
             }
-            setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+            //setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
             adjustAngle();
         }
         loadArmM1.setRaw(127);
@@ -105,7 +112,7 @@ public class LinearAccelerator {
         double start = System.currentTimeMillis();
         while(System.currentTimeMillis() - start < sleep) {            
             adjustAngle();
-            msg.printLn("waiting...");
+            setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
         }
         msg.printLn("DONE!");
         
