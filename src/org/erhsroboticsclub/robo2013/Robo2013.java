@@ -51,6 +51,7 @@ public class Robo2013 extends SimpleRobot {
      */
     public void autonomous() {        
         drive.setSafetyEnabled(false);
+        Watchdog.getInstance().setExpiration(Double.MAX_VALUE);
         Watchdog.getInstance().kill();
         msg.clearConsole();
         msg.printLn("Auto Started");
