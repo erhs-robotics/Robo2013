@@ -86,8 +86,9 @@ public class Robo2013 extends SimpleRobot {
         msg.printLn("Watchdog alive call 0 autonomous(): " + Watchdog.getInstance().isAlive());
          //end debug
         msg.printLn("Teleop Started");
-        launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+        
         while (isEnabled() && isOperatorControl()) {
+            launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
             double start = System.currentTimeMillis();
             
             /* Simple Tank Drive **************************************************/
@@ -200,7 +201,8 @@ public class Robo2013 extends SimpleRobot {
         
         // 2) Fire all frisbees
         msg.printLn("Starting launch!");
-        for (int i = 0; i < 3; i++) {            
+        for (int i = 0; i < 3; i++) {
+            launcher.setAngle(RoboMap.AUTO_SHOOT_ANGLE);
             msg.printLn("Launching disk " + (i + 1) + "...");
             launcher.launch();
         }

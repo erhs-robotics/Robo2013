@@ -41,9 +41,9 @@ public class LinearAccelerator {
             //primaryWheel.setExpiration(RoboMap.AUTO_SHOOT_TIMEOUT); 
             //secondaryWheel.setExpiration(RoboMap.AUTO_SHOOT_TIMEOUT);
             //elevatorMotor.setExpiration(RoboMap.AUTO_SHOOT_TIMEOUT);
-            primaryWheel.setSafetyEnabled(false);
-            secondaryWheel.setSafetyEnabled(false);
-            elevatorMotor.setSafetyEnabled(false);
+            //primaryWheel.setSafetyEnabled(false);
+            //secondaryWheel.setSafetyEnabled(false);
+            //elevatorMotor.setSafetyEnabled(false);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -79,7 +79,7 @@ public class LinearAccelerator {
         try {
             double start  = System.currentTimeMillis();
             while(System.currentTimeMillis() - start < 500) {
-                //setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+                setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
                 adjustAngle();
             }
             
@@ -97,7 +97,7 @@ public class LinearAccelerator {
                 msg.printLn("Stopping launch...");
                 break;
             }
-            //setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+            setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
             adjustAngle();
         }
         loadArmM1.setRaw(127);
@@ -112,7 +112,7 @@ public class LinearAccelerator {
         double start = System.currentTimeMillis();
         while(System.currentTimeMillis() - start < sleep) {            
             adjustAngle();
-            //setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+            setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
         }
         msg.printLn("DONE!");
         
