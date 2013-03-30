@@ -59,7 +59,9 @@ public class Robo2013 extends SimpleRobot {
 
         try {
             drive.setSafetyEnabled(false);
+            msg.printLn("setSafetyEnabled: " + drive.isSafetyEnabled());
             Watchdog.getInstance().kill();
+            msg.printLn("Watchdog alive: " + Watchdog.getInstance().isAlive());
             //autonomousA();//start autonomous (Plan A)
             autonomousB();//start autonomous (Plan B)
             //autonomousC();//start autonomous (Plan C)
