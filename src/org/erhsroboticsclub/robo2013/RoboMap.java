@@ -69,8 +69,8 @@ public class RoboMap {
     public static final double TURN_PID_D = 0;
     
     /* Dead Reckoning Constants */
-    public static final double AUTO_BACKUP_TIME = .5;
-    public static final double AUTO_MOVE_SPEED = -0.5;
-    public static final double AUTO_SHOOT_ANGLE = 23;
+    public static final double AUTO_BACKUP_TIME = 1;
+    public static final double AUTO_MOVE_SPEED = 0.5;
+    public static final double AUTO_SHOOT_ANGLE = 20;
     
 }

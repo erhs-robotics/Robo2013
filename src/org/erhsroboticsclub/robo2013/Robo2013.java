@@ -15,11 +15,13 @@ public class Robo2013 extends IterativeRobot {
     private AI agent;
     private int angleFlag = 0; // 0 - dynamic, 1 - feeder angle, 2 - level (0 deg)
     private double launchAngle = RoboMap.LAUNCHER_LEVEL_ANGLE;
+    private boolean autoStarted = false;    
 
     /**
      * Called once the cRIO boots up
      */
     public void robotInit() {
+        
         msg = new Messenger();
         msg.printLn("Loading FRC 2013");
         try {
@@ -48,18 +50,28 @@ public class Robo2013 extends IterativeRobot {
      * Called once at the start of autonomous mode
      */
     public void autonomousInit() {
+        autoStarted = false;
         drive.setSafetyEnabled(false);
         Watchdog.getInstance().kill();
         msg.clearConsole();
         msg.printLn("Auto Started");
+        launcher.setAngle(RoboMap.AUTO_SHOOT_ANGLE);
+    }    
 
-        try {
-            //autonomousA();//start autonomous (Plan A)
-            autonomousB();//start autonomous (Plan B)
-            //autonomousC();//start autonomous (Plan C)
-        } catch (Exception e) {
-            msg.printLn("Auto mode failed!");
-            msg.printLn(e.getMessage());
+    
+    public void autonomousPeriodic() {
+        if (!autoStarted) {
+            try {
+                drive.setSafetyEnabled(false);
+                Watchdog.getInstance().kill();
+                //autonomousA();//start autonomous (Plan A)
+                autonomousB();//start autonomous (Plan B)
+                //autonomousC();//start autonomous (Plan C)
+            } catch (Exception e) {
+                msg.printLn("Auto mode failed!");
+                msg.printLn(e.getMessage());
+            }
+            autoStarted = true;
         }
     }
 
@@ -105,7 +117,7 @@ public class Robo2013 extends IterativeRobot {
             launcher.launch();
         }
     }
-
+    
     /**
      * Plan B autonomous Called once by autonomousInit
      */
@@ -117,21 +129,20 @@ public class Robo2013 extends IterativeRobot {
         // 1) Set the launch angle
         msg.printLn("Setting angle to " + RoboMap.AUTO_SHOOT_ANGLE + "...");
         launcher.setAngle(RoboMap.AUTO_SHOOT_ANGLE);
-        launcher.waitForAngle(2000);
-        // 2) Wait for motors to come up to speed
-        msg.printLn("Waiting for motors...");
-        Timer.delay(5);
-        // 3) Fire all frisbees
+        launcher.waitForAngle(3000);
+        
+        // 2) Fire all frisbees
         msg.printLn("Starting launch!");
         for (int i = 0; i < 3; i++) {
-            msg.printLn("Launching disk " + (i + 1) + "...");
+            launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+            msg.printLn("Launching disk " + (i + 1) + "...");            
             launcher.launch();
         }
-        // 4) Lower launcher
+        // 3) Lower launcher
         msg.printLn("Lowering launcher...");
         launcher.setAngle(RoboMap.LAUNCHER_LEVEL_ANGLE);
         launcher.waitForAngle(1500);
-        // 5) Back up out of pyramid
+        // 4) Back up out of pyramid
         drive.drive(RoboMap.AUTO_MOVE_SPEED, 0);
         Timer.delay(RoboMap.AUTO_BACKUP_TIME);
         drive.drive(0, 0);
@@ -199,8 +210,8 @@ public class Robo2013 extends IterativeRobot {
                 } else {
                     launchAngle = MathX.map(stickR.getZ(), 1, -1, RoboMap.LAUNCHER_ANGLE_MIN,
                             RoboMap.LAUNCHER_ANGLE_MAX);
-                }                
-                
+                }
+
                 break;
             case 1:
                 launcher.setAngle(angleFlag);
@@ -209,13 +220,10 @@ public class Robo2013 extends IterativeRobot {
                 break;
         }
         
-       // launcher.setAngle(launchAngle);
-        //if(moveFactor <= 0.1) launcher.adjustAngle();
-        
+        // launcher.setAngle(launchAngle);
+        //if(moveFactor <= 0.1) launcher.adjustAngle();        
         msg.printOnLn("Ave volt: " + launcher.angleAccel.getAverageVoltage(), DriverStationLCD.Line.kUser1);
         msg.printOnLn("volt: " + launcher.angleAccel.getVoltage(), DriverStationLCD.Line.kUser2);
         msg.printOnLn("val: " + launcher.angleAccel.getValue(), DriverStationLCD.Line.kUser3);
-        
     }
-
 }

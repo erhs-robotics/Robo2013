@@ -17,8 +17,11 @@ class Imgproc:
 		#self.COLOR_MAX = np.array([100, 255, 255], np.uint8)
 		#self.COLOR_MIN = np.array([31,69,144], np.uint8) #70, 138, 156
 		#self.COLOR_MAX = np.array([92,198,255], np.uint8) # 100, 255, 255
-		self.COLOR_MIN = np.array([100, 100, 100], np.uint8)
-		self.COLOR_MAX = np.array([255, 255, 255], np.uint8)		
+		#self.COLOR_MIN = np.array([100, 100, 100], np.uint8)
+		#self.COLOR_MAX = np.array([255, 255, 255], np.uint8)
+		self.COLOR_MIN = np.array([157, 144, 0], np.uint8)
+		self.COLOR_MAX = np.array([255, 255, 67], np.uint8)
+				
 		self.YELLOW_MIN = np.array([0, 100, 100], np.uint8)
 		self.YELLOW_MAX = np.array([30, 255, 255], np.uint8)
 		self.LOW = 1.178571429 # width / height
@@ -95,13 +98,29 @@ class Imgproc:
 		return (rects, rects_img)		
 		
 	def getRect(self, img):
-		img = cv2.blur(img,(3,3))
+		img = cv2.blur(img,(4,4))
 		hsv_img = img#self.getHSVImage(img)
 		self.hsv_img = img
 		thresh_img = self.getThreshImage(hsv_img, self.COLOR_MIN, self.COLOR_MAX)
 		thresh_contours = self.getContours(thresh_img)		
 		
 		rects = self.getBoundingRectangles(thresh_contours)
+		
+		
+		#remove duplicates
+		duplicates = []
+		for i in range(len(rects)):
+			if not rects[i] in duplicates:
+				for j in range(len(rects)):
+					if i != j and rects[i].contains(rects[j]):					
+						if not rects[j] in duplicates:
+							duplicates.append(rects[j])
+		
+		for dup in duplicates:
+			rects.remove(dup)
+					
+					
+		
 		sorted_rects = sorted(rects, key=lambda x:x.x)
 		return sorted_rects
 		
@@ -109,7 +128,7 @@ class Imgproc:
 		filtered = []
 		for rect in rects:
 			height = self.getTargetHeight(rect)
-			if height != None:
+			if True:#height != None:
 				rect.target_height = height
 				filtered.append(rect)
 		return filtered

@@ -71,21 +71,28 @@ public class LinearAccelerator {
         loadArmM1.setRaw(1);
         loadArmM2.setRaw(1);
         try {
-            Thread.sleep(500);
+            double start  = System.currentTimeMillis();
+            while(System.currentTimeMillis() - start < 500) {
+                setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+                adjustAngle();
+            }
+            
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        double time = Timer.getFPGATimestamp();
+        double time = System.currentTimeMillis();
         while (true) {
             if (!limitSwitch.get()) {
                 break;
             }
             // stops the launch if it has taken more than 10 seconds
-            if (Timer.getFPGATimestamp() - time > 10000) {
+            if (System.currentTimeMillis() - time > 5000) {
                 msg.printLn("Limit switch not found!");
                 msg.printLn("Stopping launch...");
                 break;
             }
+            setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+            adjustAngle();
         }
         loadArmM1.setRaw(127);
         loadArmM2.setRaw(127);
@@ -96,10 +103,13 @@ public class LinearAccelerator {
      * @param sleep The amount of time in milliseconds to run the PID 
      */
     public void waitForAngle(double sleep) {
-        double start = Timer.getFPGATimestamp();
-        while(Timer.getFPGATimestamp() - start < sleep) {
-            adjustAngle();            
+        double start = System.currentTimeMillis();
+        while(System.currentTimeMillis() - start < sleep) {            
+            adjustAngle();
+            msg.printLn("waiting...");
         }
+        msg.printLn("DONE!");
+        
     }
     
     /**
@@ -116,6 +126,8 @@ public class LinearAccelerator {
             ex.printStackTrace();
         }
     }
+    
+    
     
     /**
      * Sets the target angle. DOES NOT ACTUAL MOVE ANYTHING. The angle is
