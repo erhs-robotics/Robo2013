@@ -22,7 +22,7 @@ public class LinearAccelerator {
     private PIDControllerX pid;    
     private double angle = 31;
     
-    public static final double AUTO_SHOOT_SPEED = -.8;    
+    public static final double AUTO_SHOOT_SPEED = -.5;    
 
     public LinearAccelerator() {
         loadArmM1 = new PWM(RoboMap.LOAD_ARM_MOTOR1);
@@ -75,13 +75,14 @@ public class LinearAccelerator {
      * Launches a Frisby
      */
     public void launch() {
+        setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
         loadArmM1.setRaw(1);
         loadArmM2.setRaw(1);
         try {
             double start  = System.currentTimeMillis();
             while(System.currentTimeMillis() - start < 500) {
                 setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
-                adjustAngle();
+                //adjustAngle();
             }
             
         } catch (Exception ex) {
@@ -99,7 +100,7 @@ public class LinearAccelerator {
                 break;
             }
             setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
-            adjustAngle();
+            //adjustAngle();
         }
         loadArmM1.setRaw(127);
         loadArmM2.setRaw(127);

@@ -14,7 +14,7 @@ public class Robo2013 extends SimpleRobot {
     private LinearAccelerator launcher;
     private AI agent;
     private int angleFlag = 0; // 0 - dynamic, 1 - feeder angle, 2 - level (0 deg)
-    private double launchAngle = RoboMap.LAUNCHER_LEVEL_ANGLE;    
+    private double launchAngle = RoboMap.LAUNCHER_LEVEL_ANGLE;
 
     /**
      * Called once the cRIO boots up
@@ -27,12 +27,12 @@ public class Robo2013 extends SimpleRobot {
             TOP_LEFT_JAGUAR = new CANJaguar(RoboMap.TOP_LEFT_DRIVE_MOTOR);
             BOTTOM_LEFT_JAGUAR = new CANJaguar(RoboMap.BOTTOM_LEFT_DRIVE_MOTOR);
             TOP_RIGHT_JAGUAR = new CANJaguar(RoboMap.TOP_RIGHT_DRIVE_MOTOR);
-            BOTTOM_RIGHT_JAGUAR = new CANJaguar(RoboMap.BOTTOM_RIGHT_DRIVE_MOTOR);            
-            
+            BOTTOM_RIGHT_JAGUAR = new CANJaguar(RoboMap.BOTTOM_RIGHT_DRIVE_MOTOR);
+
         } catch (CANTimeoutException ex) {
             msg.printLn("CAN network failed!");
             msg.printLn(ex.getMessage());
-        }        
+        }
 
         launcher = new LinearAccelerator();
         drive = new RobotDrive(TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR);
@@ -49,7 +49,7 @@ public class Robo2013 extends SimpleRobot {
     /**
      * This function is called once each time the robot enters autonomous mode.
      */
-    public void autonomous() {        
+    public void autonomous() {
         drive.setSafetyEnabled(false);
         msg.printLn("setSafetyEnabled call 0 autonomous(): " + drive.isSafetyEnabled()); //debug
         Watchdog.getInstance().setExpiration(Double.MAX_VALUE);
@@ -84,13 +84,13 @@ public class Robo2013 extends SimpleRobot {
         //debug
         msg.printLn("setSafetyEnabled call 0 operatorControl(): " + drive.isSafetyEnabled());
         msg.printLn("Watchdog alive call 0 autonomous(): " + Watchdog.getInstance().isAlive());
-         //end debug
+        //end debug
         msg.printLn("Teleop Started");
-        
+
         while (isEnabled() && isOperatorControl()) {
             launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
             double start = System.currentTimeMillis();
-            
+
             /* Simple Tank Drive **************************************************/
             double moveValue = MathX.max(stickL.getY(), stickR.getY());
             drive.tankDrive(stickL.getY() * RoboMap.SPEED, stickR.getY() * RoboMap.SPEED);
@@ -133,12 +133,17 @@ public class Robo2013 extends SimpleRobot {
             }
 
             launcher.setAngle(launchAngle);
-            if(moveValue < 0.1) launcher.adjustAngle();
+            if (moveValue < 0.1) {
+                launcher.adjustAngle();
+            }
+            double actualAngle = launcher.readAngle();
 
-            msg.printOnLn("Angle: " + launcher.getAngle(), RoboMap.ANGLE_LINE);
-            
-            
-            while(System.currentTimeMillis() - start < RoboMap.UPDATE_FREQ) {
+            msg.printOnLn("angle: " + actualAngle, DriverStationLCD.Line.kUser1);
+            msg.printOnLn("setp: " + launchAngle, DriverStationLCD.Line.kUser2);
+            msg.printOnLn("error: " + (launchAngle - actualAngle), DriverStationLCD.Line.kUser3);
+
+
+            while (System.currentTimeMillis() - start < RoboMap.UPDATE_FREQ) {
                 //Do nothing
             }
         }
@@ -198,8 +203,8 @@ public class Robo2013 extends SimpleRobot {
         // 1) Set the launch angle
         msg.printLn("Setting angle to " + RoboMap.AUTO_SHOOT_ANGLE + "...");
         launcher.setAngle(RoboMap.AUTO_SHOOT_ANGLE);
-        launcher.waitForAngle(5000);       
-        
+        launcher.waitForAngle(5000);
+
         // 2) Fire all frisbees
         msg.printLn("Starting launch!");
         for (int i = 0; i < 3; i++) {
