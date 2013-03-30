@@ -66,7 +66,9 @@ public class Messenger {
         for (int i = 0; i < 6; i++) {
             msg[i] = EMPTY_SPACE;
         }
-        printLn(EMPTY_SPACE);
+        for (int i = 0; i < 6; i++) {
+            write(LINE[i], msg[5 - i]);
+        }
     }
 
     /**
