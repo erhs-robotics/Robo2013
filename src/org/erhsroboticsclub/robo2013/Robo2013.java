@@ -92,6 +92,7 @@ public class Robo2013 extends SimpleRobot {
             double start = System.currentTimeMillis();
             
             /* Simple Tank Drive **************************************************/
+            double moveValue = MathX.max(stickL.getY(), stickR.getY());
             drive.tankDrive(stickL.getY() * RoboMap.SPEED, stickR.getY() * RoboMap.SPEED);
 
             /* Fire the frisbee ***************************************************/
@@ -132,7 +133,7 @@ public class Robo2013 extends SimpleRobot {
             }
 
             launcher.setAngle(launchAngle);
-            launcher.adjustAngle();
+            if(moveValue < 0.1) launcher.adjustAngle();
 
             msg.printOnLn("Angle: " + launcher.getAngle(), RoboMap.ANGLE_LINE);
             
@@ -206,5 +207,5 @@ public class Robo2013 extends SimpleRobot {
             msg.printLn("Launching disk " + (i + 1) + "...");
             launcher.launch();
         }
-    }    
+    }
 }
