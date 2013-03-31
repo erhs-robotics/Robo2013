@@ -51,9 +51,12 @@ def writeInfo(image, json):
     cv2.imwrite("target.png", cv2.resize(bgr, (bgr.shape[1]/SCALE_FACTOR, bgr.shape[0]/SCALE_FACTOR)), params)
     Lock.unlockfile("target.png")
     
-if __name__ == '__main__':      
+if __name__ == '__main__':
+	i = 0  
     while True:
         print "Looping"
+        print "[" + i + "]"
         rects, bgr = getTargets()
         json = encodeTargets(rects)
-        writeInfo(bgr, json)  
+        writeInfo(bgr, json)
+        i += 1  
