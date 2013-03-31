@@ -6,6 +6,7 @@ public class RoboMap {
     
     /* Robot Constants */
     public static final double SPEED = 1;    
+    public static final double UPDATE_FREQ = 5;
     
     /* CAN ID Numbers */
     public static final int SECONDARY_LAUNCH_MOTOR = 1; // second
@@ -27,13 +28,15 @@ public class RoboMap {
     public static final int LEFT_DRIVE_STICK = 1;
     public static final int RIGHT_DRIVE_STICK = 2;
     
-    /* Analog Ports */
-    public static final int LAUNCHER_ANGLE_POT = 1;
+    /* Analog Ports */    
+    public static final int LAUNCHER_ACCEL = 1;    
     
     /* Left Stick Controls */
     public static final int AUTO_AIM_BUTTON = 1;
     public static final int FIRE_BUTTON = 1; //LEFT
-    public static final int TURN_TO_TARGET_BUTTON = 6;    
+    public static final int TURN_TO_TARGET_BUTTON = 6;  
+    public static final int BUMP_UP_BUTTON = 3;
+    public static final int BUMP_DOWN_BUTTON = 2;
     
     /* Right Stick Controls */    
     public static final int FEED_ANGLE_BUTTON = 1;
@@ -43,22 +46,26 @@ public class RoboMap {
     public static final int DYNAMIC_ANGLE_BUTTON = 5;
 
     /* Driver Station LCD Lines */
-    public static final Line ANGLE_LINE = Line.kUser1;
+    public static final Line STATUS_LINE = Line.kUser1;
+    public static final Line ANGLE_LINE  = Line.kUser2;
+    public static final Line SETPT_LINE   = Line.kUser3;
+    public static final Line ERROR_LINE  = Line.kUser4;
     
     /* Linear Accelerator Angle Constants */
     public static final double LAUNCHER_ANGLE_MIN = 0;
-    public static final double LAUNCHER_ANGLE_MAX = 35;
-    public static final double LAUNCHER_POT_MIN   = 0.144214;
-    public static final double LAUNCHER_POT_MAX   = 0.6279;   
+    public static final double LAUNCHER_ANGLE_MAX = 23;      
     public static final double LAUNCHER_FEED_ANGLE = 14;
     public static final double LAUNCHER_LEVEL_ANGLE = 0;
-    public static final double LAUNCHER_FAR_ANGLE = 27;// Behind the pyramid
+    public static final double LAUNCHER_FAR_ANGLE = 20;// Behind the pyramid
     public static final double LAUNCHER_NEAR_ANGLE = 10;// Infront of the pyramid
+    public static final double ACCEL_MIN = 2.506207535;
+    public static final double ACCEL_MAX = 3.514814715;
+    public static final double ANGLE_OFFSET = 20.5;
     
     /* Linear Accelerator PID Constants */
-    public static final double LAUNCHER_PID_P = 12.5;
+    public static final double LAUNCHER_PID_P = 0.1;
     public static final double LAUNCHER_PID_I = 0;
-    public static final double LAUNCHER_PID_D = 0;
+    public static final double LAUNCHER_PID_D = 0.000000006;
     
     public static final double LAUNCH_PID_MIN = -1;
     public static final double LAUNCH_PID_MAX = 1;
@@ -71,6 +78,9 @@ public class RoboMap {
     /* Dead Reckoning Constants */
     public static final double AUTO_BACKUP_TIME = 1;
     public static final double AUTO_MOVE_SPEED = 0.5;
-    public static final double AUTO_SHOOT_ANGLE = 20;
+    public static final double AUTO_SHOOT_ANGLE = 23;
+    //see LinearAccelerator
+    //public static final double AUTO_SHOOT_TIMEOUT = 1000;
+    
     
 }

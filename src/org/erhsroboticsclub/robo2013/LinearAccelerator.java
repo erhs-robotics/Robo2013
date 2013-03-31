@@ -17,7 +17,7 @@ public class LinearAccelerator {
     private CANJaguar elevatorMotor;
     private PWM loadArmM1, loadArmM2;
     private DigitalInput limitSwitch;
-    public AnalogChannel anglePotentiometer;
+    public AnalogChannel angleAccel;
     private Messenger msg = new Messenger();
     private PIDControllerX pid;    
     private double angle = 31;
@@ -26,17 +26,25 @@ public class LinearAccelerator {
 
     public LinearAccelerator() {
         loadArmM1 = new PWM(RoboMap.LOAD_ARM_MOTOR1);
-        loadArmM2 = new PWM(RoboMap.LOAD_ARM_MOTOR2);
+        loadArmM2 = new PWM(RoboMap.LOAD_ARM_MOTOR2);        
         limitSwitch = new DigitalInput(RoboMap.LIMIT_SWITCH);
-        anglePotentiometer = new AnalogChannel(RoboMap.LAUNCHER_ANGLE_POT);
+        angleAccel = new AnalogChannel(RoboMap.LAUNCHER_ACCEL);
         pid = new PIDControllerX(RoboMap.LAUNCHER_PID_P, RoboMap.LAUNCHER_PID_I, 
                                  RoboMap.LAUNCHER_PID_D);
+
         pid.capOutput(RoboMap.LAUNCH_PID_MIN, RoboMap.LAUNCH_PID_MAX);
         
         try {
             primaryWheel = new CANJaguar(RoboMap.PRIMARY_LAUNCH_MOTOR);
             secondaryWheel = new CANJaguar(RoboMap.SECONDARY_LAUNCH_MOTOR);
             elevatorMotor = new CANJaguar(RoboMap.ELEVATOR_MOTOR);
+            //timeouts not needed for CAN, according to CD in 2012
+            //primaryWheel.setExpiration(RoboMap.AUTO_SHOOT_TIMEOUT); 
+            //secondaryWheel.setExpiration(RoboMap.AUTO_SHOOT_TIMEOUT);
+            //elevatorMotor.setExpiration(RoboMap.AUTO_SHOOT_TIMEOUT);
+            //primaryWheel.setSafetyEnabled(false);
+            //secondaryWheel.setSafetyEnabled(false);
+            //elevatorMotor.setSafetyEnabled(false);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -62,18 +70,39 @@ public class LinearAccelerator {
     public void setWheels(double speed) {
         this.setWheels(speed, speed);
     }
+    
+    public void bumpUp() {
+        try {
+            this.elevatorMotor.setX(-0.4);
+            Thread.sleep(25);
+            this.elevatorMotor.setX(0);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public void bumpDown() {
+        try {
+            this.elevatorMotor.setX(0.4);
+            Thread.sleep(25);
+            this.elevatorMotor.setX(0);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
     /**
      * Launches a Frisby
      */
     public void launch() {
+        setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
         loadArmM1.setRaw(1);
         loadArmM2.setRaw(1);
         try {
             double start  = System.currentTimeMillis();
             while(System.currentTimeMillis() - start < 500) {
                 setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
-                adjustAngle();
+                //adjustAngle();
             }
             
         } catch (Exception ex) {
@@ -91,11 +120,13 @@ public class LinearAccelerator {
                 break;
             }
             setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
-            adjustAngle();
+            //adjustAngle();
         }
         loadArmM1.setRaw(127);
         loadArmM2.setRaw(127);
     }
+    
+    
     
     /**
      * Runs the PID loop for the specified amount of time
@@ -105,7 +136,7 @@ public class LinearAccelerator {
         double start = System.currentTimeMillis();
         while(System.currentTimeMillis() - start < sleep) {            
             adjustAngle();
-            msg.printLn("waiting...");
+            setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
         }
         msg.printLn("DONE!");
         
@@ -115,12 +146,9 @@ public class LinearAccelerator {
      * Runs one iteration of the PID controller
      */
     public void adjustAngle() {
-        double setpoint = MathX.map(angle, RoboMap.LAUNCHER_ANGLE_MIN,
-                                    RoboMap.LAUNCHER_ANGLE_MAX, RoboMap.LAUNCHER_POT_MIN, 
-                                    RoboMap.LAUNCHER_POT_MAX);
-        double voltage = anglePotentiometer.getAverageVoltage();        
-        pid.setSetpoint(setpoint);
-        double correction = pid.doPID(voltage);
+        double currentAngle = readAngle();
+        pid.setSetpoint(angle);
+        double correction = pid.doPID(currentAngle);
         
         try {
             elevatorMotor.setX(-correction);
@@ -142,18 +170,16 @@ public class LinearAccelerator {
    
     public double getAngle() {
         return angle;
-    }
-    
+    }    
+
     /**
-     * Converts the pot value to an angle
-     * @return  The pot value as an angle
+     * Converts the accelerometer voltage to degrees
+     * @return The voltage in degrees
      */
-    public double getPOTasAngle() {
-        double voltage = anglePotentiometer.getAverageVoltage();
-        return MathX.map(voltage, RoboMap.LAUNCHER_POT_MIN,
-                                  RoboMap.LAUNCHER_POT_MAX, 
-                                  RoboMap.LAUNCHER_ANGLE_MIN, 
-                                  RoboMap.LAUNCHER_ANGLE_MAX);
+    public double readAngle() {
+        double voltage = angleAccel.getAverageVoltage();
+        double raw = MathX.map(voltage, RoboMap.ACCEL_MIN, RoboMap.ACCEL_MAX, 0, 1);        
+        return MathX.asin(raw) - RoboMap.ANGLE_OFFSET;
     }
 
 }
