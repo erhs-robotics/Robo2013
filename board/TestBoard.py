@@ -52,7 +52,7 @@ def writeInfo(image, json):
     Lock.unlockfile("target.png")
     
 if __name__ == '__main__':
-	i = 0  
+    i = 0  
     while True:
         print "Looping"
         print "[" + i + "]"
