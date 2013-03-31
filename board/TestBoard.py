@@ -55,7 +55,7 @@ if __name__ == '__main__':
     i = 0  
     while True:
         print "Looping"
-        print "[" + i + "]"
+        print "[" , i , "]"
         rects, bgr = getTargets()
         json = encodeTargets(rects)
         writeInfo(bgr, json)
