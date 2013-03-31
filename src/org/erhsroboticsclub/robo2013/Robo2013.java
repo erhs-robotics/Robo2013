@@ -101,6 +101,9 @@ public class Robo2013 extends SimpleRobot {
             } else if (stickR.getRawButton(RoboMap.LEVEL_ANGLE_BUTTON)) {
                 dynamicMode = false;
                 launchAngle = RoboMap.LAUNCHER_LEVEL_ANGLE;
+            } else if (stickR.getRawButton(RoboMap.FEED_ANGLE_BUTTON)) {
+                dynamicMode = false;
+                launchAngle = RoboMap.LAUNCHER_FEED_ANGLE;
             } else if (stickR.getRawButton(RoboMap.NEAR_ANGLE_BUTTON)) {
                 dynamicMode = false;
                 launchAngle = RoboMap.LAUNCHER_NEAR_ANGLE;
