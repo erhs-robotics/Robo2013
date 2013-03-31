@@ -15,6 +15,8 @@ public class Robo2013 extends SimpleRobot {
     private AI agent;
     private double launchAngle = RoboMap.LAUNCHER_LEVEL_ANGLE;
     private boolean dynamicMode = true;
+    private boolean bumpingDown = false;
+    private boolean bumpingUp = false;
 
     /**
      * Called once the cRIO boots up
@@ -108,11 +110,20 @@ public class Robo2013 extends SimpleRobot {
             }            
 
             /* Allow minute adjustments of the launcher ***********************/
-            if (stickL.getRawButton(RoboMap.BUMP_UP_BUTTON)) {
-
+            boolean button_down = stickL.getRawButton(RoboMap.BUMP_UP_BUTTON);
+            if (button_down && !bumpingUp) {
                 launcher.bumpUp();
-            } else if(stickL.getRawButton(RoboMap.BUMP_DOWN_BUTTON)) {
+                bumpingUp = true;
+            } else if(!button_down) {
+                bumpingUp = false;
+            }
+            
+            button_down = stickL.getRawButton(RoboMap.BUMP_DOWN_BUTTON);
+            if(button_down && !bumpingDown) {
                 launcher.bumpDown();
+                bumpingDown = true;
+            } else if(!button_down){
+                bumpingDown = false;
             }
 
             /* Set the launch angle *******************************************/
