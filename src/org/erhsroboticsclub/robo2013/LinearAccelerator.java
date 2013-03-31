@@ -22,7 +22,7 @@ public class LinearAccelerator {
     private PIDControllerX pid;    
     private double angle = 31;
     
-    public static final double AUTO_SHOOT_SPEED = 0;    
+    public static final double AUTO_SHOOT_SPEED = -.8;    
 
     public LinearAccelerator() {
         loadArmM1 = new PWM(RoboMap.LOAD_ARM_MOTOR1);
