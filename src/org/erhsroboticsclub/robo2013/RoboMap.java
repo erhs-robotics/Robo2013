@@ -40,10 +40,8 @@ public class RoboMap {
     
     /* Right Stick Controls */    
     public static final int FEED_ANGLE_BUTTON = 1;
-    public static final int LEVEL_ANGLE_BUTTON = 4;
-    public static final int FAR_ANGLE_BUTTON = 2;
-    public static final int NEAR_ANGLE_BUTTON = 3;    
-    public static final int DYNAMIC_ANGLE_BUTTON = 5;
+    public static final int RAISE_ANGLE_BUTTON = 5;
+    public static final int LOWER_ANGLE_BUTTON = 4;    
 
     /* Driver Station LCD Lines */
     public static final Line STATUS_LINE = Line.kUser1;
@@ -56,8 +54,8 @@ public class RoboMap {
     public static final double LAUNCHER_ANGLE_MAX = 23;      
     public static final double LAUNCHER_FEED_ANGLE = 14;
     public static final double LAUNCHER_LEVEL_ANGLE = 0;
-    public static final double LAUNCHER_FAR_ANGLE = 20;// Behind the pyramid
-    public static final double LAUNCHER_NEAR_ANGLE = 10;// Infront of the pyramid
+    public static final double LAUNCHER_HIGH_ANGLE = 20;// Behind the pyramid
+    public static final double LAUNCHER_MED_ANGLE = 10;// Infront of the pyramid
     public static final double ACCEL_MIN = 2.506207535;
     public static final double ACCEL_MAX = 3.514814715;
     public static final double ANGLE_OFFSET = 20.5;
