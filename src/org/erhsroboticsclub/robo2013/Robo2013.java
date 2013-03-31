@@ -52,16 +52,16 @@ public class Robo2013 extends SimpleRobot {
      * This function is called once each time the robot enters autonomous mode.
      */
     public void autonomous() {
-        drive.setSafetyEnabled(false);        
+        drive.setSafetyEnabled(false);
         Watchdog.getInstance().setExpiration(Double.MAX_VALUE);
-        Watchdog.getInstance().kill();        
+        Watchdog.getInstance().kill();
         msg.clearConsole();
         msg.printLn("Auto Started");
         launcher.setAngle(RoboMap.AUTO_SHOOT_ANGLE);
 
         try {
-            drive.setSafetyEnabled(false);            
-            Watchdog.getInstance().kill();            
+            drive.setSafetyEnabled(false);
+            Watchdog.getInstance().kill();
             //autonomousA();//start autonomous (Plan A)
             autonomousB();//start autonomous (Plan B)
             //autonomousC();//start autonomous (Plan C)
@@ -78,17 +78,17 @@ public class Robo2013 extends SimpleRobot {
     public void operatorControl() {
         drive.setSafetyEnabled(false);
         Watchdog.getInstance().kill();
-        msg.clearConsole();        
+        msg.clearConsole();
 
         msg.printOnLn("Teleop Mode", RoboMap.STATUS_LINE);
 
         while (isEnabled() && isOperatorControl()) {
             double startTime = System.currentTimeMillis();
-            
+
             /* Simple Tank Drive **********************************************/
             double moveValue = MathX.max(stickL.getY(), stickR.getY());
-            drive.tankDrive(stickL.getY() * RoboMap.SPEED, 
-                            stickR.getY() * RoboMap.SPEED);
+            drive.tankDrive(stickL.getY() * RoboMap.SPEED,
+                    stickR.getY() * RoboMap.SPEED);
 
             /* Fire the frisbee ***********************************************/
             if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
@@ -107,46 +107,46 @@ public class Robo2013 extends SimpleRobot {
             } else if (stickR.getRawButton(RoboMap.FAR_ANGLE_BUTTON)) {
                 dynamicMode = false;
                 launchAngle = RoboMap.LAUNCHER_FAR_ANGLE;
-            }            
+            }
 
             /* Allow minute adjustments of the launcher ***********************/
             boolean button_down = stickL.getRawButton(RoboMap.BUMP_UP_BUTTON);
             if (button_down && !bumpingUp) {
                 launcher.bumpUp();
                 bumpingUp = true;
-            } else if(!button_down) {
+            } else if (!button_down) {
                 bumpingUp = false;
             }
-            
+
             button_down = stickL.getRawButton(RoboMap.BUMP_DOWN_BUTTON);
-            if(button_down && !bumpingDown) {
+            if (button_down && !bumpingDown) {
                 launcher.bumpDown();
                 bumpingDown = true;
-            } else if(!button_down){
+            } else if (!button_down) {
                 bumpingDown = false;
             }
 
             /* Set the launch angle *******************************************/
             if (dynamicMode) {
                 launchAngle = MathX.map(stickR.getZ(), 1, -1, RoboMap.LAUNCHER_ANGLE_MIN,
-                                        RoboMap.LAUNCHER_ANGLE_MAX);
+                        RoboMap.LAUNCHER_ANGLE_MAX);
             }
             if (stickR.getRawButton(RoboMap.FEED_ANGLE_BUTTON)) {
                 launchAngle = RoboMap.LAUNCHER_FEED_ANGLE;
             }
             launcher.setAngle(launchAngle);
-            
+
             /* Only adjust launcher if robot is not moving ********************/
             if (moveValue < 0.1) {
                 launcher.adjustAngle();
             }
-            
+
             /* Display launcher status ****************************************/
             double actualAngle = launcher.readAngle();
             double error = launchAngle - actualAngle;
             msg.printOnLn("angle: " + actualAngle, RoboMap.ANGLE_LINE);
             msg.printOnLn("setpt: " + launchAngle, RoboMap.SETPT_LINE);
-            msg.printOnLn("error: " + error,       RoboMap.ERROR_LINE);
+            msg.printOnLn("error: " + error, RoboMap.ERROR_LINE);
 
             while (System.currentTimeMillis() - startTime < RoboMap.UPDATE_FREQ) {
                 //Do nothing
@@ -218,5 +218,4 @@ public class Robo2013 extends SimpleRobot {
             launcher.launch();
         }
     }
-
 }
