@@ -45,9 +45,7 @@ public class RoboMap {
 
     /* Driver Station LCD Lines */
     public static final Line STATUS_LINE = Line.kUser1;
-    public static final Line ANGLE_LINE  = Line.kUser2;
-    public static final Line SETPT_LINE   = Line.kUser3;
-    public static final Line ERROR_LINE  = Line.kUser4;
+    public static final Line ANGLE_LINE  = Line.kUser2;    
     
     /* Linear Accelerator Angle Constants */
     public static final double LAUNCHER_ANGLE_MIN = 0;
