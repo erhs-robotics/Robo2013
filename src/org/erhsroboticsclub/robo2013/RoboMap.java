@@ -34,7 +34,9 @@ public class RoboMap {
     /* Left Stick Controls */
     public static final int AUTO_AIM_BUTTON = 1;
     public static final int FIRE_BUTTON = 1; //LEFT
-    public static final int TURN_TO_TARGET_BUTTON = 6;    
+    public static final int TURN_TO_TARGET_BUTTON = 6;  
+    public static final int BUMP_UP_BUTTON = 3;
+    public static final int BUMP_DOWN_BUTTON = 2;
     
     /* Right Stick Controls */    
     public static final int FEED_ANGLE_BUTTON = 1;
@@ -44,7 +46,10 @@ public class RoboMap {
     public static final int DYNAMIC_ANGLE_BUTTON = 5;
 
     /* Driver Station LCD Lines */
-    public static final Line ANGLE_LINE = Line.kUser1;
+    public static final Line STATUS_LINE = Line.kUser1;
+    public static final Line ANGLE_LINE  = Line.kUser2;
+    public static final Line SETPT_LINE   = Line.kUser3;
+    public static final Line ERROR_LINE  = Line.kUser4;
     
     /* Linear Accelerator Angle Constants */
     public static final double LAUNCHER_ANGLE_MIN = 0;
@@ -60,7 +65,7 @@ public class RoboMap {
     /* Linear Accelerator PID Constants */
     public static final double LAUNCHER_PID_P = 0.1;
     public static final double LAUNCHER_PID_I = 0;
-        public static final double LAUNCHER_PID_D = 0.000000006;
+    public static final double LAUNCHER_PID_D = 0.000000006;
     
     public static final double LAUNCH_PID_MIN = -1;
     public static final double LAUNCH_PID_MAX = 1;

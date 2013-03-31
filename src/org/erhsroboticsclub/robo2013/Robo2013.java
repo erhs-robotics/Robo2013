@@ -9,7 +9,7 @@ public class Robo2013 extends SimpleRobot {
 
     private RobotDrive drive;
     private Joystick stickL, stickR;
-    private CANJaguar TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR;
+    private CANJaguar topLeftJaguar, bottomLeftJaguar, topRightJaguar, bottomRightJaguar;
     private Messenger msg;
     private LinearAccelerator launcher;
     private AI agent;
@@ -24,10 +24,10 @@ public class Robo2013 extends SimpleRobot {
         msg = new Messenger();
         msg.printLn("Loading FRC 2013");
         try {
-            TOP_LEFT_JAGUAR = new CANJaguar(RoboMap.TOP_LEFT_DRIVE_MOTOR);
-            BOTTOM_LEFT_JAGUAR = new CANJaguar(RoboMap.BOTTOM_LEFT_DRIVE_MOTOR);
-            TOP_RIGHT_JAGUAR = new CANJaguar(RoboMap.TOP_RIGHT_DRIVE_MOTOR);
-            BOTTOM_RIGHT_JAGUAR = new CANJaguar(RoboMap.BOTTOM_RIGHT_DRIVE_MOTOR);
+            topLeftJaguar = new CANJaguar(RoboMap.TOP_LEFT_DRIVE_MOTOR);
+            bottomLeftJaguar = new CANJaguar(RoboMap.BOTTOM_LEFT_DRIVE_MOTOR);
+            topRightJaguar = new CANJaguar(RoboMap.TOP_RIGHT_DRIVE_MOTOR);
+            bottomRightJaguar = new CANJaguar(RoboMap.BOTTOM_RIGHT_DRIVE_MOTOR);
 
         } catch (CANTimeoutException ex) {
             msg.printLn("CAN network failed!");
@@ -35,7 +35,7 @@ public class Robo2013 extends SimpleRobot {
         }
 
         launcher = new LinearAccelerator();
-        drive = new RobotDrive(TOP_LEFT_JAGUAR, BOTTOM_LEFT_JAGUAR, TOP_RIGHT_JAGUAR, BOTTOM_RIGHT_JAGUAR);
+        drive = new RobotDrive(topLeftJaguar, bottomLeftJaguar, topRightJaguar, bottomRightJaguar);
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
@@ -77,22 +77,25 @@ public class Robo2013 extends SimpleRobot {
         drive.setSafetyEnabled(false);
         Watchdog.getInstance().kill();
         msg.clearConsole();        
-        msg.printLn("Teleop Started");
+        msg.printOnLn("Teleop Mode", RoboMap.STATUS_LINE);
 
         while (isEnabled() && isOperatorControl()) {
+            double startTime = System.currentTimeMillis();
+            
+            /* Set launcher to speed ******************************************/
             launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
-            double start = System.currentTimeMillis();
 
-            /* Simple Tank Drive **************************************************/
+            /* Simple Tank Drive **********************************************/
             double moveValue = MathX.max(stickL.getY(), stickR.getY());
-            drive.tankDrive(stickL.getY() * RoboMap.SPEED, stickR.getY() * RoboMap.SPEED);
+            drive.tankDrive(stickL.getY() * RoboMap.SPEED, 
+                            stickR.getY() * RoboMap.SPEED);
 
-            /* Fire the frisbee ***************************************************/
+            /* Fire the frisbee ***********************************************/
             if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
                 launcher.launch();
             }
 
-            /* Set angle adjustment mode ******************************************/
+            /* Set angle adjustment mode **************************************/
             if (stickR.getRawButton(RoboMap.DYNAMIC_ANGLE_BUTTON)) {
                 dynamicMode = true;
             } else if (stickR.getRawButton(RoboMap.LEVEL_ANGLE_BUTTON)) {
@@ -106,35 +109,36 @@ public class Robo2013 extends SimpleRobot {
                 launchAngle = RoboMap.LAUNCHER_FAR_ANGLE;
             }
             
-            //bumps
-            if (stickL.getRawButton(3)) {
+            /* Allow minute adjustments of the launcher ***********************/
+            if (stickL.getRawButton(RoboMap.BUMP_UP_BUTTON)) {
                 launcher.bumpUp();
-            } else if(stickL.getRawButton(2)) {
+            } else if(stickL.getRawButton(RoboMap.BUMP_DOWN_BUTTON)) {
                 launcher.bumpDown();
             }
 
-            /* Setting the launch angle *******************************************/
+            /* Set the launch angle *******************************************/
             if (dynamicMode) {
                 launchAngle = MathX.map(stickR.getZ(), 1, -1, RoboMap.LAUNCHER_ANGLE_MIN,
-                        RoboMap.LAUNCHER_ANGLE_MAX);
+                                        RoboMap.LAUNCHER_ANGLE_MAX);
             }
-
             if (stickR.getRawButton(RoboMap.FEED_ANGLE_BUTTON)) {
                 launchAngle = RoboMap.LAUNCHER_FEED_ANGLE;
             }
-
             launcher.setAngle(launchAngle);
+            
+            /* Only adjust launcher if robot is not moving ********************/
             if (moveValue < 0.1) {
                 //launcher.adjustAngle();
             }
+            
+            /* Display launcher status ****************************************/
             double actualAngle = launcher.readAngle();
+            double error = launchAngle - actualAngle;
+            msg.printOnLn("angle: " + actualAngle, RoboMap.ANGLE_LINE);
+            msg.printOnLn("setpt: " + launchAngle, RoboMap.SETPT_LINE);
+            msg.printOnLn("error: " + error,       RoboMap.ERROR_LINE);
 
-            msg.printOnLn("angle: " + actualAngle, DriverStationLCD.Line.kUser1);
-            msg.printOnLn("setp: " + launchAngle, DriverStationLCD.Line.kUser2);
-            msg.printOnLn("error: " + (launchAngle - actualAngle), DriverStationLCD.Line.kUser3);
-
-
-            while (System.currentTimeMillis() - start < RoboMap.UPDATE_FREQ) {
+            while (System.currentTimeMillis() - startTime < RoboMap.UPDATE_FREQ) {
                 //Do nothing
             }
         }
@@ -204,4 +208,5 @@ public class Robo2013 extends SimpleRobot {
             launcher.launch();
         }
     }
+
 }
