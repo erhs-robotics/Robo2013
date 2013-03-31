@@ -78,9 +78,9 @@ public class Robo2013 extends SimpleRobot {
         Watchdog.getInstance().kill();
         msg.clearConsole();        
         msg.printLn("Teleop Started");
+        launcher.setWheels(0);
 
-        while (isEnabled() && isOperatorControl()) {
-            launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+        while (isEnabled() && isOperatorControl()) {            
             double start = System.currentTimeMillis();
 
             /* Simple Tank Drive **************************************************/
@@ -106,7 +106,7 @@ public class Robo2013 extends SimpleRobot {
                 launchAngle = RoboMap.LAUNCHER_FAR_ANGLE;
             }
             
-            //bumps
+            
             if (stickL.getRawButton(3)) {
                 launcher.bumpUp();
             } else if(stickL.getRawButton(2)) {
@@ -125,7 +125,7 @@ public class Robo2013 extends SimpleRobot {
 
             launcher.setAngle(launchAngle);
             if (moveValue < 0.1) {
-                //launcher.adjustAngle();
+                launcher.adjustAngle();
             }
             double actualAngle = launcher.readAngle();
 
