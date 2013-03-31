@@ -17,6 +17,8 @@ public class Robo2013 extends SimpleRobot {
     private int adjMode = -1; // -1 - dynamic, 0 - level, 1 - medium, 2 - high
     private boolean bumpingDown = false;
     private boolean bumpingUp = false;
+    private boolean raiseButtonDown = false;
+    private boolean lowerButtonDown = false;
     private double lastZValue = 0;
     private boolean firing = false;
     private boolean triggerDown = false;
@@ -89,6 +91,8 @@ public class Robo2013 extends SimpleRobot {
         lastZValue = 0;
         firing = false;
         triggerDown = false;
+        raiseButtonDown = false;
+        lowerButtonDown = false;
 
         while (isEnabled() && isOperatorControl()) {
             double startTime = System.currentTimeMillis();
@@ -102,7 +106,7 @@ public class Robo2013 extends SimpleRobot {
                     stickR.getY() * RoboMap.SPEED);
 
             /* Disable shoot mode if we are driving ***************************/
-            if (moveValue > 0.5) {
+            if (moveValue > 0.5) {                
                 launcher.setWheels(0);
                 firing = false;
             }
@@ -123,7 +127,7 @@ public class Robo2013 extends SimpleRobot {
                 adjMode = -1;
             }
 
-            if (stickR.getRawButton(RoboMap.RAISE_ANGLE_BUTTON)) {
+            if (stickR.getRawButton(RoboMap.RAISE_ANGLE_BUTTON) && !raiseButtonDown) {
                 if (adjMode == -1) {
                     double d1 = RoboMap.LAUNCHER_MED_ANGLE - actualAngle,
                             d2 = RoboMap.LAUNCHER_HIGH_ANGLE - actualAngle;
@@ -132,7 +136,12 @@ public class Robo2013 extends SimpleRobot {
                 } else {
                     adjMode = (int) MathX.clamp(++adjMode, 0, 2);
                 }
-            } else if (stickR.getRawButton(RoboMap.LOWER_ANGLE_BUTTON)) {
+                raiseButtonDown = true;
+            } else if (!stickR.getRawButton(RoboMap.RAISE_ANGLE_BUTTON) && raiseButtonDown) {
+                raiseButtonDown = false;
+            }
+            
+            if (stickR.getRawButton(RoboMap.LOWER_ANGLE_BUTTON) && !lowerButtonDown) {
                 if (adjMode == -1) {
                     double d0 = actualAngle - RoboMap.LAUNCHER_LEVEL_ANGLE,
                             d1 = actualAngle - RoboMap.LAUNCHER_MED_ANGLE;
@@ -141,6 +150,9 @@ public class Robo2013 extends SimpleRobot {
                 } else {
                     adjMode = (int) MathX.clamp(--adjMode, 0, 2);
                 }
+                raiseButtonDown = true;
+            } else if (!stickR.getRawButton(RoboMap.LOWER_ANGLE_BUTTON) && lowerButtonDown) {
+                lowerButtonDown = false;
             }
 
             /* Allow minute adjustments of the launcher ***********************/
