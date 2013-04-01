@@ -22,13 +22,16 @@ public class LinearAccelerator {
     private PIDControllerX pid;    
     private double angle = 31;
     
-    public static final double AUTO_SHOOT_SPEED = -.8;    
+    public static final double AUTO_SHOOT_SPEED = -.8;
+    
+    private int OVERSAMPLE_BITS = 4;
 
     public LinearAccelerator() {
         loadArmM1 = new PWM(RoboMap.LOAD_ARM_MOTOR1);
         loadArmM2 = new PWM(RoboMap.LOAD_ARM_MOTOR2);        
         limitSwitch = new DigitalInput(RoboMap.LIMIT_SWITCH);
         angleAccel = new AnalogChannel(RoboMap.LAUNCHER_ACCEL);
+        angleAccel.setOversampleBits(OVERSAMPLE_BITS);
         pid = new PIDControllerX(RoboMap.LAUNCHER_PID_P, RoboMap.LAUNCHER_PID_I, 
                                  RoboMap.LAUNCHER_PID_D);
 
