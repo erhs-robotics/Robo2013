@@ -113,7 +113,7 @@ public class Robo2013 extends SimpleRobot {
 
             /* Fire the frisbee ***********************************************/
             if (stickL.getRawButton(RoboMap.FIRE_BUTTON) && !firing) {
-                launcher.setWheels(moveValue);
+                launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
                 firing = true;
                 triggerDown = true;
             } else if (!stickL.getRawButton(RoboMap.FIRE_BUTTON) && firing) {
