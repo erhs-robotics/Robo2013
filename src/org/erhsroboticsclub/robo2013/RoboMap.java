@@ -78,5 +78,4 @@ public class RoboMap {
     //see LinearAccelerator
     //public static final double AUTO_SHOOT_TIMEOUT = 1000;
     
-    
 }

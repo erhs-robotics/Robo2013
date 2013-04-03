@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.AnalogChannel;
 import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PWM;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import org.erhsroboticsclub.robo2013.utilities.MathX;
 import org.erhsroboticsclub.robo2013.utilities.Messenger;
@@ -129,8 +128,6 @@ public class LinearAccelerator {
         loadArmM2.setRaw(127);
     }
     
-    
-    
     /**
      * Runs the PID loop for the specified amount of time
      * @param sleep The amount of time in milliseconds to run the PID 
@@ -159,9 +156,7 @@ public class LinearAccelerator {
             ex.printStackTrace();
         }
     }
-    
-    
-    
+        
     /**
      * Sets the target angle. DOES NOT ACTUAL MOVE ANYTHING. The angle is
      * clamped between the min and max values

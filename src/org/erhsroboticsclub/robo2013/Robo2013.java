@@ -9,7 +9,7 @@ public class Robo2013 extends SimpleRobot {
 
     private RobotDrive drive;
     private Joystick stickL, stickR;
-    private CANJaguar topLeftJaguar, bottomLeftJaguar, topRightJaguar, bottomRightJaguar;
+    private CANJaguar topLeftJag, bottomLeftJag, topRightJag, bottomRightJag;
     private Messenger msg;
     private LinearAccelerator launcher;
     private AI agent;
@@ -32,10 +32,10 @@ public class Robo2013 extends SimpleRobot {
         msg = new Messenger();
         msg.printLn("Loading FRC 2013");
         try {
-            topLeftJaguar = new CANJaguar(RoboMap.TOP_LEFT_DRIVE_MOTOR);
-            bottomLeftJaguar = new CANJaguar(RoboMap.BOTTOM_LEFT_DRIVE_MOTOR);
-            topRightJaguar = new CANJaguar(RoboMap.TOP_RIGHT_DRIVE_MOTOR);
-            bottomRightJaguar = new CANJaguar(RoboMap.BOTTOM_RIGHT_DRIVE_MOTOR);
+            topLeftJag = new CANJaguar(RoboMap.TOP_LEFT_DRIVE_MOTOR);
+            bottomLeftJag = new CANJaguar(RoboMap.BOTTOM_LEFT_DRIVE_MOTOR);
+            topRightJag = new CANJaguar(RoboMap.TOP_RIGHT_DRIVE_MOTOR);
+            bottomRightJag = new CANJaguar(RoboMap.BOTTOM_RIGHT_DRIVE_MOTOR);
 
         } catch (CANTimeoutException ex) {
             msg.printLn("CAN network failed!");
@@ -43,7 +43,7 @@ public class Robo2013 extends SimpleRobot {
         }
 
         launcher = new LinearAccelerator();
-        drive = new RobotDrive(topLeftJaguar, bottomLeftJaguar, topRightJaguar, bottomRightJaguar);
+        drive = new RobotDrive(topLeftJag, bottomLeftJag, topRightJag, bottomRightJag);
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
@@ -103,7 +103,7 @@ public class Robo2013 extends SimpleRobot {
             /* Simple Tank Drive **********************************************/
             double moveValue = MathX.max(stickL.getY(), stickR.getY());
             drive.tankDrive(stickL.getY() * RoboMap.SPEED,
-                    stickR.getY() * RoboMap.SPEED);
+                            stickR.getY() * RoboMap.SPEED);
 
             /* Disable shoot mode if we are driving ***************************/
             if (moveValue > 0.5) {                
@@ -177,8 +177,9 @@ public class Robo2013 extends SimpleRobot {
 
             switch (adjMode) {
                 case -1:
-                    launchAngle = MathX.map(stickR.getZ(), 1, -1, RoboMap.LAUNCHER_ANGLE_MIN,
-                            RoboMap.LAUNCHER_ANGLE_MAX);
+                    launchAngle = MathX.map(stickR.getZ(), 1, -1, 
+                                            RoboMap.LAUNCHER_ANGLE_MIN,
+                                            RoboMap.LAUNCHER_ANGLE_MAX);
                     break;
                 case 0:
                     launchAngle = RoboMap.LAUNCHER_LEVEL_ANGLE;
@@ -202,7 +203,7 @@ public class Robo2013 extends SimpleRobot {
 
             launcher.setAngle(launchAngle);
 
-            /* Only adjust launcher if robot is not moving or firing***********/
+            /* Only adjust launcher if robot is not moving nor firing *********/
             if (moveValue < 0.1 && !firing) {
                 launcher.adjustAngle();
             }
@@ -262,15 +263,14 @@ public class Robo2013 extends SimpleRobot {
      */
     private void autonomousB() {
         msg.printLn("Autonomous B:");
-        // 0) Set the wheels to proper speed
+        /* 0) Set the wheels to proper speed **********************************/
         msg.printLn("Starting up launcher...");
         launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
-        // 1) Set the launch angle
+        /* 1) Set the launch angle ********************************************/
         msg.printLn("Setting angle to " + RoboMap.AUTO_SHOOT_ANGLE + "...");
         launcher.setAngle(RoboMap.AUTO_SHOOT_ANGLE);
         launcher.waitForAngle(5000);
-
-        // 2) Fire all frisbees
+        /* 2) Fire all frisbees ***********************************************/
         msg.printLn("Starting launch!");
         for (int i = 0; i < 3; i++) {
             launcher.setAngle(RoboMap.AUTO_SHOOT_ANGLE);
@@ -278,4 +278,5 @@ public class Robo2013 extends SimpleRobot {
             launcher.launch();
         }
     }
+
 }
