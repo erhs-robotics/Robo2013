@@ -14,15 +14,6 @@ public class Robo2013 extends SimpleRobot {
     private LinearAccelerator launcher;
     private AI agent;
     private double launchAngle = RoboMap.LAUNCHER_LEVEL_ANGLE;
-    private int adjMode = -1; // -1 - dynamic, 0 - level, 1 - medium, 2 - high
-    private boolean bumpingDown = false;
-    private boolean bumpingUp = false;
-    private boolean raiseButtonDown = false;
-    private boolean lowerButtonDown = false;
-    private double lastZValue = 0;
-    private boolean firing = false;
-    private boolean triggerDown = false;
-    private String[] modeStrings = {"Dynamic", "Level", "Medium", "High"};
 
     /**
      * Called once the cRIO boots up
@@ -85,14 +76,15 @@ public class Robo2013 extends SimpleRobot {
         drive.setSafetyEnabled(false);
         Watchdog.getInstance().kill();
         msg.clearConsole();
-        adjMode = -1; // -1 - dynamic, 0 - level, 1 - medium, 2 - high
-        bumpingDown = false;
-        bumpingUp = false;
-        lastZValue = 0;
-        firing = false;
-        triggerDown = false;
-        raiseButtonDown = false;
-        lowerButtonDown = false;
+        int adjMode = -1; // -1 - dynamic, 0 - level, 1 - medium, 2 - high
+        boolean bumpingDown = false;
+        boolean bumpingUp = false;
+        double lastZValue = 0;
+        boolean firing = false;
+        boolean triggerDown = false;
+        boolean raiseButtonDown = false;
+        boolean lowerButtonDown = false;
+        String[] modeStrings = {"Dynamic", "Level", "Medium", "High"};
 
         while (isEnabled() && isOperatorControl()) {
             double startTime = System.currentTimeMillis();
