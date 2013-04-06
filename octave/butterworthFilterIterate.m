@@ -9,9 +9,9 @@ nyq_freq = samp_freq/2;
 
 for j=1:10;
 	%cutoff_freq=j %use this line to test every integer in the range (line 10)
-	testabove = 3 %change this line set a number to test every tenth 
+	testabove = 1 %change this line set a number to test every tenth 
 	%(i.e. 3 would result in the values being 3.1, 3.2 etc.) 
-	%cutoff_freq=(j/10)+ testabove % use this line to enable testabove parameter
+	cutoff_freq=(j/10)+ testabove % use this line to enable testabove parameter
 	
 	
 
