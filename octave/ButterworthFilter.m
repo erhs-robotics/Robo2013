@@ -21,6 +21,9 @@ cutoff_freq=8;
 % a 1 Hz and a 20 Hz sine wave and some gaussian noise.
 t=0:1/samp_freq:5;
 input=20 + sin(2*pi*20*t) + randn(size(t));
+plot(t, input);
+print("nofilter");
+
 output=filter(b,a,input);
 plot(t, [output]);
 print("normsamp");
@@ -30,7 +33,7 @@ print("normsamp");
 
 % oversample time interval
 t2=0:1/oversamp_freq:5;
-input2=20 + sin(2*pi*200*t2) + randn(size(t2));
+input2=20 + sin(2*pi*20*t2) + randn(size(t2));
 output2=filter(b,a,input2);
 plot(t2, [output2]);
 print("oversamp");
