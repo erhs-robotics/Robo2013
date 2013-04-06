@@ -1,8 +1,8 @@
 pkg load all; % Load the required signal processing toolbox
 
 % sampling frequency in Hz
-samp_freq = 300;
-oversamp_freq = samp_freq * 16;
+samp_freq = 800;
+oversamp_freq = samp_freq * (2**4);
 
 % nyquist frequency, half the sampling frequency
 nyq_freq = samp_freq/2;
@@ -10,7 +10,7 @@ nyq_freq2 = oversamp_freq/2;
 
 % cut off frequency, in Hz, between 0 and nyquist frequency
 % try playing around and changing this value guys
-cutoff_freq=7;
+cutoff_freq=8;
 
 % create a first-order Butterworth low pass.
 % The returned vectors are of legth n.
