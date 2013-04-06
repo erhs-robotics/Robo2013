@@ -1,6 +1,7 @@
 package org.erhsroboticsclub.robo2013;
 
 import edu.wpi.first.wpilibj.AnalogChannel;
+import edu.wpi.first.wpilibj.AnalogModule;
 import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PWM;
@@ -23,13 +24,15 @@ public class LinearAccelerator {
     
     public static final double AUTO_SHOOT_SPEED = -.8;
     
-    private int OVERSAMPLE_BITS = 4;
+    private final int AVERAGING_BITS  = 7;
+    private final int OVERSAMPLE_BITS = 4;
 
     public LinearAccelerator() {
         loadArmM1 = new PWM(RoboMap.LOAD_ARM_MOTOR1);
         loadArmM2 = new PWM(RoboMap.LOAD_ARM_MOTOR2);        
         limitSwitch = new DigitalInput(RoboMap.LIMIT_SWITCH);
         angleAccel = new AnalogChannel(RoboMap.LAUNCHER_ACCEL);
+        angleAccel.setAverageBits(AVERAGING_BITS);
         angleAccel.setOversampleBits(OVERSAMPLE_BITS);
         pid = new PIDControllerX(RoboMap.LAUNCHER_PID_P, RoboMap.LAUNCHER_PID_I, 
                                  RoboMap.LAUNCHER_PID_D);
