@@ -16,7 +16,7 @@ public class Messenger {
     private DriverStationLCD driverLCD;
     private String msg[];
     private final String EMPTY_SPACE = "                             ";
-    private final int MAX_MESSAGE_LENGTH = 20;
+    private final int MAX_MESSAGE_LENGTH = DriverStationLCD.kLineLength;
     private final DriverStationLCD.Line[] LINE = {DriverStationLCD.Line.kUser1,
                                                   DriverStationLCD.Line.kUser2, 
                                                   DriverStationLCD.Line.kUser3, 
