@@ -76,13 +76,14 @@ public class Robo2013 extends SimpleRobot {
         drive.setSafetyEnabled(false);
         Watchdog.getInstance().kill();
         msg.clearConsole();
-        int adjMode = -1; // -1 - dynamic, 0 - level, 1 - medium, 2 - high
+        int adjMode = -1; // -1 - dynamic, 0 - level, 1 - medium, 2 - high, 3 - bumping, 4 - feeding
+        int last_adjMode = -1;
         boolean bumpingDown = false;
         boolean bumpingUp = false;
         double lastZValue = 0;        
         boolean raiseButtonDown = false;
         boolean lowerButtonDown = false;
-        String[] modeStrings = {"Dynamic", "Level", "Medium", "High"};
+        String[] modeStrings = {"Dynamic", "Level", "Medium", "High", "Bumping", "Feeding"};
 
         while (isEnabled() && isOperatorControl()) {
             double startTime = System.currentTimeMillis();
@@ -135,16 +136,18 @@ public class Robo2013 extends SimpleRobot {
 
             /* Allow minute adjustments of the launcher ***********************/
             boolean button_down = stickL.getRawButton(RoboMap.BUMP_UP_BUTTON);
-            if (button_down && !bumpingUp) {
-                launcher.bumpUp();
+            if (button_down && !bumpingUp) {                
+                adjMode = 3;
+                launchAngle += 1;
                 bumpingUp = true;
             } else if (!button_down) {
                 bumpingUp = false;
             }
 
             button_down = stickL.getRawButton(RoboMap.BUMP_DOWN_BUTTON);
-            if (button_down && !bumpingDown) {
-                launcher.bumpDown();
+            if (button_down && !bumpingDown) {                
+                adjMode = 3;
+                launchAngle -= 1;
                 bumpingDown = true;
             } else if (!button_down) {
                 bumpingDown = false;
@@ -168,6 +171,9 @@ public class Robo2013 extends SimpleRobot {
                 case 2:
                     launchAngle = RoboMap.LAUNCHER_HIGH_ANGLE;
                     break;
+                case 3:
+                    //Do nothing
+                    break;
                 default:// Should not get here
                     msg.printLn("Invalid launch mode of " + adjMode + "!");
                     msg.printLn("Reseting to 0...");
@@ -177,8 +183,12 @@ public class Robo2013 extends SimpleRobot {
             
             /* Check for special feeder station mode **************************/
             if (stickR.getRawButton(RoboMap.FEED_ANGLE_BUTTON)) {
+                if(adjMode != 4) last_adjMode = adjMode;
+                adjMode = 4;
                 launchAngle = RoboMap.LAUNCHER_FEED_ANGLE;
-            }           
+            } else {
+                adjMode = last_adjMode;
+            }
 
             /* Adjust the angle with the PID Controller ***********************/
             launcher.setAngle(launchAngle);
