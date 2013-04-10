@@ -172,6 +172,7 @@ public class Robo2013 extends SimpleRobot {
                     launchAngle = RoboMap.LAUNCHER_HIGH_ANGLE;
                     break;
                 case 3:
+                case 4:
                     //Do nothing
                     break;
                 default:// Should not get here
