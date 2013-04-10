@@ -79,9 +79,7 @@ public class Robo2013 extends SimpleRobot {
         int adjMode = -1; // -1 - dynamic, 0 - level, 1 - medium, 2 - high
         boolean bumpingDown = false;
         boolean bumpingUp = false;
-        double lastZValue = 0;
-        boolean firing = false;
-        boolean triggerDown = false;
+        double lastZValue = 0;        
         boolean raiseButtonDown = false;
         boolean lowerButtonDown = false;
         String[] modeStrings = {"Dynamic", "Level", "Medium", "High"};
