@@ -88,29 +88,17 @@ public class Robo2013 extends SimpleRobot {
 
         while (isEnabled() && isOperatorControl()) {
             double startTime = System.currentTimeMillis();
+            launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
             msg.printOnLn("Teleop Mode", RoboMap.STATUS_LINE);
             msg.printOnLn("Angle Mode: " + modeStrings[adjMode + 1], RoboMap.ANGLE_LINE);
             double actualAngle = launcher.readAngle();
 
-            /* Simple Tank Drive **********************************************/
-            double moveValue = MathX.max(stickL.getY(), stickR.getY());
+            /* Simple Tank Drive **********************************************/           
             drive.tankDrive(stickL.getY() * RoboMap.SPEED,
-                            stickR.getY() * RoboMap.SPEED);
-
-            /* Disable shoot mode if we are driving ***************************/
-            if (moveValue > 0.5) {                
-                launcher.setWheels(0);
-                firing = false;
-            }
+                            stickR.getY() * RoboMap.SPEED);           
 
             /* Fire the frisbee ***********************************************/
-            if (stickL.getRawButton(RoboMap.FIRE_BUTTON) && !firing) {
-                launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
-                firing = true;
-                triggerDown = true;
-            } else if (!stickL.getRawButton(RoboMap.FIRE_BUTTON) && firing) {
-                triggerDown = false;
-            } else if (stickL.getRawButton(RoboMap.FIRE_BUTTON) && firing && !triggerDown) {
+            if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {                
                 launcher.launch();
             }
 
@@ -188,17 +176,15 @@ public class Robo2013 extends SimpleRobot {
                     adjMode = 0;
                     break;
             }
-
+            
+            /* Check for special feeder station mode **************************/
             if (stickR.getRawButton(RoboMap.FEED_ANGLE_BUTTON)) {
                 launchAngle = RoboMap.LAUNCHER_FEED_ANGLE;
-            }
+            }           
 
+            /* Adjust the angle with the PID Controller ***********************/
             launcher.setAngle(launchAngle);
-
-            /* Only adjust launcher if robot is not moving nor firing *********/
-            if (moveValue < 0.1 && !firing) {
-                launcher.adjustAngle();
-            }
+            launcher.adjustAngle();            
 
             /* Set the loop frequency *****************************************/
             while (System.currentTimeMillis() - startTime < RoboMap.UPDATE_FREQ) {
