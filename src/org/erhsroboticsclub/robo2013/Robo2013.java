@@ -105,7 +105,7 @@ public class Robo2013 extends SimpleRobot {
 
             /* Fire the frisbee ***********************************************/
             if (stickL.getRawButton(RoboMap.FIRE_BUTTON) && !firing) {
-                launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+                launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
                 firing = true;
                 triggerDown = true;
             } else if (!stickL.getRawButton(RoboMap.FIRE_BUTTON) && firing) {
@@ -217,7 +217,7 @@ public class Robo2013 extends SimpleRobot {
 
         // 0) Set wheels to proper speed
         msg.printLn("Starting up launcher...");
-        launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+        launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
 
         // 1) Auto aim launcher
         msg.printLn("Aiming launcher...");
@@ -257,7 +257,7 @@ public class Robo2013 extends SimpleRobot {
         msg.printLn("Autonomous B:");
         /* 0) Set the wheels to proper speed **********************************/
         msg.printLn("Starting up launcher...");
-        launcher.setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+        launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
         /* 1) Set the launch angle ********************************************/
         msg.printLn("Setting angle to " + RoboMap.AUTO_SHOOT_ANGLE + "...");
         launcher.setAngle(RoboMap.AUTO_SHOOT_ANGLE);

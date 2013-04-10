@@ -47,7 +47,7 @@ public class RoboMap {
     public static final Line STATUS_LINE = Line.kUser1;
     public static final Line ANGLE_LINE  = Line.kUser2;    
     
-    /* Linear Accelerator Angle Constants */
+    /* Linear Accelerator */
     public static final double LAUNCHER_ANGLE_MIN = 0;
     public static final double LAUNCHER_ANGLE_MAX = 23;      
     public static final double LAUNCHER_FEED_ANGLE = 14;
@@ -57,6 +57,9 @@ public class RoboMap {
     public static final double ACCEL_MIN = 2.506207535;
     public static final double ACCEL_MAX = 3.514814715;
     public static final double ANGLE_OFFSET = 20.5;
+    public static final double AUTO_SHOOT_SPEED = -.8;
+    public static final int AVERAGING_BITS  = 7;
+    public static final int OVERSAMPLE_BITS = 4;
     
     /* Linear Accelerator PID Constants */
     public static final double LAUNCHER_PID_P = 0.1;

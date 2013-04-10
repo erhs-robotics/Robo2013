@@ -20,20 +20,15 @@ public class LinearAccelerator {
     public AnalogChannel angleAccel;
     private Messenger msg = new Messenger();
     private PIDControllerX pid;    
-    private double angle = 31;
-    
-    public static final double AUTO_SHOOT_SPEED = -.8;
-    
-    private final int AVERAGING_BITS  = 7;
-    private final int OVERSAMPLE_BITS = 4;
+    private double angle = 31;    
 
     public LinearAccelerator() {
         loadArmM1 = new PWM(RoboMap.LOAD_ARM_MOTOR1);
         loadArmM2 = new PWM(RoboMap.LOAD_ARM_MOTOR2);        
         limitSwitch = new DigitalInput(RoboMap.LIMIT_SWITCH);
         angleAccel = new AnalogChannel(RoboMap.LAUNCHER_ACCEL);
-        angleAccel.setAverageBits(AVERAGING_BITS);
-        angleAccel.setOversampleBits(OVERSAMPLE_BITS);
+        angleAccel.setAverageBits(RoboMap.AVERAGING_BITS);
+        angleAccel.setOversampleBits(RoboMap.OVERSAMPLE_BITS);
         pid = new PIDControllerX(RoboMap.LAUNCHER_PID_P, RoboMap.LAUNCHER_PID_I, 
                                  RoboMap.LAUNCHER_PID_D);
 
@@ -100,13 +95,13 @@ public class LinearAccelerator {
      * Launches a Frisby
      */
     public void launch() {
-        setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+        setWheels(RoboMap.AUTO_SHOOT_SPEED);
         loadArmM1.setRaw(1);
         loadArmM2.setRaw(1);
         try {
             double start  = System.currentTimeMillis();
             while(System.currentTimeMillis() - start < 500) {
-                setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+                setWheels(RoboMap.AUTO_SHOOT_SPEED);
                 //adjustAngle();
             }
             
@@ -124,7 +119,7 @@ public class LinearAccelerator {
                 msg.printLn("Stopping launch...");
                 break;
             }
-            setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+            setWheels(RoboMap.AUTO_SHOOT_SPEED);
             //adjustAngle();
         }
         loadArmM1.setRaw(127);
@@ -139,7 +134,7 @@ public class LinearAccelerator {
         double start = System.currentTimeMillis();
         while(System.currentTimeMillis() - start < sleep) {            
             adjustAngle();
-            setWheels(LinearAccelerator.AUTO_SHOOT_SPEED);
+            setWheels(RoboMap.AUTO_SHOOT_SPEED);
         }
         msg.printLn("DONE!");
         
