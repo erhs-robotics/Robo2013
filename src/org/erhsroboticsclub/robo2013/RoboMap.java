@@ -49,13 +49,13 @@ public class RoboMap {
     
     /* Linear Accelerator */
     public static final double LAUNCHER_ANGLE_MIN = 0;
-    public static final double LAUNCHER_ANGLE_MAX = 23;
+    public static final double LAUNCHER_ANGLE_MAX = 20;
     public static final double LAUNCHER_FEED_ANGLE = 14;
     public static final double LAUNCHER_LEVEL_ANGLE = 0;
     public static final double LAUNCHER_HIGH_ANGLE = 20;
     public static final double LAUNCHER_MED_ANGLE = 10;
-    public static final double VOLT_MIN = 2.506207535;
-    public static final double VOLT_MAX = 3.514814715;
+    public static final double VOLT_MIN = 1.096215865;
+    public static final double VOLT_MAX = 1.507892265;
     public static final double ANGLE_OFFSET = 0;
     public static final double AUTO_SHOOT_SPEED = -.8;
     public static final int AVERAGING_BITS = 7;
