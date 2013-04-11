@@ -265,7 +265,7 @@ public class Robo2013 extends SimpleRobot {
         /* 2) Fire all frisbees ***********************************************/
         msg.printLn("Starting launch!");
         for (int i = 0; i < 3; i++) {
-            launcher.setAngle(RoboMap.AUTO_SHOOT_ANGLE);
+            launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
             msg.printLn("Launching disk " + (i + 1) + "...");
             launcher.launch();
         }
