@@ -73,26 +73,6 @@ public class LinearAccelerator {
         this.setWheels(speed, speed);
     }
 
-    public void bumpUp() {
-        try {
-            this.elevatorMotor.setX(-0.4);
-            Thread.sleep(25);
-            this.elevatorMotor.setX(0);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    public void bumpDown() {
-        try {
-            this.elevatorMotor.setX(0.4);
-            Thread.sleep(25);
-            this.elevatorMotor.setX(0);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
     /**
      * Launches a Frisby
      */
@@ -152,7 +132,7 @@ public class LinearAccelerator {
         double correction = pid.doPID(currentAngle);
 
         try {
-            elevatorMotor.setX(-correction);
+            elevatorMotor.setX(correction);
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }

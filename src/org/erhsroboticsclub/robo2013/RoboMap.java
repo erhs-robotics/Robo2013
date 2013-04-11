@@ -40,8 +40,8 @@ public class RoboMap {
     
     /* Right Stick Controls */
     public static final int FEED_ANGLE_BUTTON = 1;
-    public static final int RAISE_ANGLE_BUTTON = 5;
-    public static final int LOWER_ANGLE_BUTTON = 4;
+    public static final int RAISE_ANGLE_BUTTON = 3;
+    public static final int LOWER_ANGLE_BUTTON = 2;
 
     /* Driver Station LCD Lines */
     public static final Line STATUS_LINE = Line.kUser1;
@@ -49,20 +49,20 @@ public class RoboMap {
     
     /* Linear Accelerator */
     public static final double LAUNCHER_ANGLE_MIN = 0;
-    public static final double LAUNCHER_ANGLE_MAX = 23;
-    public static final double LAUNCHER_FEED_ANGLE = 14;
+    public static final double LAUNCHER_ANGLE_MAX = 35;
+    public static final double LAUNCHER_FEED_ANGLE = 20;
     public static final double LAUNCHER_LEVEL_ANGLE = 0;
-    public static final double LAUNCHER_HIGH_ANGLE = 20;
-    public static final double LAUNCHER_MED_ANGLE = 10;
-    public static final double VOLT_MIN = 2.506207535;
-    public static final double VOLT_MAX = 3.514814715;
+    public static final double LAUNCHER_HIGH_ANGLE = 30;
+    public static final double LAUNCHER_MED_ANGLE = 23;
+    public static final double VOLT_MIN = 1.008734630;
+    public static final double VOLT_MAX = 1.569643725;
     public static final double ANGLE_OFFSET = 0;
     public static final double AUTO_SHOOT_SPEED = -.8;
     public static final int AVERAGING_BITS = 7;
     public static final int OVERSAMPLE_BITS = 4;
     
     /* Linear Accelerator PID Constants */
-    public static final double LAUNCHER_PID_P = 0.1;
+    public static final double LAUNCHER_PID_P = 0.15;
     public static final double LAUNCHER_PID_I = 0;
     public static final double LAUNCHER_PID_D = 0;
     public static final double LAUNCH_PID_MIN = -1;
@@ -76,5 +76,5 @@ public class RoboMap {
     /* Dead Reckoning Constants */
     public static final double AUTO_BACKUP_TIME = 1;
     public static final double AUTO_MOVE_SPEED = 0.5;
-    public static final double AUTO_SHOOT_ANGLE = 23;
+    public static final double AUTO_SHOOT_ANGLE = 28;
 }
