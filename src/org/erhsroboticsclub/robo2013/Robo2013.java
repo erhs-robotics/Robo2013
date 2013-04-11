@@ -120,7 +120,7 @@ public class Robo2013 extends SimpleRobot {
             }
 
             if (stickR.getRawButton(RoboMap.RAISE_ANGLE_BUTTON) && !raiseButtonDown) {
-                if (adjMode == -1) {
+                if (adjMode == -1 || adjMode == 3) {
                     double d1 = RoboMap.LAUNCHER_MED_ANGLE - actualAngle,
                             d2 = RoboMap.LAUNCHER_HIGH_ANGLE - actualAngle;
                     d1 = d1 < 0 ? Double.POSITIVE_INFINITY : d1;
@@ -134,7 +134,7 @@ public class Robo2013 extends SimpleRobot {
             }
             
             if (stickR.getRawButton(RoboMap.LOWER_ANGLE_BUTTON) && !lowerButtonDown) {
-                if (adjMode == -1) {
+                if (adjMode == -1 || adjMode == 3) {
                     double d0 = actualAngle - RoboMap.LAUNCHER_LEVEL_ANGLE,
                             d1 = actualAngle - RoboMap.LAUNCHER_MED_ANGLE;
                     d1 = d1 < 0 ? Double.POSITIVE_INFINITY : d1;
