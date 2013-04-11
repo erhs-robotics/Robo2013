@@ -17,3 +17,4 @@ CMakeCache.txt
 *.png
 *.json
 *.bak.xml
+*.ps
