@@ -7,6 +7,7 @@ public class RoboMap {
     /* Robot Constants */
     public static final double SPEED = 1;
     public static final double UPDATE_FREQ = 5;
+    public static final long BUMP_TIME = 50;
     
     /* CAN ID Numbers */
     public static final int SECONDARY_LAUNCH_MOTOR = 1; // second
@@ -37,6 +38,9 @@ public class RoboMap {
     public static final int TURN_TO_TARGET_BUTTON = 6;
     public static final int BUMP_UP_BUTTON = 3;
     public static final int BUMP_DOWN_BUTTON = 2;
+    public static final int BUMP_DRIVE_LEFT = 4;
+    public static final int BUMP_DRIVE_RIGHT = 5;
+    
     
     /* Right Stick Controls */
     public static final int FEED_ANGLE_BUTTON = 1;
@@ -50,7 +54,7 @@ public class RoboMap {
     /* Linear Accelerator */
     public static final double LAUNCHER_ANGLE_MIN = 0;
     public static final double LAUNCHER_ANGLE_MAX = 35;
-    public static final double LAUNCHER_FEED_ANGLE = 20;
+    public static final double LAUNCHER_FEED_ANGLE = 12;
     public static final double LAUNCHER_LEVEL_ANGLE = 0;
     public static final double LAUNCHER_HIGH_ANGLE = 35;
     public static final double LAUNCHER_MED_ANGLE = 28;
@@ -71,10 +75,10 @@ public class RoboMap {
     /* Turn To Target PID Constants */
     public static final double TURN_PID_P = 1;
     public static final double TURN_PID_I = 0;
-    public static final double TURN_PID_D = 0;
+    public static final double TURN_PID_D = 0;//33.63
     
     /* Dead Reckoning Constants */
     public static final double AUTO_BACKUP_TIME = 1;
-    public static final double AUTO_MOVE_SPEED = 0.5;//from the side
-    public static final double AUTO_SHOOT_ANGLE = 28.4;//28.4//32.65
+    public static final double AUTO_MOVE_SPEED = 0.5;//from the side 28.4
+    public static final double AUTO_SHOOT_ANGLE = 33.63;//top
 }

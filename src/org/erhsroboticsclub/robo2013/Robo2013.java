@@ -14,12 +14,11 @@ public class Robo2013 extends SimpleRobot {
     private LinearAccelerator launcher;
     private AI agent;
     private double launchAngle = RoboMap.LAUNCHER_LEVEL_ANGLE;
-
+    Talon t;
     /**
      * Called once the cRIO boots up
      */
     public void robotInit() {
-
         msg = new Messenger();
         msg.printLn("Loading FRC 2013");
         try {
@@ -80,6 +79,8 @@ public class Robo2013 extends SimpleRobot {
         int last_adjMode = -1;
         boolean bumpingDown = false;
         boolean bumpingUp = false;
+        boolean bumpingLeft = false;
+        boolean bumpingRight = false;
         double lastZValue = 0;        
         boolean raiseButtonDown = false;
         boolean lowerButtonDown = false;
@@ -87,7 +88,7 @@ public class Robo2013 extends SimpleRobot {
 
         while (isEnabled() && isOperatorControl()) {
             double startTime = System.currentTimeMillis();
-            //launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
+            launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
             double actualAngle = launcher.readAngle();
             msg.printOnLn("Teleop Mode", RoboMap.STATUS_LINE);
             msg.printOnLn("Angle Mode: " + modeStrings[adjMode + 1], RoboMap.ANGLE_LINE);            
@@ -157,6 +158,36 @@ public class Robo2013 extends SimpleRobot {
             } else if (!button_down) {
                 bumpingDown = false;
             }
+            
+            /* Allow minute adjustments of the drive train ********************/
+            button_down = stickL.getRawButton(RoboMap.BUMP_DRIVE_LEFT);
+            if(button_down && !bumpingLeft) {
+                drive.tankDrive(-RoboMap.SPEED, RoboMap.SPEED);
+                try {
+                    Thread.sleep(RoboMap.BUMP_TIME);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                drive.tankDrive(0, 0);
+                bumpingLeft = true;
+            } else if(!button_down) {
+                bumpingLeft = false;
+            }
+            
+            button_down = stickL.getRawButton(RoboMap.BUMP_DRIVE_RIGHT);
+            if(button_down && !bumpingRight) {
+                drive.tankDrive(RoboMap.SPEED, -RoboMap.SPEED);
+                try {
+                    Thread.sleep(RoboMap.BUMP_TIME);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                drive.tankDrive(0, 0);
+                bumpingRight = true;
+            } else if(!button_down) {
+                bumpingRight = false;
+            }
+            
 
             /* Set the launch angle *******************************************/
             lastZValue = stickR.getZ();
