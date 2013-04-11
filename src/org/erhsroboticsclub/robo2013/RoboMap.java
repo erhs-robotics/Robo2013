@@ -40,8 +40,8 @@ public class RoboMap {
     
     /* Right Stick Controls */
     public static final int FEED_ANGLE_BUTTON = 1;
-    public static final int RAISE_ANGLE_BUTTON = 5;
-    public static final int LOWER_ANGLE_BUTTON = 4;
+    public static final int RAISE_ANGLE_BUTTON = 3;
+    public static final int LOWER_ANGLE_BUTTON = 2;
 
     /* Driver Station LCD Lines */
     public static final Line STATUS_LINE = Line.kUser1;
