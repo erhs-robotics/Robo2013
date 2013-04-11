@@ -52,8 +52,8 @@ public class RoboMap {
     public static final double LAUNCHER_ANGLE_MAX = 23;
     public static final double LAUNCHER_FEED_ANGLE = 14;
     public static final double LAUNCHER_LEVEL_ANGLE = 0;
-    public static final double LAUNCHER_HIGH_ANGLE = 20;// Behind the pyramid
-    public static final double LAUNCHER_MED_ANGLE = 10;// Infront of the pyramid
+    public static final double LAUNCHER_HIGH_ANGLE = 20;
+    public static final double LAUNCHER_MED_ANGLE = 10;
     public static final double VOLT_MIN = 2.506207535;
     public static final double VOLT_MAX = 3.514814715;
     public static final double ANGLE_OFFSET = 0;
