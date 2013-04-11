@@ -50,10 +50,10 @@ public class RoboMap {
     /* Linear Accelerator */
     public static final double LAUNCHER_ANGLE_MIN = 0;
     public static final double LAUNCHER_ANGLE_MAX = 35;
-    public static final double LAUNCHER_FEED_ANGLE = 14;
+    public static final double LAUNCHER_FEED_ANGLE = 20;
     public static final double LAUNCHER_LEVEL_ANGLE = 0;
-    public static final double LAUNCHER_HIGH_ANGLE = 20;
-    public static final double LAUNCHER_MED_ANGLE = 10;
+    public static final double LAUNCHER_HIGH_ANGLE = 30;
+    public static final double LAUNCHER_MED_ANGLE = 23;
     public static final double VOLT_MIN = 1.008734630;
     public static final double VOLT_MAX = 1.569643725;
     public static final double ANGLE_OFFSET = 0;
@@ -62,7 +62,7 @@ public class RoboMap {
     public static final int OVERSAMPLE_BITS = 4;
     
     /* Linear Accelerator PID Constants */
-    public static final double LAUNCHER_PID_P = 0.1;
+    public static final double LAUNCHER_PID_P = 0.15;
     public static final double LAUNCHER_PID_I = 0;
     public static final double LAUNCHER_PID_D = 0;
     public static final double LAUNCH_PID_MIN = -1;

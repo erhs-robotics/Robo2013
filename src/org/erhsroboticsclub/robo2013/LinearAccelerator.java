@@ -132,7 +132,7 @@ public class LinearAccelerator {
         double correction = pid.doPID(currentAngle);
 
         try {
-            elevatorMotor.setX(-correction);
+            elevatorMotor.setX(correction);
         } catch (CANTimeoutException ex) {
             ex.printStackTrace();
         }

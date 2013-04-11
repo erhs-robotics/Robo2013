@@ -107,10 +107,11 @@ public class Robo2013 extends SimpleRobot {
 
             /* Set angle adjustment mode **************************************/
             if (lastZValue != stickR.getZ()) {
-                adjMode = -1;
+               // adjMode = -1;
             }
 
             if (stickR.getRawButton(RoboMap.RAISE_ANGLE_BUTTON) && !raiseButtonDown) {
+                System.out.println("RRRRR");
                 if (adjMode == -1 || adjMode == 3) {
                     double d1 = RoboMap.LAUNCHER_MED_ANGLE - actualAngle,
                             d2 = RoboMap.LAUNCHER_HIGH_ANGLE - actualAngle;
@@ -191,7 +192,7 @@ public class Robo2013 extends SimpleRobot {
                 if(adjMode != 4) last_adjMode = adjMode;
                 adjMode = 4;
                 launchAngle = RoboMap.LAUNCHER_FEED_ANGLE;
-            } else {
+            } else if(adjMode == 4) {
                 adjMode = last_adjMode;
             }
 
