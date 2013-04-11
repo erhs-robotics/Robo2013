@@ -87,13 +87,13 @@ public class Robo2013 extends SimpleRobot {
 
         while (isEnabled() && isOperatorControl()) {
             double startTime = System.currentTimeMillis();
-            launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
+            //launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
             double actualAngle = launcher.readAngle();
             msg.printOnLn("Teleop Mode", RoboMap.STATUS_LINE);
             msg.printOnLn("Angle Mode: " + modeStrings[adjMode + 1], RoboMap.ANGLE_LINE);            
             msg.printOnLn("Ave volt: " + launcher.pot.getAverageVoltage(), DriverStationLCD.Line.kUser3);
             msg.printOnLn("angle: " + actualAngle, DriverStationLCD.Line.kUser4);
-            msg.printOnLn("setp: " + launchAngle, DriverStationLCD.Line.kUser5);
+            msg.printOnLn("setp: " + launcher.getAngle(), DriverStationLCD.Line.kUser5);
             msg.printOnLn("error: " + (launchAngle - actualAngle), DriverStationLCD.Line.kUser6);            
 
             /* Simple Tank Drive **********************************************/           
@@ -107,7 +107,7 @@ public class Robo2013 extends SimpleRobot {
 
             /* Set angle adjustment mode **************************************/
             if (lastZValue != stickR.getZ()) {
-               // adjMode = -1;
+                adjMode = -1;
             }
 
             if (stickR.getRawButton(RoboMap.RAISE_ANGLE_BUTTON) && !raiseButtonDown) {
@@ -134,7 +134,7 @@ public class Robo2013 extends SimpleRobot {
                 } else {
                     adjMode = (int) MathX.clamp(--adjMode, 0, 2);
                 }
-                raiseButtonDown = true;
+                lowerButtonDown = true;
             } else if (!stickR.getRawButton(RoboMap.LOWER_ANGLE_BUTTON) && lowerButtonDown) {
                 lowerButtonDown = false;
             }
@@ -143,7 +143,7 @@ public class Robo2013 extends SimpleRobot {
             boolean button_down = stickL.getRawButton(RoboMap.BUMP_UP_BUTTON);
             if (button_down && !bumpingUp) {                
                 adjMode = 3;
-                launchAngle += 1;
+                launchAngle += 0.5;
                 bumpingUp = true;
             } else if (!button_down) {
                 bumpingUp = false;
@@ -152,7 +152,7 @@ public class Robo2013 extends SimpleRobot {
             button_down = stickL.getRawButton(RoboMap.BUMP_DOWN_BUTTON);
             if (button_down && !bumpingDown) {                
                 adjMode = 3;
-                launchAngle -= 1;
+                launchAngle -= 0.5;
                 bumpingDown = true;
             } else if (!button_down) {
                 bumpingDown = false;
@@ -166,6 +166,8 @@ public class Robo2013 extends SimpleRobot {
                     launchAngle = MathX.map(stickR.getZ(), 1, -1, 
                                             RoboMap.LAUNCHER_ANGLE_MIN,
                                             RoboMap.LAUNCHER_ANGLE_MAX);
+                    launchAngle = MathX.clamp(launchAngle, RoboMap.LAUNCHER_ANGLE_MIN, 
+                            RoboMap.LAUNCHER_ANGLE_MAX);
                     break;
                 case 0:
                     launchAngle = RoboMap.LAUNCHER_LEVEL_ANGLE;
