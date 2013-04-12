@@ -260,17 +260,17 @@ public class Robo2013 extends SimpleRobot {
     private void autonomousB() {
         msg.printLn("Autonomous B:");
         /* 0) Set the wheels to proper speed **********************************/
-        msg.printLn("Starting up launcher...");
+        msg.printLn("Start launcher");
         launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
         /* 1) Set the launch angle ********************************************/
-        msg.printLn("Setting angle to " + RoboMap.LAUNCHER_TOP_ANGLE + "...");
+        msg.printLn("Angle: " + RoboMap.LAUNCHER_TOP_ANGLE);
         launcher.setAngle(RoboMap.LAUNCHER_TOP_ANGLE);
         launcher.waitForAngle(5000);
         /* 2) Fire all frisbees ***********************************************/
-        msg.printLn("Starting launch!");
+        msg.printLn("Launch!");
         for (int i = 0; i < 3; i++) {
             launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
-            msg.printLn("Launching disk " + (i + 1) + "...");
+            msg.printLn("Launch disk " + (i + 1));
             launcher.launch();
         }
     }
