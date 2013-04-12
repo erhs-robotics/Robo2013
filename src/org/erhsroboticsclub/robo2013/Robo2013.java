@@ -278,9 +278,11 @@ public class Robo2013 extends SimpleRobot {
         /* 2) Fire all frisbees ***********************************************/
         msg.printLn("Launch!");
         for (int i = 0; i < 3; i++) {
+            double error = launcher.getAngle() - launcher.readAngle();            
             launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
             msg.printLn("Launch disk " + (i + 1));
-            launcher.launch();
+            msg.printLn("Angle error: "  + error);
+            launcher.launch();            
         }
     }
 
