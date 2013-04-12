@@ -16,6 +16,7 @@ public class Robo2013 extends SimpleRobot {
     private AI agent;
     private double launchAngle = 0;
     
+    
     /**
      * Called once the cRIO boots up
      */
@@ -76,8 +77,7 @@ public class Robo2013 extends SimpleRobot {
         drive.setSafetyEnabled(false);
         Watchdog.getInstance().kill();
         msg.clearConsole();
-        int adjMode = -1; // -1 - dynamic, 0 - top, 1 - feeding, 2 - bumping
-        int last_adjMode = -1;
+        int adjMode = -1; // -1 - dynamic, 0 - top, 1 - feeding, 2 - bumping        
         boolean bumpingDown = false;
         boolean bumpingUp = false;
         boolean bumpingLeft = false;
@@ -85,11 +85,13 @@ public class Robo2013 extends SimpleRobot {
         double lastZValue = 0;        
         boolean topButtonDown = false;
         boolean feedButtonDown = false;
+        boolean shooterOn = true;
+        double launchSpeed = RoboMap.AUTO_SHOOT_SPEED;
         String[] modeStrings = {"Dynamic", "Top", "Feeding", "Bumping"};
 
         while (isEnabled() && isOperatorControl()) {
             double startTime = System.currentTimeMillis();
-            launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
+            launcher.setWheels(launchSpeed);
             double actualAngle = launcher.readAngle();
             msg.printOnLn("Teleop Mode", RoboMap.STATUS_LINE);
             msg.printOnLn("Angle Mode: " + modeStrings[adjMode + 1], RoboMap.ANGLE_MODE_LINE);            
@@ -105,6 +107,13 @@ public class Robo2013 extends SimpleRobot {
             /* Fire the frisbee ***********************************************/
             if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {                
                 launcher.launch();
+            }
+            
+            /* Set boolean launch value ***************************************/
+            if(stickR.getRawButton(RoboMap.LAUNCHER_OFF_BUTTON)) {
+                launchSpeed = 0;
+            } else if(stickR.getRawButton(RoboMap.LAUNCHER_ON_BUTTON)) {
+                launchSpeed = RoboMap.AUTO_SHOOT_SPEED;
             }
 
             /* Allow minute adjustments of the launcher ***********************/

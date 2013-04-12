@@ -45,6 +45,8 @@ public class RoboMap {
     /* Right Stick Controls */
     public static final int FEED_ANGLE_BUTTON = 2;
     public static final int TOP_ANGLE_BUTTON = 3;
+    public static final int LAUNCHER_OFF_BUTTON = 8;
+    public static final int LAUNCHER_ON_BUTTON = 9;
     
     /* Driver Station LCD Lines */
     public static final Line STATUS_LINE = Line.kUser1;
