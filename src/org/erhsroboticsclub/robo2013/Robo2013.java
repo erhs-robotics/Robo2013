@@ -42,7 +42,7 @@ public class Robo2013 extends SimpleRobot {
         stickL = new Joystick(RoboMap.LEFT_DRIVE_STICK);
         stickR = new Joystick(RoboMap.RIGHT_DRIVE_STICK);
         agent = new AI(drive, launcher);
-        msg.printLn("Done Loading: FRC 2013");
+        msg.printLn("Done: FRC 2013");
     }
 
     /**
