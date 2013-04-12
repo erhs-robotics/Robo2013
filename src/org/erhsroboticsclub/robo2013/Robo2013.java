@@ -91,11 +91,11 @@ public class Robo2013 extends SimpleRobot {
             launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
             double actualAngle = launcher.readAngle();
             msg.printOnLn("Teleop Mode", RoboMap.STATUS_LINE);
-            msg.printOnLn("Angle Mode: " + modeStrings[adjMode + 1], RoboMap.ANGLE_LINE);            
-            msg.printOnLn("Ave volt: " + launcher.pot.getAverageVoltage(), DriverStationLCD.Line.kUser3);
-            msg.printOnLn("angle: " + actualAngle, DriverStationLCD.Line.kUser4);
-            msg.printOnLn("setp: " + launcher.getAngle(), DriverStationLCD.Line.kUser5);
-            msg.printOnLn("error: " + (launchAngle - actualAngle), DriverStationLCD.Line.kUser6);            
+            msg.printOnLn("Angle Mode: " + modeStrings[adjMode + 1], RoboMap.ANGLE_MODE_LINE);            
+            msg.printOnLn("Ave volt: " + launcher.pot.getAverageVoltage(), RoboMap.VOLTAGE_LINE);
+            msg.printOnLn("angle: " + actualAngle, RoboMap.ANGLE_LINE);
+            msg.printOnLn("setp: " + launcher.getAngle(), RoboMap.SETPOINT_LINE);
+            msg.printOnLn("error: " + (launchAngle - actualAngle), RoboMap.ERROR_LINE);            
 
             /* Simple Tank Drive **********************************************/           
             drive.tankDrive(stickL.getY() * RoboMap.SPEED,
