@@ -12,6 +12,7 @@ public class Robo2013 extends SimpleRobot {
     private CANJaguar topLeftJag, bottomLeftJag, topRightJag, bottomRightJag;
     private Messenger msg;
     private LinearAccelerator launcher;
+    private AnalogChannel modePot;
     private AI agent;
     private double launchAngle = 0;
     
@@ -31,7 +32,7 @@ public class Robo2013 extends SimpleRobot {
             msg.printLn("CAN network failed!");
             msg.printLn(ex.getMessage());
         }
-
+        modePot = new AnalogChannel(RoboMap.MODE_POT);
         launcher = new LinearAccelerator();
         drive = new RobotDrive(topLeftJag, bottomLeftJag, topRightJag, bottomRightJag);
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
@@ -41,7 +42,7 @@ public class Robo2013 extends SimpleRobot {
         stickL = new Joystick(RoboMap.LEFT_DRIVE_STICK);
         stickR = new Joystick(RoboMap.RIGHT_DRIVE_STICK);
         agent = new AI(drive, launcher);
-        msg.printLn("Done Loading: FRC 2013");
+        msg.printLn("Done: FRC 2013");
     }
 
     /**
@@ -263,15 +264,25 @@ public class Robo2013 extends SimpleRobot {
         msg.printLn("Start launcher");
         launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
         /* 1) Set the launch angle ********************************************/
-        msg.printLn("Angle: " + RoboMap.LAUNCHER_TOP_CENTER_ANGLE);
-        launcher.setAngle(RoboMap.LAUNCHER_TOP_CENTER_ANGLE);
+        if(modePot.getAverageVoltage() < 2.5) {
+            msg.printLn("Mode: side");
+            launcher.setAngle(RoboMap.LAUNCHER_TOP_SIDE_ANGLE);
+        } else {
+            msg.printLn("Mode: center");
+            launcher.setAngle(RoboMap.LAUNCHER_TOP_CENTER_ANGLE);            
+        }
+        msg.printLn("Angle: " + launcher.getAngle());
+        
+        
         launcher.waitForAngle(5000);
         /* 2) Fire all frisbees ***********************************************/
         msg.printLn("Launch!");
         for (int i = 0; i < 3; i++) {
+            double error = launcher.getAngle() - launcher.readAngle();            
             launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
             msg.printLn("Launch disk " + (i + 1));
-            launcher.launch();
+            msg.printLn("Angle error: "  + error);
+            launcher.launch();            
         }
     }
 

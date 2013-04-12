@@ -31,6 +31,7 @@ public class RoboMap {
     
     /* Analog Ports */
     public static final int LAUNCHER_ACCEL = 1;
+    public static final int MODE_POT = 2;
     
     /* Left Stick Controls */
     public static final int AUTO_AIM_BUTTON = 1;
