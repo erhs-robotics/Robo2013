@@ -53,7 +53,7 @@ public class Robo2013 extends SimpleRobot {
         Watchdog.getInstance().kill();
         msg.clearConsole();
         msg.printLn("Auto Started");
-        launcher.setAngle(RoboMap.LAUNCHER_TOP_ANGLE);
+        launcher.setAngle(RoboMap.LAUNCHER_TOP_CENTER_ANGLE);
 
         try {
             drive.setSafetyEnabled(false);
@@ -185,7 +185,7 @@ public class Robo2013 extends SimpleRobot {
                             RoboMap.LAUNCHER_ANGLE_MAX);
                     break;
                 case 0:
-                    launchAngle = RoboMap.LAUNCHER_TOP_ANGLE;
+                    launchAngle = RoboMap.LAUNCHER_TOP_CENTER_ANGLE;
                     break;
                 case 1:
                     launchAngle = RoboMap.LAUNCHER_FEED_ANGLE;
@@ -263,8 +263,8 @@ public class Robo2013 extends SimpleRobot {
         msg.printLn("Start launcher");
         launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
         /* 1) Set the launch angle ********************************************/
-        msg.printLn("Angle: " + RoboMap.LAUNCHER_TOP_ANGLE);
-        launcher.setAngle(RoboMap.LAUNCHER_TOP_ANGLE);
+        msg.printLn("Angle: " + RoboMap.LAUNCHER_TOP_CENTER_ANGLE);
+        launcher.setAngle(RoboMap.LAUNCHER_TOP_CENTER_ANGLE);
         launcher.waitForAngle(5000);
         /* 2) Fire all frisbees ***********************************************/
         msg.printLn("Launch!");

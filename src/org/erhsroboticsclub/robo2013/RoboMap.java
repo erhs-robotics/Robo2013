@@ -57,7 +57,8 @@ public class RoboMap {
     public static final double LAUNCHER_ANGLE_MIN = 0;
     public static final double LAUNCHER_ANGLE_MAX = 35;
     public static final double LAUNCHER_FEED_ANGLE = 12;    
-    public static final double LAUNCHER_TOP_ANGLE = 33.63;
+    public static final double LAUNCHER_TOP_CENTER_ANGLE = 33.63;
+    public static final double LAUNCHER_TOP_SIDE_ANGLE = 32.13;
     public static final double LAUNCHER_MIDDLE_ANGLE = 28.4;
     public static final double VOLT_MIN = 1.008734630;
     public static final double VOLT_MAX = 1.569643725;    
