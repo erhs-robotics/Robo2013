@@ -12,8 +12,7 @@ public class Robo2013 extends SimpleRobot {
     private CANJaguar topLeftJag, bottomLeftJag, topRightJag, bottomRightJag;
     private Messenger msg;
     private LinearAccelerator launcher;
-    private AnalogChannel modePot;
-    private AI agent;
+    private AnalogChannel modePot;    
     private double launchAngle = 0;
     
     
@@ -41,8 +40,7 @@ public class Robo2013 extends SimpleRobot {
         drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
         stickL = new Joystick(RoboMap.LEFT_DRIVE_STICK);
-        stickR = new Joystick(RoboMap.RIGHT_DRIVE_STICK);
-        agent = new AI(drive, launcher);
+        stickR = new Joystick(RoboMap.RIGHT_DRIVE_STICK);        
         msg.printLn("Done: FRC 2013");
     }
 
@@ -220,50 +218,7 @@ public class Robo2013 extends SimpleRobot {
             }
         }
     }
-
-    /**
-     * Plan A autonomous Called once by autonomousInit
-     */
-    private void autonomousA() throws Exception {
-        msg.printLn("Autonomous A:");
-        int fails = 0;
-        boolean success;
-
-        // 0) Set wheels to proper speed
-        msg.printLn("Starting up launcher...");
-        launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
-
-        // 1) Auto aim launcher
-        msg.printLn("Aiming launcher...");
-        do {
-            if (!isAutonomous()) {
-                throw new Exception("Ran out of time!");
-            }
-            success = agent.autoAimLauncher();
-            if (!success) {
-                msg.printLn("turnToTarget failed!");
-                fails++;
-            }
-            if (fails > 500) {
-                msg.printLn("Giving up...");
-                break;
-            } else {
-                msg.printLn("Retrying...");
-            }
-        } while (!success);
-
-        // 2) Wait for motors to come up to speed
-        msg.printLn("Waiting for motors...");
-        Timer.delay(5);
-
-        // 3) Fire all frisbees
-        msg.printLn("Starting launch!");
-        for (int i = 0; i < 3; i++) {
-            msg.printLn("Launching disk " + (i + 1) + "...");
-            launcher.launch();
-        }
-    }
-
+    
     /**
      * Plan B autonomous Called once by autonomousInit
      */
