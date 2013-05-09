@@ -1,20 +1,18 @@
 package org.erhsroboticsclub.robo2013;
 
 import edu.wpi.first.wpilibj.AnalogChannel;
-import edu.wpi.first.wpilibj.AnalogModule;
-import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PWM;
-import edu.wpi.first.wpilibj.can.CANTimeoutException;
+import edu.wpi.first.wpilibj.Talon;
 import org.erhsroboticsclub.robo2013.utilities.MathX;
 import org.erhsroboticsclub.robo2013.utilities.Messenger;
 import org.erhsroboticsclub.robo2013.utilities.PIDControllerX;
 
 public class LinearAccelerator {
 
-    private CANJaguar primaryWheel;
-    private CANJaguar secondaryWheel;
-    private CANJaguar elevatorMotor;
+    private Talon primaryWheel;
+    private Talon secondaryWheel;
+    private Talon elevatorMotor;
     private PWM loadArmM1, loadArmM2;
     private DigitalInput limitSwitch;
     public AnalogChannel pot;
@@ -33,21 +31,9 @@ public class LinearAccelerator {
                 RoboMap.LAUNCHER_PID_D);
 
         pid.capOutput(RoboMap.LAUNCH_PID_MIN, RoboMap.LAUNCH_PID_MAX);
-
-        try {
-            primaryWheel = new CANJaguar(RoboMap.PRIMARY_LAUNCH_MOTOR);
-            secondaryWheel = new CANJaguar(RoboMap.SECONDARY_LAUNCH_MOTOR);
-            elevatorMotor = new CANJaguar(RoboMap.ELEVATOR_MOTOR);
-            //timeouts not needed for CAN, according to CD in 2012
-            //primaryWheel.setExpiration(RoboMap.AUTO_SHOOT_TIMEOUT); 
-            //secondaryWheel.setExpiration(RoboMap.AUTO_SHOOT_TIMEOUT);
-            //elevatorMotor.setExpiration(RoboMap.AUTO_SHOOT_TIMEOUT);
-            //primaryWheel.setSafetyEnabled(false);
-            //secondaryWheel.setSafetyEnabled(false);
-            //elevatorMotor.setSafetyEnabled(false);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        primaryWheel = new Talon(RoboMap.PRIMARY_LAUNCH_MOTOR);
+        secondaryWheel = new Talon(RoboMap.SECONDARY_LAUNCH_MOTOR);
+        elevatorMotor = new Talon(RoboMap.ELEVATOR_MOTOR);
     }
 
     /**
@@ -57,11 +43,10 @@ public class LinearAccelerator {
      * @param secondary The speed of the second launch wheel
      */
     public void setWheels(double primary, double secondary) {
-        try {
-            primaryWheel.setX(primary);
-            secondaryWheel.setX(secondary);
-        } catch (CANTimeoutException e) {
-        }
+
+        primaryWheel.set(primary);
+        secondaryWheel.set(secondary);
+
     }
 
     /**
@@ -130,12 +115,8 @@ public class LinearAccelerator {
         double currentAngle = readAngle();
         pid.setSetpoint(angle);
         double correction = pid.doPID(currentAngle);
-
-        try {
-            elevatorMotor.setX(correction);
-        } catch (CANTimeoutException ex) {
-            ex.printStackTrace();
-        }
+        
+        elevatorMotor.set(correction);
     }
 
     /**
@@ -161,6 +142,6 @@ public class LinearAccelerator {
         double voltage = pot.getAverageVoltage();
         return MathX.map(voltage, RoboMap.VOLT_MIN, RoboMap.VOLT_MAX,
                 RoboMap.LAUNCHER_ANGLE_MIN, RoboMap.LAUNCHER_ANGLE_MAX);
-        
+
     }
 }

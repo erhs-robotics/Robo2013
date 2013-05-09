@@ -1,7 +1,6 @@
 package org.erhsroboticsclub.robo2013;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import org.erhsroboticsclub.robo2013.utilities.MathX;
 import org.erhsroboticsclub.robo2013.utilities.Messenger;
 
@@ -9,12 +8,11 @@ public class Robo2013 extends SimpleRobot {
 
     private RobotDrive drive;
     private Joystick stickL, stickR;
-    private CANJaguar topLeftJag, bottomLeftJag, topRightJag, bottomRightJag;
+    private Talon topLeftT, bottomLeftT, topRightT, bottomRightT;
     private Messenger msg;
     private LinearAccelerator launcher;
     private AnalogChannel modePot;    
-    private double launchAngle = 0;
-    
+    private double launchAngle = 0;    
     
     /**
      * Called once the cRIO boots up
@@ -22,19 +20,15 @@ public class Robo2013 extends SimpleRobot {
     public void robotInit() {
         msg = new Messenger();
         msg.printLn("Loading FRC 2013");
-        try {
-            topLeftJag = new CANJaguar(RoboMap.TOP_LEFT_DRIVE_MOTOR);
-            bottomLeftJag = new CANJaguar(RoboMap.BOTTOM_LEFT_DRIVE_MOTOR);
-            topRightJag = new CANJaguar(RoboMap.TOP_RIGHT_DRIVE_MOTOR);
-            bottomRightJag = new CANJaguar(RoboMap.BOTTOM_RIGHT_DRIVE_MOTOR);
-
-        } catch (CANTimeoutException ex) {
-            msg.printLn("CAN network failed!");
-            msg.printLn(ex.getMessage());
-        }
+        
+        topLeftT = new Talon(RoboMap.TOP_LEFT_DRIVE_MOTOR);
+        bottomLeftT = new Talon(RoboMap.BOTTOM_LEFT_DRIVE_MOTOR);
+        topRightT = new Talon(RoboMap.TOP_RIGHT_DRIVE_MOTOR);
+        bottomRightT = new Talon(RoboMap.BOTTOM_RIGHT_DRIVE_MOTOR);
+        
         modePot = new AnalogChannel(RoboMap.MODE_POT);
         launcher = new LinearAccelerator();
-        drive = new RobotDrive(topLeftJag, bottomLeftJag, topRightJag, bottomRightJag);
+        drive = new RobotDrive(topLeftT, bottomLeftT, topRightT, bottomRightT);
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
@@ -249,5 +243,4 @@ public class Robo2013 extends SimpleRobot {
             launcher.launch();            
         }
     }
-
 }
