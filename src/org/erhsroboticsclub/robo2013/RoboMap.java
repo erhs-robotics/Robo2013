@@ -3,11 +3,11 @@ package org.erhsroboticsclub.robo2013;
 import edu.wpi.first.wpilibj.DriverStationLCD.Line;
 
 public class RoboMap {
-
+    
     /* Robot Constants */
-    public static final double SPEED = 1;
-    public static final double UPDATE_FREQ = 5;
-    public static final long BUMP_TIME = 50;
+    public static final double SPEED = 1;       // 0 = no move; 1 = max speed
+    public static final double UPDATE_FREQ = 5; // ms
+    public static final long BUMP_TIME = 50;    // ms
     
     /* CAN ID Numbers */
     public static final int SECONDARY_LAUNCH_MOTOR = 1; // second
@@ -29,14 +29,13 @@ public class RoboMap {
     public static final int LEFT_DRIVE_STICK = 1;
     public static final int RIGHT_DRIVE_STICK = 2;
     
-    /* Analog Ports */
+    /* Analog In Ports */
     public static final int LAUNCHER_ACCEL = 1;
     public static final int MODE_POT = 2;
     
     /* Left Stick Controls */
     public static final int AUTO_AIM_BUTTON = 1;
-    public static final int FIRE_BUTTON = 1; //LEFT
-    public static final int TURN_TO_TARGET_BUTTON = 6;
+    public static final int FIRE_BUTTON = 1;
     public static final int BUMP_UP_BUTTON = 3;
     public static final int BUMP_DOWN_BUTTON = 2;
     public static final int BUMP_DRIVE_LEFT = 4;
@@ -48,7 +47,7 @@ public class RoboMap {
     public static final int LAUNCHER_OFF_BUTTON = 8;
     public static final int LAUNCHER_ON_BUTTON = 9;
     
-    /* Driver Station LCD Lines */
+    /* Teleop Driver Station LCD Lines */
     public static final Line STATUS_LINE = Line.kUser1;
     public static final Line ANGLE_MODE_LINE = Line.kUser2;
     public static final Line VOLTAGE_LINE = Line.kUser3;
@@ -75,10 +74,5 @@ public class RoboMap {
     public static final double LAUNCHER_PID_D = 0;
     public static final double LAUNCH_PID_MIN = -1;
     public static final double LAUNCH_PID_MAX = 1;
-    
-    /* Turn To Target PID Constants */
-    public static final double TURN_PID_P = 1;
-    public static final double TURN_PID_I = 0;
-    public static final double TURN_PID_D = 0;
 
 }

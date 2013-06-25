@@ -26,8 +26,8 @@ public class Messenger {
 
     public Messenger() {
         driverLCD = DriverStationLCD.getInstance();
-        msg = new String[6];
-        for (int i = 0; i < 6; i++) {
+        msg = new String[LINE.length];
+        for (int i = 0; i < msg.length; i++) {
             msg[i] = " ";
         }
     }

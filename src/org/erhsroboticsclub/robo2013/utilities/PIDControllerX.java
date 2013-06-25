@@ -2,21 +2,18 @@ package org.erhsroboticsclub.robo2013.utilities;
 
 import edu.wpi.first.wpilibj.Timer;
 
-/**
- *
- * @author michael
- */
 public class PIDControllerX {
+    
     private double Kp, Ki, Kd, setpoint;
     private double lastError, totalError, lastTime;
-    private boolean firstrun;
+    private boolean firstRun;
     private double min = 0, max = 0;    
 
     public PIDControllerX(double Kp, double Ki, double Kd) {
         this.Kp = Kp;
         this.Ki = Ki;
         this.Kd = Kd;
-        firstrun = true;
+        this.firstRun = true;
         this.lastError = 0;
         this.totalError = 0;
         this.lastTime = 0;
@@ -41,9 +38,9 @@ public class PIDControllerX {
         double error = setpoint - value;
         double correction;
         
-        if(firstrun) {
+        if(firstRun) {
             correction = Kp * error;           
-            firstrun = false;
+            firstRun = false;
         } else {
             double de = error - lastError;
             double dt = Timer.getFPGATimestamp() - lastTime;
@@ -54,6 +51,7 @@ public class PIDControllerX {
         lastError = error;        
         lastTime = Timer.getFPGATimestamp();
         
+        // Only cap output if capOutput() function has been called
         if(min != max) {
             correction = MathX.clamp(correction, min, max);
         }
@@ -78,7 +76,7 @@ public class PIDControllerX {
     }
     
     public void reset() {
-        firstrun = true;
+        this.firstRun = true;
         this.lastError = 0;
         this.totalError = 0;
         this.lastTime = 0;
