@@ -18,18 +18,10 @@ public class Robo2013 extends SimpleRobot {
      */
     public void robotInit() {
         msg = new Messenger();
-        msg.printLn("Loading FRC 2013");
-        modePot = new AnalogChannel(RoboMap.MODE_POT);
-        launcher = new LinearAccelerator();
-        drive = new RobotDrive(new Talon(RoboMap.TOP_LEFT_DRIVE_MOTOR),
-                new Talon(RoboMap.BOTTOM_LEFT_DRIVE_MOTOR),
-                new Talon(RoboMap.TOP_RIGHT_DRIVE_MOTOR),
-                new Talon(RoboMap.BOTTOM_RIGHT_DRIVE_MOTOR));
-        drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
-        drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
-        drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
-        drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
-        stickL = new Joystick(RoboMap.LEFT_DRIVE_STICK);
+        msg.printLn("CALIBRATOR");
+        
+        launcher = new LinearAccelerator();     
+        
         stickR = new Joystick(RoboMap.RIGHT_DRIVE_STICK);
         msg.printLn("Done: FRC 2013");
     }
@@ -59,146 +51,23 @@ public class Robo2013 extends SimpleRobot {
     public void operatorControl() {
         drive.setSafetyEnabled(false);
         Watchdog.getInstance().kill();
-        msg.clearConsole();
-        // TODO: Make this index start at 0 instead of -1.  
-        // Seriously, who thought this was a good idea.
-        int adjMode = -1; // -1 - dynamic, 0 - top, 1 - feeding, 2 - bumping
-        boolean bumpingButtonDown;
-        boolean bumpingDown = false;
-        boolean bumpingUp = false;
-        boolean bumpingLeft = false;
-        boolean bumpingRight = false;
-        double lastZValue = 0;
-        boolean topButtonDown = false;
-        boolean feedButtonDown = false;
-        boolean shooterOn = true;
-        double launchSpeed = RoboMap.AUTO_SHOOT_SPEED;
-        String[] modeStrings = {"Dynamic", "Top", "Feeding", "Bumping"};
+        msg.clearConsole();      
 
         while (isEnabled() && isOperatorControl()) {
             double startTime = System.currentTimeMillis();
-            launcher.setWheels(launchSpeed);
-            double actualAngle = launcher.readAngle();
-            msg.printOnLn("Teleop Mode", RoboMap.STATUS_LINE);
-            msg.printOnLn("Angle Mode: " + modeStrings[adjMode + 1], RoboMap.ANGLE_MODE_LINE);
-            msg.printOnLn("Ave volt: " + launcher.pot.getAverageVoltage(), RoboMap.VOLTAGE_LINE);
-            msg.printOnLn("angle: " + actualAngle, RoboMap.ANGLE_LINE);
-            msg.printOnLn("setp: " + launcher.getAngleSetpoint(), RoboMap.SETPOINT_LINE);
-            msg.printOnLn("error: " + (launchAngle - actualAngle), RoboMap.ERROR_LINE);
+           
+            double angle = launcher.readAngle();            
+            msg.printOnLn("Ave volt: " + launcher.pot.getAverageVoltage(), DriverStationLCD.Line.kUser1);
+            msg.printOnLn("angle: " + angle, DriverStationLCD.Line.kUser2);        
 
-            /* Simple Tank Drive **********************************************/
-            drive.tankDrive(stickL.getY() * RoboMap.SPEED,
-                    stickR.getY() * RoboMap.SPEED);
-
-            /* Fire the frisbee ***********************************************/
-            if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
-                launcher.launch();
-            }
-
-            /* Set boolean launch value ***************************************/
-            if (stickR.getRawButton(RoboMap.LAUNCHER_OFF_BUTTON)) {
-                launchSpeed = 0;
-            } else if (stickR.getRawButton(RoboMap.LAUNCHER_ON_BUTTON)) {
-                launchSpeed = RoboMap.AUTO_SHOOT_SPEED;
-            }
-
-            /* Allow minute adjustments of the launcher ***********************/
-            bumpingButtonDown = stickL.getRawButton(RoboMap.BUMP_UP_BUTTON);
-            if (bumpingButtonDown && !bumpingUp) {
-                adjMode = 2;
-                launchAngle += 0.5;
-                bumpingUp = true;
-            } else if (!bumpingButtonDown) {
-                bumpingUp = false;
-            }
-
-            bumpingButtonDown = stickL.getRawButton(RoboMap.BUMP_DOWN_BUTTON);
-            if (bumpingButtonDown && !bumpingDown) {
-                adjMode = 2;
-                launchAngle -= 0.5;
-                bumpingDown = true;
-            } else if (!bumpingButtonDown) {
-                bumpingDown = false;
-            }
-
-            /* Allow minute adjustments of the drive train ********************/
-            bumpingButtonDown = stickL.getRawButton(RoboMap.BUMP_DRIVE_LEFT);
-            if (bumpingButtonDown && !bumpingLeft) {
-                drive.tankDrive(-RoboMap.SPEED, RoboMap.SPEED);
-                try {
-                    Thread.sleep(RoboMap.BUMP_TIME);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-                drive.tankDrive(0, 0);
-                bumpingLeft = true;
-            } else if (!bumpingButtonDown) {
-                bumpingLeft = false;
-            }
-
-            bumpingButtonDown = stickL.getRawButton(RoboMap.BUMP_DRIVE_RIGHT);
-            if (bumpingButtonDown && !bumpingRight) {
-                drive.tankDrive(RoboMap.SPEED, -RoboMap.SPEED);
-                try {
-                    Thread.sleep(RoboMap.BUMP_TIME);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-                drive.tankDrive(0, 0);
-                bumpingRight = true;
-            } else if (!bumpingButtonDown) {
-                bumpingRight = false;
-            }
-
-            /* Set angle adjustment mode **************************************/
-            if (lastZValue != stickR.getZ()) {
-                adjMode = -1;
-            }
-
-            if (stickR.getRawButton(RoboMap.TOP_ANGLE_BUTTON) && !topButtonDown) {
-                adjMode = 0;
-                topButtonDown = true;
-            } else if (!stickR.getRawButton(RoboMap.TOP_ANGLE_BUTTON) && topButtonDown) {
-                topButtonDown = false;
-            }
-
-            if (stickR.getRawButton(RoboMap.FEED_ANGLE_BUTTON) && !feedButtonDown) {
-                adjMode = 1;
-                feedButtonDown = true;
-            } else if (!stickR.getRawButton(RoboMap.FEED_ANGLE_BUTTON) && feedButtonDown) {
-                feedButtonDown = false;
-            }
-
-            /* Set the launch angle *******************************************/
-            lastZValue = stickR.getZ();
-
-            switch (adjMode) {
-                case -1:
-                    launchAngle = MathX.map(stickR.getZ(), 1, -1,
-                            RoboMap.LAUNCHER_ANGLE_MIN,
-                            RoboMap.LAUNCHER_ANGLE_MAX);
-                    launchAngle = MathX.clamp(launchAngle, RoboMap.LAUNCHER_ANGLE_MIN,
-                            RoboMap.LAUNCHER_ANGLE_MAX);
-                    break;
-                case 0:
-                    launchAngle = RoboMap.LAUNCHER_TOP_CENTER_ANGLE;
-                    break;
-                case 1:
-                    launchAngle = RoboMap.LAUNCHER_FEED_ANGLE;
-                    break;
-                case 2:
-                    //Do nothing
-                    break;
-                default:// Should not get here
-                    msg.printLn("Invalid launch mode of " + adjMode + "!");
-                    msg.printLn("Reseting to 0...");
-                    adjMode = 0;
-                    break;
-            }
-
-            /* Adjust the angle with the PID Controller ***********************/
-            launcher.setAngleSetpoint(launchAngle);
-            launcher.adjustAngle();
+            double y = stickR.getY();
+            if(y > 0.7) {
+                launcher.elevatorMotor.set(0.3);
+            } else if (y < -0.7) {
+                launcher.elevatorMotor.set(-0.3);
+            } else {
+                launcher.elevatorMotor.set(0);
+            }        
 
             /* Set the loop frequency *****************************************/
             while (System.currentTimeMillis() - startTime < RoboMap.UPDATE_FREQ) {

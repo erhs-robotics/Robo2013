@@ -12,7 +12,7 @@ public class LinearAccelerator {
 
     private Talon primaryWheel;
     private Talon secondaryWheel;
-    private Talon elevatorMotor;
+    public Talon elevatorMotor;
     private PWM loadArmM1, loadArmM2;
     private DigitalInput limitSwitch;
     public  AnalogChannel pot;
