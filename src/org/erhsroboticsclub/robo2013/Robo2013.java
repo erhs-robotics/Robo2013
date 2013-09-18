@@ -7,7 +7,7 @@ import org.erhsroboticsclub.robo2013.utilities.Messenger;
 public class Robo2013 extends SimpleRobot {
 
     private RobotDrive drive;
-    private Joystick stickL, stickR;
+    private Joystick stick;
     private Messenger msg;
     private LinearAccelerator launcher;
     private AnalogChannel modePot;
@@ -29,8 +29,8 @@ public class Robo2013 extends SimpleRobot {
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
-        stickL = new Joystick(RoboMap.LEFT_DRIVE_STICK);
-        stickR = new Joystick(RoboMap.RIGHT_DRIVE_STICK);
+        stick = new Joystick(RoboMap.LEFT_DRIVE_STICK);
+        
         msg.printLn("Done: FRC 2013");
     }
 
@@ -87,23 +87,16 @@ public class Robo2013 extends SimpleRobot {
             msg.printOnLn("error: " + (launchAngle - actualAngle), RoboMap.ERROR_LINE);
 
             /* Simple Tank Drive **********************************************/
-            drive.tankDrive(stickL.getY() * RoboMap.SPEED,
-                    stickR.getY() * RoboMap.SPEED);
+            drive.arcadeDrive(stick.getY() * RoboMap.SPEED, stick.getX() * RoboMap.SPEED);
+            
 
             /* Fire the frisbee ***********************************************/
-            if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
+            if (stick.getRawButton(RoboMap.FIRE_BUTTON)) {
                 launcher.launch();
-            }
-
-            /* Set boolean launch value ***************************************/
-            if (stickR.getRawButton(RoboMap.LAUNCHER_OFF_BUTTON)) {
-                launchSpeed = 0;
-            } else if (stickR.getRawButton(RoboMap.LAUNCHER_ON_BUTTON)) {
-                launchSpeed = RoboMap.AUTO_SHOOT_SPEED;
-            }
+            }           
 
             /* Allow minute adjustments of the launcher ***********************/
-            bumpingButtonDown = stickL.getRawButton(RoboMap.BUMP_UP_BUTTON);
+            bumpingButtonDown = stick.getRawButton(RoboMap.BUMP_UP_BUTTON);
             if (bumpingButtonDown && !bumpingUp) {
                 adjMode = 2;
                 launchAngle += 0.5;
@@ -112,7 +105,7 @@ public class Robo2013 extends SimpleRobot {
                 bumpingUp = false;
             }
 
-            bumpingButtonDown = stickL.getRawButton(RoboMap.BUMP_DOWN_BUTTON);
+            bumpingButtonDown = stick.getRawButton(RoboMap.BUMP_DOWN_BUTTON);
             if (bumpingButtonDown && !bumpingDown) {
                 adjMode = 2;
                 launchAngle -= 0.5;
@@ -122,7 +115,7 @@ public class Robo2013 extends SimpleRobot {
             }
 
             /* Allow minute adjustments of the drive train ********************/
-            bumpingButtonDown = stickL.getRawButton(RoboMap.BUMP_DRIVE_LEFT);
+            bumpingButtonDown = stick.getRawButton(RoboMap.BUMP_DRIVE_LEFT);
             if (bumpingButtonDown && !bumpingLeft) {
                 drive.tankDrive(-RoboMap.SPEED, RoboMap.SPEED);
                 try {
@@ -136,7 +129,7 @@ public class Robo2013 extends SimpleRobot {
                 bumpingLeft = false;
             }
 
-            bumpingButtonDown = stickL.getRawButton(RoboMap.BUMP_DRIVE_RIGHT);
+            bumpingButtonDown = stick.getRawButton(RoboMap.BUMP_DRIVE_RIGHT);
             if (bumpingButtonDown && !bumpingRight) {
                 drive.tankDrive(RoboMap.SPEED, -RoboMap.SPEED);
                 try {
@@ -151,30 +144,20 @@ public class Robo2013 extends SimpleRobot {
             }
 
             /* Set angle adjustment mode **************************************/
-            if (lastZValue != stickR.getZ()) {
+            if (lastZValue != stick.getZ()) {
                 adjMode = -1;
             }
 
-            if (stickR.getRawButton(RoboMap.TOP_ANGLE_BUTTON) && !topButtonDown) {
-                adjMode = 0;
-                topButtonDown = true;
-            } else if (!stickR.getRawButton(RoboMap.TOP_ANGLE_BUTTON) && topButtonDown) {
-                topButtonDown = false;
-            }
+            
 
-            if (stickR.getRawButton(RoboMap.FEED_ANGLE_BUTTON) && !feedButtonDown) {
-                adjMode = 1;
-                feedButtonDown = true;
-            } else if (!stickR.getRawButton(RoboMap.FEED_ANGLE_BUTTON) && feedButtonDown) {
-                feedButtonDown = false;
-            }
+            
 
             /* Set the launch angle *******************************************/
-            lastZValue = stickR.getZ();
+            lastZValue = stick.getZ();
 
             switch (adjMode) {
                 case -1:
-                    launchAngle = MathX.map(stickR.getZ(), 1, -1,
+                    launchAngle = MathX.map(stick.getZ(), 1, -1,
                             RoboMap.LAUNCHER_ANGLE_MIN,
                             30);
                     launchAngle = MathX.clamp(launchAngle, RoboMap.LAUNCHER_ANGLE_MIN,
