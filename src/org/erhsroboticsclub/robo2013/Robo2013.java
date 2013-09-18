@@ -77,7 +77,7 @@ public class Robo2013 extends SimpleRobot {
 
         while (isEnabled() && isOperatorControl()) {
             double startTime = System.currentTimeMillis();
-            //launcher.setWheels(launchSpeed);
+            launcher.setWheels(launchSpeed);
             double actualAngle = launcher.readAngle();
             msg.printOnLn("Teleop Mode", RoboMap.STATUS_LINE);
             msg.printOnLn("Angle Mode: " + modeStrings[adjMode + 1], RoboMap.ANGLE_MODE_LINE);
@@ -87,8 +87,8 @@ public class Robo2013 extends SimpleRobot {
             msg.printOnLn("error: " + (launchAngle - actualAngle), RoboMap.ERROR_LINE);
 
             /* Simple Tank Drive **********************************************/
-            //drive.tankDrive(stickL.getY() * RoboMap.SPEED,
-            //        stickR.getY() * RoboMap.SPEED);
+            drive.tankDrive(stickL.getY() * RoboMap.SPEED,
+                    stickR.getY() * RoboMap.SPEED);
 
             /* Fire the frisbee ***********************************************/
             if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
@@ -216,13 +216,9 @@ public class Robo2013 extends SimpleRobot {
         launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
 
         /* 1) Set the launch angle dependent on starting position *************/
-        if (modePot.getAverageVoltage() < 2.5) {
-            msg.printLn("Mode: side");
-            launcher.setAngleSetpoint(RoboMap.LAUNCHER_TOP_SIDE_ANGLE);
-        } else {
-            msg.printLn("Mode: center");
-            launcher.setAngleSetpoint(RoboMap.LAUNCHER_TOP_CENTER_ANGLE);
-        }
+        
+        launcher.setAngleSetpoint(RoboMap.LAUNCHER_TOP_SIDE_ANGLE);
+        
         msg.printLn("Angle: " + launcher.getAngleSetpoint());
         launcher.waitForAngle(5000);
 
