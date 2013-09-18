@@ -77,7 +77,7 @@ public class Robo2013 extends SimpleRobot {
 
         while (isEnabled() && isOperatorControl()) {
             double startTime = System.currentTimeMillis();
-            launcher.setWheels(launchSpeed);
+            //launcher.setWheels(launchSpeed);
             double actualAngle = launcher.readAngle();
             msg.printOnLn("Teleop Mode", RoboMap.STATUS_LINE);
             msg.printOnLn("Angle Mode: " + modeStrings[adjMode + 1], RoboMap.ANGLE_MODE_LINE);
@@ -87,8 +87,8 @@ public class Robo2013 extends SimpleRobot {
             msg.printOnLn("error: " + (launchAngle - actualAngle), RoboMap.ERROR_LINE);
 
             /* Simple Tank Drive **********************************************/
-            drive.tankDrive(stickL.getY() * RoboMap.SPEED,
-                    stickR.getY() * RoboMap.SPEED);
+            //drive.tankDrive(stickL.getY() * RoboMap.SPEED,
+            //        stickR.getY() * RoboMap.SPEED);
 
             /* Fire the frisbee ***********************************************/
             if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
@@ -176,7 +176,7 @@ public class Robo2013 extends SimpleRobot {
                 case -1:
                     launchAngle = MathX.map(stickR.getZ(), 1, -1,
                             RoboMap.LAUNCHER_ANGLE_MIN,
-                            RoboMap.LAUNCHER_ANGLE_MAX);
+                            30);
                     launchAngle = MathX.clamp(launchAngle, RoboMap.LAUNCHER_ANGLE_MIN,
                             RoboMap.LAUNCHER_ANGLE_MAX);
                     break;
