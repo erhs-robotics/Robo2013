@@ -1,26 +1,24 @@
 package org.erhsroboticsclub.robo2013;
 
 import edu.wpi.first.wpilibj.AnalogChannel;
-import edu.wpi.first.wpilibj.AnalogModule;
-import edu.wpi.first.wpilibj.CANJaguar;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.PWM;
-import edu.wpi.first.wpilibj.can.CANTimeoutException;
+import edu.wpi.first.wpilibj.Talon;
 import org.erhsroboticsclub.robo2013.utilities.MathX;
 import org.erhsroboticsclub.robo2013.utilities.Messenger;
 import org.erhsroboticsclub.robo2013.utilities.PIDControllerX;
 
 public class LinearAccelerator {
 
-    private CANJaguar primaryWheel;
-    private CANJaguar secondaryWheel;
-    private CANJaguar elevatorMotor;
+    private Talon primaryWheel;
+    private Talon secondaryWheel;
+    private Talon elevatorMotor;
     private PWM loadArmM1, loadArmM2;
     private DigitalInput limitSwitch;
-    public AnalogChannel pot;
+    public  AnalogChannel pot;
     private Messenger msg = new Messenger();
     private PIDControllerX pid;
-    private double angle = 31;
+    private double angleSetpoint = 31;
 
     public LinearAccelerator() {
         loadArmM1 = new PWM(RoboMap.LOAD_ARM_MOTOR1);
@@ -30,24 +28,11 @@ public class LinearAccelerator {
         pot.setAverageBits(RoboMap.AVERAGING_BITS);
         pot.setOversampleBits(RoboMap.OVERSAMPLE_BITS);
         pid = new PIDControllerX(RoboMap.LAUNCHER_PID_P, RoboMap.LAUNCHER_PID_I,
-                RoboMap.LAUNCHER_PID_D);
-
+                                 RoboMap.LAUNCHER_PID_D);
         pid.capOutput(RoboMap.LAUNCH_PID_MIN, RoboMap.LAUNCH_PID_MAX);
-
-        try {
-            primaryWheel = new CANJaguar(RoboMap.PRIMARY_LAUNCH_MOTOR);
-            secondaryWheel = new CANJaguar(RoboMap.SECONDARY_LAUNCH_MOTOR);
-            elevatorMotor = new CANJaguar(RoboMap.ELEVATOR_MOTOR);
-            //timeouts not needed for CAN, according to CD in 2012
-            //primaryWheel.setExpiration(RoboMap.AUTO_SHOOT_TIMEOUT); 
-            //secondaryWheel.setExpiration(RoboMap.AUTO_SHOOT_TIMEOUT);
-            //elevatorMotor.setExpiration(RoboMap.AUTO_SHOOT_TIMEOUT);
-            //primaryWheel.setSafetyEnabled(false);
-            //secondaryWheel.setSafetyEnabled(false);
-            //elevatorMotor.setSafetyEnabled(false);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        primaryWheel = new Talon(RoboMap.PRIMARY_LAUNCH_MOTOR);
+        secondaryWheel = new Talon(RoboMap.SECONDARY_LAUNCH_MOTOR);
+        elevatorMotor = new Talon(RoboMap.ELEVATOR_MOTOR);
     }
 
     /**
@@ -57,11 +42,8 @@ public class LinearAccelerator {
      * @param secondary The speed of the second launch wheel
      */
     public void setWheels(double primary, double secondary) {
-        try {
-            primaryWheel.setX(primary);
-            secondaryWheel.setX(secondary);
-        } catch (CANTimeoutException e) {
-        }
+        primaryWheel.set(primary);
+        secondaryWheel.set(secondary);
     }
 
     /**
@@ -74,19 +56,22 @@ public class LinearAccelerator {
     }
 
     /**
-     * Launches a Frisby
+     * Launches a disk.  This function operates on the same Thread as the rest
+     * of the code,  so the robot cannot be driven while it is trying to launch
+     * a disk.  The launch has a timeout of 5 seconds.
      */
     public void launch() {
         setWheels(RoboMap.AUTO_SHOOT_SPEED);
         loadArmM1.setRaw(1);
         loadArmM2.setRaw(1);
+        
+        // This should no longer need to be try-catched with the move to the Talons
         try {
             double start = System.currentTimeMillis();
             while (System.currentTimeMillis() - start < 500) {
                 setWheels(RoboMap.AUTO_SHOOT_SPEED);
                 //adjustAngle();
             }
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -95,12 +80,13 @@ public class LinearAccelerator {
             if (!limitSwitch.get()) {
                 break;
             }
-            // stops the launch if it has taken more than 10 seconds
+            // stops the launch if it has taken more than 5 seconds
             if (System.currentTimeMillis() - time > 5000) {
                 msg.printLn("Limit switch not found!");
                 msg.printLn("Stopping launch...");
                 break;
             }
+            // this shouldn't be necessary with the move to the Talons
             setWheels(RoboMap.AUTO_SHOOT_SPEED);
             //adjustAngle();
         }
@@ -120,7 +106,6 @@ public class LinearAccelerator {
             setWheels(RoboMap.AUTO_SHOOT_SPEED);
         }
         msg.printLn("DONE!");
-
     }
 
     /**
@@ -128,39 +113,40 @@ public class LinearAccelerator {
      */
     public void adjustAngle() {
         double currentAngle = readAngle();
-        pid.setSetpoint(angle);
+        pid.setSetpoint(angleSetpoint);
         double correction = pid.doPID(currentAngle);
-
-        try {
-            elevatorMotor.setX(correction);
-        } catch (CANTimeoutException ex) {
-            ex.printStackTrace();
-        }
+        elevatorMotor.set(correction);
     }
 
     /**
      * Sets the target angle. DOES NOT ACTUAL MOVE ANYTHING. The angle is
-     * clamped between the min and max values
+     * clamped between the min and max values established in RoboMap
      *
      * @param angle The new target angle
      */
-    public void setAngle(double angle) {
-        this.angle = MathX.clamp(angle, RoboMap.LAUNCHER_ANGLE_MIN, RoboMap.LAUNCHER_ANGLE_MAX);
-    }
-
-    public double getAngle() {
-        return angle;
+    public void setAngleSetpoint(double angle) {
+        this.angleSetpoint = MathX.clamp(angle, RoboMap.LAUNCHER_ANGLE_MIN, RoboMap.LAUNCHER_ANGLE_MAX);
     }
 
     /**
-     * Converts the accelerometer voltage to degrees
+     * Returns the target angle.  THIS IS NOT THE ACTUAL ANGLE and may not even
+     * be close to the actual angle.
+     * 
+     * @return The target angle
+     */
+    public double getAngleSetpoint() {
+        return angleSetpoint;
+    }
+
+    /**
+     * Converts the accelerometer voltage to degrees.  Returns the actual angle
+     * of the launcher as measured by the potentiometer.
      *
-     * @return The voltage in degrees
+     * @return The angle in degrees
      */
     public double readAngle() {
         double voltage = pot.getAverageVoltage();
         return MathX.map(voltage, RoboMap.VOLT_MIN, RoboMap.VOLT_MAX,
                 RoboMap.LAUNCHER_ANGLE_MIN, RoboMap.LAUNCHER_ANGLE_MAX);
-        
     }
 }

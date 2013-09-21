@@ -3,7 +3,7 @@ package org.erhsroboticsclub.robo2013.utilities;
 import com.sun.squawk.util.MathUtils;
 
 /**
- * Contains a lot of useful math functions that FRC doesn't normally gives us.
+ * Contains a lot of useful math functions that FRC doesn't normally give us.
  * Also adjusts trig functions to use degrees instead of radians.
  *
  * @author Nick, Michael
@@ -65,39 +65,38 @@ public class MathX {
     }
 
     public static double max(double d1, double d2) {
-        if (d1 > d2) {
+        if (d1 > d2)
             return d1;
-        }
         return d2;
     }
 
     public static double min(double d1, double d2) {
-        if (d1 < d2) {
+        if (d1 < d2)
             return d1;
-        }
         return d2;
     }
 
-    public static double map(double x, double in_min, double in_max, double out_min, double out_max) {
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    public static double map(double x, double inMin, double inMax, double outMin, double outMax) {
+        return (x - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
     }
 
     public static double clamp(double value, double min, double max) {
-        if (value > max) {
+        if (value > max)
             return max;
-        }
-        if (value < min) {
+        if (value < min)
             return min;
-        }
-
         return value;
     }
 
     public static boolean isWithin(double value, double target, double variance) {
-        if (abs(value - target) <= variance) {
+        if (abs(value - target) <= variance)
             return true;
-        }
-
+        return false;
+    }
+    
+    public static boolean isBetween(double value, double min, double max) {
+        if (value >= min || value <= max)
+            return true;
         return false;
     }
 

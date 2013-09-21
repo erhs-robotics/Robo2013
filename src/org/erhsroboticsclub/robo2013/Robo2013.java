@@ -1,7 +1,6 @@
 package org.erhsroboticsclub.robo2013;
 
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.can.CANTimeoutException;
 import org.erhsroboticsclub.robo2013.utilities.MathX;
 import org.erhsroboticsclub.robo2013.utilities.Messenger;
 
@@ -9,40 +8,29 @@ public class Robo2013 extends SimpleRobot {
 
     private RobotDrive drive;
     private Joystick stickL, stickR;
-    private CANJaguar topLeftJag, bottomLeftJag, topRightJag, bottomRightJag;
     private Messenger msg;
     private LinearAccelerator launcher;
     private AnalogChannel modePot;
-    private AI agent;
     private double launchAngle = 0;
-    
-    
+
     /**
      * Called once the cRIO boots up
      */
     public void robotInit() {
         msg = new Messenger();
         msg.printLn("Loading FRC 2013");
-        try {
-            topLeftJag = new CANJaguar(RoboMap.TOP_LEFT_DRIVE_MOTOR);
-            bottomLeftJag = new CANJaguar(RoboMap.BOTTOM_LEFT_DRIVE_MOTOR);
-            topRightJag = new CANJaguar(RoboMap.TOP_RIGHT_DRIVE_MOTOR);
-            bottomRightJag = new CANJaguar(RoboMap.BOTTOM_RIGHT_DRIVE_MOTOR);
-
-        } catch (CANTimeoutException ex) {
-            msg.printLn("CAN network failed!");
-            msg.printLn(ex.getMessage());
-        }
         modePot = new AnalogChannel(RoboMap.MODE_POT);
         launcher = new LinearAccelerator();
-        drive = new RobotDrive(topLeftJag, bottomLeftJag, topRightJag, bottomRightJag);
+        drive = new RobotDrive(new Talon(RoboMap.TOP_LEFT_DRIVE_MOTOR),
+                new Talon(RoboMap.BOTTOM_LEFT_DRIVE_MOTOR),
+                new Talon(RoboMap.TOP_RIGHT_DRIVE_MOTOR),
+                new Talon(RoboMap.BOTTOM_RIGHT_DRIVE_MOTOR));
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, true);
         drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
         stickL = new Joystick(RoboMap.LEFT_DRIVE_STICK);
         stickR = new Joystick(RoboMap.RIGHT_DRIVE_STICK);
-        agent = new AI(drive, launcher);
         msg.printLn("Done: FRC 2013");
     }
 
@@ -50,24 +38,19 @@ public class Robo2013 extends SimpleRobot {
      * This function is called once each time the robot enters autonomous mode.
      */
     public void autonomous() {
-        drive.setSafetyEnabled(false);
-        Watchdog.getInstance().setExpiration(Double.MAX_VALUE);
-        Watchdog.getInstance().kill();
+        Watchdog.getInstance().setExpiration(Double.MAX_VALUE); // really not necessary
+        killSafety();
         msg.clearConsole();
         msg.printLn("Auto Started");
-        launcher.setAngle(RoboMap.LAUNCHER_TOP_CENTER_ANGLE);
+        launcher.setAngleSetpoint(RoboMap.LAUNCHER_TOP_CENTER_ANGLE);
 
         try {
-            drive.setSafetyEnabled(false);
-            Watchdog.getInstance().kill();
-            //autonomousA();//start autonomous (Plan A)
-            autonomousB();//start autonomous (Plan B)
-            //autonomousC();//start autonomous (Plan C)
+            killSafety(); // probably don't need to kill the safety twice
+            autonomousProcedure();
         } catch (Exception e) {
-            msg.printLn("Auto mode failed!");
+            msg.printLn("Autonomous Failed");
             msg.printLn(e.getMessage());
         }
-
     }
 
     /**
@@ -77,12 +60,15 @@ public class Robo2013 extends SimpleRobot {
         drive.setSafetyEnabled(false);
         Watchdog.getInstance().kill();
         msg.clearConsole();
-        int adjMode = -1; // -1 - dynamic, 0 - top, 1 - feeding, 2 - bumping        
+        // TODO: Make this index start at 0 instead of -1.  
+        // Seriously, who thought this was a good idea.
+        int adjMode = -1; // -1 - dynamic, 0 - top, 1 - feeding, 2 - bumping
+        boolean bumpingButtonDown;
         boolean bumpingDown = false;
         boolean bumpingUp = false;
         boolean bumpingLeft = false;
         boolean bumpingRight = false;
-        double lastZValue = 0;        
+        double lastZValue = 0;
         boolean topButtonDown = false;
         boolean feedButtonDown = false;
         boolean shooterOn = true;
@@ -94,50 +80,51 @@ public class Robo2013 extends SimpleRobot {
             launcher.setWheels(launchSpeed);
             double actualAngle = launcher.readAngle();
             msg.printOnLn("Teleop Mode", RoboMap.STATUS_LINE);
-            msg.printOnLn("Angle Mode: " + modeStrings[adjMode + 1], RoboMap.ANGLE_MODE_LINE);            
+            msg.printOnLn("Angle Mode: " + modeStrings[adjMode + 1], RoboMap.ANGLE_MODE_LINE);
             msg.printOnLn("Ave volt: " + launcher.pot.getAverageVoltage(), RoboMap.VOLTAGE_LINE);
             msg.printOnLn("angle: " + actualAngle, RoboMap.ANGLE_LINE);
-            msg.printOnLn("setp: " + launcher.getAngle(), RoboMap.SETPOINT_LINE);
-            msg.printOnLn("error: " + (launchAngle - actualAngle), RoboMap.ERROR_LINE);            
+            msg.printOnLn("setp: " + launcher.getAngleSetpoint(), RoboMap.SETPOINT_LINE);
+            msg.printOnLn("error: " + (launchAngle - actualAngle), RoboMap.ERROR_LINE);
 
-            /* Simple Tank Drive **********************************************/           
+            /* Simple Tank Drive **********************************************/
             drive.tankDrive(stickL.getY() * RoboMap.SPEED,
-                            stickR.getY() * RoboMap.SPEED);           
+                    stickR.getY() * RoboMap.SPEED);
 
             /* Fire the frisbee ***********************************************/
-            if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {                
+            if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
+                launchSpeed = RoboMap.AUTO_SHOOT_SPEED;
                 launcher.launch();
             }
-            
+
             /* Set boolean launch value ***************************************/
-            if(stickR.getRawButton(RoboMap.LAUNCHER_OFF_BUTTON)) {
+            if (stickR.getRawButton(RoboMap.LAUNCHER_OFF_BUTTON)) {
                 launchSpeed = 0;
-            } else if(stickR.getRawButton(RoboMap.LAUNCHER_ON_BUTTON)) {
+            } else if (stickR.getRawButton(RoboMap.LAUNCHER_ON_BUTTON)) {
                 launchSpeed = RoboMap.AUTO_SHOOT_SPEED;
             }
 
             /* Allow minute adjustments of the launcher ***********************/
-            boolean button_down = stickL.getRawButton(RoboMap.BUMP_UP_BUTTON);
-            if (button_down && !bumpingUp) {                
+            bumpingButtonDown = stickL.getRawButton(RoboMap.BUMP_UP_BUTTON);
+            if (bumpingButtonDown && !bumpingUp) {
                 adjMode = 2;
                 launchAngle += 0.5;
                 bumpingUp = true;
-            } else if (!button_down) {
+            } else if (!bumpingButtonDown) {
                 bumpingUp = false;
             }
 
-            button_down = stickL.getRawButton(RoboMap.BUMP_DOWN_BUTTON);
-            if (button_down && !bumpingDown) {                
+            bumpingButtonDown = stickL.getRawButton(RoboMap.BUMP_DOWN_BUTTON);
+            if (bumpingButtonDown && !bumpingDown) {
                 adjMode = 2;
                 launchAngle -= 0.5;
                 bumpingDown = true;
-            } else if (!button_down) {
+            } else if (!bumpingButtonDown) {
                 bumpingDown = false;
             }
-            
+
             /* Allow minute adjustments of the drive train ********************/
-            button_down = stickL.getRawButton(RoboMap.BUMP_DRIVE_LEFT);
-            if(button_down && !bumpingLeft) {
+            bumpingButtonDown = stickL.getRawButton(RoboMap.BUMP_DRIVE_LEFT);
+            if (bumpingButtonDown && !bumpingLeft) {
                 drive.tankDrive(-RoboMap.SPEED, RoboMap.SPEED);
                 try {
                     Thread.sleep(RoboMap.BUMP_TIME);
@@ -146,12 +133,12 @@ public class Robo2013 extends SimpleRobot {
                 }
                 drive.tankDrive(0, 0);
                 bumpingLeft = true;
-            } else if(!button_down) {
+            } else if (!bumpingButtonDown) {
                 bumpingLeft = false;
             }
-            
-            button_down = stickL.getRawButton(RoboMap.BUMP_DRIVE_RIGHT);
-            if(button_down && !bumpingRight) {
+
+            bumpingButtonDown = stickL.getRawButton(RoboMap.BUMP_DRIVE_RIGHT);
+            if (bumpingButtonDown && !bumpingRight) {
                 drive.tankDrive(RoboMap.SPEED, -RoboMap.SPEED);
                 try {
                     Thread.sleep(RoboMap.BUMP_TIME);
@@ -160,10 +147,10 @@ public class Robo2013 extends SimpleRobot {
                 }
                 drive.tankDrive(0, 0);
                 bumpingRight = true;
-            } else if(!button_down) {
+            } else if (!bumpingButtonDown) {
                 bumpingRight = false;
             }
-            
+
             /* Set angle adjustment mode **************************************/
             if (lastZValue != stickR.getZ()) {
                 adjMode = -1;
@@ -175,23 +162,23 @@ public class Robo2013 extends SimpleRobot {
             } else if (!stickR.getRawButton(RoboMap.TOP_ANGLE_BUTTON) && topButtonDown) {
                 topButtonDown = false;
             }
-            
+
             if (stickR.getRawButton(RoboMap.FEED_ANGLE_BUTTON) && !feedButtonDown) {
                 adjMode = 1;
                 feedButtonDown = true;
             } else if (!stickR.getRawButton(RoboMap.FEED_ANGLE_BUTTON) && feedButtonDown) {
                 feedButtonDown = false;
-            }            
+            }
 
             /* Set the launch angle *******************************************/
             lastZValue = stickR.getZ();
 
             switch (adjMode) {
                 case -1:
-                    launchAngle = MathX.map(stickR.getZ(), 1, -1, 
-                                            RoboMap.LAUNCHER_ANGLE_MIN,
-                                            RoboMap.LAUNCHER_ANGLE_MAX);
-                    launchAngle = MathX.clamp(launchAngle, RoboMap.LAUNCHER_ANGLE_MIN, 
+                    launchAngle = MathX.map(stickR.getZ(), 1, -1,
+                            RoboMap.LAUNCHER_ANGLE_MIN,
+                            30);
+                    launchAngle = MathX.clamp(launchAngle, RoboMap.LAUNCHER_ANGLE_MIN,
                             RoboMap.LAUNCHER_ANGLE_MAX);
                     break;
                 case 0:
@@ -200,7 +187,7 @@ public class Robo2013 extends SimpleRobot {
                 case 1:
                     launchAngle = RoboMap.LAUNCHER_FEED_ANGLE;
                     break;
-                case 2:               
+                case 2:
                     //Do nothing
                     break;
                 default:// Should not get here
@@ -208,11 +195,11 @@ public class Robo2013 extends SimpleRobot {
                     msg.printLn("Reseting to 0...");
                     adjMode = 0;
                     break;
-            }       
+            }
 
             /* Adjust the angle with the PID Controller ***********************/
-            launcher.setAngle(launchAngle);
-            launcher.adjustAngle();            
+            launcher.setAngleSetpoint(launchAngle);
+            launcher.adjustAngle();
 
             /* Set the loop frequency *****************************************/
             while (System.currentTimeMillis() - startTime < RoboMap.UPDATE_FREQ) {
@@ -222,77 +209,37 @@ public class Robo2013 extends SimpleRobot {
     }
 
     /**
-     * Plan A autonomous Called once by autonomousInit
+     * Autonomous Procedure to be called from the autonomous() method.
      */
-    private void autonomousA() throws Exception {
-        msg.printLn("Autonomous A:");
-        int fails = 0;
-        boolean success;
-
-        // 0) Set wheels to proper speed
-        msg.printLn("Starting up launcher...");
+    private void autonomousProcedure() {
+        /* 0) Set the wheels to proper speed **********************************/
+        msg.printLn("Start launcher");
         launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
 
-        // 1) Auto aim launcher
-        msg.printLn("Aiming launcher...");
-        do {
-            if (!isAutonomous()) {
-                throw new Exception("Ran out of time!");
-            }
-            success = agent.autoAimLauncher();
-            if (!success) {
-                msg.printLn("turnToTarget failed!");
-                fails++;
-            }
-            if (fails > 500) {
-                msg.printLn("Giving up...");
-                break;
-            } else {
-                msg.printLn("Retrying...");
-            }
-        } while (!success);
+        /* 1) Set the launch angle dependent on starting position *************/
+        
+        launcher.setAngleSetpoint(RoboMap.LAUNCHER_TOP_SIDE_ANGLE);
+        
+        msg.printLn("Angle: " + launcher.getAngleSetpoint());
+        launcher.waitForAngle(5000);
 
-        // 2) Wait for motors to come up to speed
-        msg.printLn("Waiting for motors...");
-        Timer.delay(5);
-
-        // 3) Fire all frisbees
-        msg.printLn("Starting launch!");
+        /* 2) Fire all frisbees ***********************************************/
+        msg.printLn("Launch!");
         for (int i = 0; i < 3; i++) {
-            msg.printLn("Launching disk " + (i + 1) + "...");
+            double error = launcher.getAngleSetpoint() - launcher.readAngle();
+            launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
+            msg.printLn("Launch disk " + (i + 1));
+            msg.printLn("Angle error: " + error);
             launcher.launch();
         }
     }
 
     /**
-     * Plan B autonomous Called once by autonomousInit
+     * Kills the various safety elements of the WPILIB that usually result in a
+     * non-functioning robot.
      */
-    private void autonomousB() {
-        msg.printLn("Autonomous B:");
-        /* 0) Set the wheels to proper speed **********************************/
-        msg.printLn("Start launcher");
-        launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
-        /* 1) Set the launch angle ********************************************/
-        if(modePot.getAverageVoltage() < 2.5) {
-            msg.printLn("Mode: side");
-            launcher.setAngle(RoboMap.LAUNCHER_TOP_SIDE_ANGLE);
-        } else {
-            msg.printLn("Mode: center");
-            launcher.setAngle(RoboMap.LAUNCHER_TOP_CENTER_ANGLE);            
-        }
-        msg.printLn("Angle: " + launcher.getAngle());
-        
-        
-        launcher.waitForAngle(5000);
-        /* 2) Fire all frisbees ***********************************************/
-        msg.printLn("Launch!");
-        for (int i = 0; i < 3; i++) {
-            double error = launcher.getAngle() - launcher.readAngle();            
-            launcher.setWheels(RoboMap.AUTO_SHOOT_SPEED);
-            msg.printLn("Launch disk " + (i + 1));
-            msg.printLn("Angle error: "  + error);
-            launcher.launch();            
-        }
+    private void killSafety() {
+        drive.setSafetyEnabled(false);
+        Watchdog.getInstance().kill();
     }
-
 }
