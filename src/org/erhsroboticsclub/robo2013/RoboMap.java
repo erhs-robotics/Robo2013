@@ -34,7 +34,7 @@ public class RoboMap {
     public static final int MODE_POT = 2;
     
     /* Left Stick Controls */
-    public static final int AUTO_AIM_BUTTON = 1;
+    //public static final int AUTO_AIM_BUTTON = 1;
     public static final int FIRE_BUTTON = 1;
     public static final int BUMP_UP_BUTTON = 3;
     public static final int BUMP_DOWN_BUTTON = 2;
@@ -59,8 +59,8 @@ public class RoboMap {
     public static final double LAUNCHER_ANGLE_MIN = 0;
     public static final double LAUNCHER_ANGLE_MAX = 34;
     public static final double LAUNCHER_FEED_ANGLE = 12;    
-    public static final double LAUNCHER_TOP_CENTER_ANGLE = 30;
-    public static final double LAUNCHER_TOP_SIDE_ANGLE = 30;
+    public static final double LAUNCHER_TOP_CENTER_ANGLE = 20;
+    public static final double LAUNCHER_TOP_SIDE_ANGLE = 20;
     public static final double LAUNCHER_MIDDLE_ANGLE = 28.4;
     public static final double VOLT_MIN = 0.805469407;//34
     public static final double VOLT_MAX = 1.525903107;      

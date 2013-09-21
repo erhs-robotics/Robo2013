@@ -92,6 +92,7 @@ public class Robo2013 extends SimpleRobot {
 
             /* Fire the frisbee ***********************************************/
             if (stickL.getRawButton(RoboMap.FIRE_BUTTON)) {
+                launchSpeed = RoboMap.AUTO_SHOOT_SPEED;
                 launcher.launch();
             }
 
